@@ -1,8 +1,11 @@
-# React + Vite
+# Member List and Link document:
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Member list:
 
-Currently, two official plugins are available:
+- Tô Hải Đăng - SE172732
+- Tsằn Trí Đức - SE172760
+- Phan Thị Hoài Diễm - SE172790
+- Hà Minh Đức - SE173675
+- Hà Huy Tài - SE173563
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Document: (link)
