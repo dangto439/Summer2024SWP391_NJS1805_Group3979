@@ -8,4 +8,4 @@ Member list:
 - Hà Minh Đức - SE173675
 - Hà Huy Tài - SE173563
 
-Document: (link) - (vanvtt10@fpt.edu.vn - Commenter)
+Document: (https://docs.google.com/document/d/14tavT_n1zcEBR352fM63DE_V-xZNe81xaEXoKjN_ZsA/edit?usp=sharing)
