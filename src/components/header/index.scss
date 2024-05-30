@@ -23,25 +23,16 @@
             background-color: rgb(83, 170, 81);
             color: #fff;
             border: none;
-            
-//   color: white;
- 
-  padding: 1px 32px;
-//   text-align: center;
-//   text-decoration: none;
-//   display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-//   cursor: pointer;
-  border-radius: 4px;
+            padding: 1px 32px;
+            font-size: 16px;
+            margin: 4px 2px;
+            border-radius: 4px;
             
         }
         .custom:hover {
             background-color: #45a049; /* Slightly darker green for hover effect */
-          }
-        
+          }  
     }
-
 
     &__search{
         position: absolute;
@@ -69,7 +60,7 @@
             gap: 30px;
             list-style: none;
             cursor: pointer;
-        
+            margin-top: 15px;      
             a{
                 text-decoration: none;
                 color: white;
@@ -78,9 +69,7 @@
             li{
                 font-size: 20px;
                 color: #fff;
-            }
-
-            
+            }         
         }
     }
 }
