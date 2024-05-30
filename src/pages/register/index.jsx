@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
-import { Form, Input } from "antd";
+import { Form, Input, Radio } from "antd";
 import "./index.scss";
 import { Link, useNavigate } from "react-router-dom";
-import api from "../config/axios";
+import api from "../../config/axios";
 import { toast } from "react-toastify";
 
 function Register() {
@@ -72,6 +72,24 @@ function Register() {
             ]}
           >
             <Input id="name" placeholder="Name" className="form-input" />
+          </Form.Item>
+        </div>
+        <div className="form-group">
+          <Form.Item
+            label="Gender"
+            name="gender"
+            rules={[
+              {
+                required: true,
+                message: "Please select your Gender!",
+              },
+            ]}
+          >
+            <Radio.Group id="gender" className="form-input">
+              <Radio value="MALE">Male</Radio>
+              <Radio value="FEMALE">Female</Radio>
+              <Radio value="OTHERS">Other</Radio>
+            </Radio.Group>
           </Form.Item>
         </div>
 
@@ -146,7 +164,23 @@ function Register() {
             />
           </Form.Item>
         </div>
-
+        <div className="form-group">
+          <Form.Item
+            label="Role"
+            name="role"
+            rules={[
+              {
+                required: true,
+                message: "Please select your Role!",
+              },
+            ]}
+          >
+            <Radio.Group id="role" className="form-input">
+              <Radio value="CUSTOMER">Customer</Radio>
+              <Radio value="CLUB_OWNER">Club Owner</Radio>
+            </Radio.Group>
+          </Form.Item>
+        </div>
         <button type="submit" className="form-btn">
           Register
         </button>

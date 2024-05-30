@@ -1,0 +1,88 @@
+.header{
+    background-color: #3C6259;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 300px;
+    position: fixed;
+
+    // position: relative;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 10;
+
+    &__logo{
+        margin-top: 10px;
+    }
+
+    &__button {
+        display: flex;
+        align-items: center;
+        outline: 0; 
+        Button{
+            background-color: rgb(83, 170, 81);
+            color: #fff;
+            border: none;
+            
+//   color: white;
+ 
+  padding: 1px 32px;
+//   text-align: center;
+//   text-decoration: none;
+//   display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+//   cursor: pointer;
+  border-radius: 4px;
+            
+        }
+        .custom:hover {
+            background-color: #45a049; /* Slightly darker green for hover effect */
+          }
+        
+    }
+
+
+    &__search{
+        position: absolute;
+        top: -100%;
+        left: 0;
+        right: 0;
+        background-color: white;
+        padding: 10px 200px;
+        display: flex;
+        transition: all 0.5s;
+        input{
+            flex-grow: 1;
+            border: none;
+            outline: none;
+            font-size: 20px;
+        }
+        &.active{
+            top: 100%
+        }
+    }
+
+    &__nav{
+        ul{
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            cursor: pointer;
+        
+            a{
+                text-decoration: none;
+                color: white;
+            }
+        
+            li{
+                font-size: 20px;
+                color: #fff;
+            }
+
+            
+        }
+    }
+}
+
+
