@@ -6,15 +6,15 @@ import { auth } from "../../config/firebase";
 import { Link } from "react-router-dom";
 import api from "../../config/axios";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser } from "../../redux/features/counterSlice";
+import { login, selectUser } from "../../redux/features/counterSlice";
+import { useNavigate } from "react-router-dom/dist";
 
 function Login() {
   // để sử dụng, tương tác với redux
   const dispatch = useDispatch();
 
   const user = useSelector(selectUser);
-
-
+  const navigate = useNavigate();
   const handleLoginGoogle = async () => {
     await signInWithPopup(auth, new GoogleAuthProvider())
       .then((result) => {
@@ -28,12 +28,25 @@ function Login() {
         console.log(errorMessage);
       });
   };
+
   const handleLogin = async (values) => {
-    console.log(values);
-    const response = await api.post("/login", values);
-    const { token } = response.data;
-    console.log(token);
-    localStorage.setItem("token", token);
+    try {
+      const response = await api.post("/login", values);
+      // response.data = data back end tra ve
+      console.log(response.data);
+      //luu vo redux
+      dispatch(login(response.data));
+      //lay token ra
+      const { token } = response.data;
+      // save vo local storage
+      localStorage.setItem("token", token);
+      const role = response.data.role;
+
+      if (role === "CUSTOMER") navigate("/");
+      else if (role === "ADMIN") navigate("/dashboard");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
