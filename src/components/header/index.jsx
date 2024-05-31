@@ -4,7 +4,7 @@ import "./index.scss";
 import { useState } from "react";
 import { Button } from "antd";
 
-function Header() {
+function Headerr() {
   const [isShowSearch, setIsShowSearch] = useState(false);
 
   return (
@@ -413,4 +413,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default Headerr;
