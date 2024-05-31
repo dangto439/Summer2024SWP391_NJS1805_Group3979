@@ -7,13 +7,13 @@ import { Link } from "react-router-dom";
 import api from "../../config/axios";
 
 function Login() {
-  const handleLoginGoogle = () => {
-    signInWithPopup(auth, new GoogleAuthProvider())
+  const handleLoginGoogle = async () => {
+    await signInWithPopup(auth, new GoogleAuthProvider())
       .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        console.log(credential);
-        console.log(result);
+        //const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = result.user.accessToken;
+        //console.log(credential);
+        console.log(token);
       })
       .catch((error) => {
         const errorMessage = error.message;
