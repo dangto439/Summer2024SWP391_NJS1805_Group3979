@@ -5,8 +5,16 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../config/firebase";
 import { Link } from "react-router-dom";
 import api from "../../config/axios";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "../../redux/features/counterSlice";
 
 function Login() {
+  // để sử dụng, tương tác với redux
+  const dispatch = useDispatch();
+
+  //để lấy ra data từ redux
+  const user = useSelector(selectUser);
+
   const handleLoginGoogle = () => {
     signInWithPopup(auth, new GoogleAuthProvider())
       .then((result) => {
