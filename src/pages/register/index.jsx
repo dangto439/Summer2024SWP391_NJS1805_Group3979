@@ -10,7 +10,7 @@ function Register() {
 
   const handleRegisterAccount = async (values) => {
     try {
-      console.log(values);
+      //console.log(values);
       const response = await api.post("/register", values);
       toast.success("Register Succesfull!");
       navigate("/login");

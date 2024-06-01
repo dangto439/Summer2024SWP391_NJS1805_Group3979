@@ -7,12 +7,11 @@ import "react-toastify/dist/ReactToastify.css";
 import ResetPassword from "./pages/reset-password";
 import Layout from "./components/layout";
 import HomePage from "./pages/home";
-import Dashboard from "./component/dashboard";
+import Dashboard from "./components/dashboard";
 import { useSelector } from "react-redux";
 import { selectUser } from "./redux/features/counterSlice";
 import { Navigate } from "react-router-dom/dist";
 import { toast } from "react-toastify";
-// import { toast } from "react-toastify/dist";
 
 function App() {
   const user = useSelector(selectUser);
@@ -41,9 +40,9 @@ function App() {
         {
           path: "/",
           element: (
-            <PrivateRoute>
-              <HomePage />
-            </PrivateRoute>
+            // <PrivateRoute>
+            <HomePage />
+            // </PrivateRoute>
           ),
         },
       ],
