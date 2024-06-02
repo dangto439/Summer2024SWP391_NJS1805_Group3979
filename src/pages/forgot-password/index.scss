@@ -32,10 +32,11 @@
         margin-top: 20px;
         display: inline-block;
         width: 100%;
+        height: auto;
         padding: 16px 40px;
         font-size: 1.125rem;
         line-height: 1.75rem;
-        background-color: rgb(67, 129, 211);
+        background-color:  #1dc071;
         color: white;
         font-weight: 600;
         border-radius: 8px;
@@ -43,7 +44,6 @@
         cursor: pointer;
         position: relative;
         isolation: isolate;
-        overflow: hidden;
       }
       .form-btn:hover::before {
         left: auto;
@@ -97,6 +97,9 @@
         padding-top: 10px;
         &:hover {
           color: #1dc071;
+          &:active{
+            color: red;
+          }
         }
       }
       .form-link-register {
@@ -105,10 +108,13 @@
         text-decoration: underline;
         transition: linear 0.25s;
         margin-top: -35px;
-        padding-left: 330px;
+        margin-left: 330px;
         padding-top: 10px;
         &:hover {
           color: #1dc071;
+          &:active{
+            color: red;
+          }
         }
       }
 }

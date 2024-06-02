@@ -32,6 +32,7 @@
         margin-top: 20px;
         display: inline-block;
         width: 100%;
+        height: auto;
         padding: 16px 40px;
         font-size: 1.125rem;
         line-height: 1.75rem;
@@ -39,11 +40,9 @@
         color: white;
         font-weight: 600;
         border-radius: 8px;
-      //   user-select: none;
         cursor: pointer;
         position: relative;
         isolation: isolate;
-        overflow: hidden;
       }
       .form-btn:hover::before {
         left: auto;

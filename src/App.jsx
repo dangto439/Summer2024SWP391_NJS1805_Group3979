@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Login from "./pages/login";
 import Register from "./pages/register";
@@ -24,6 +25,7 @@ function App() {
     }
     return children;
   };
+
   const PrivateRoute = ({ children }) => {
     if (user == null) {
       toast.error("Ban can dang nhap");

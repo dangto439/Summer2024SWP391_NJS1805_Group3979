@@ -33,6 +33,11 @@
       transition: linear 0.25s;
       cursor: pointer;
     }
+
+    .btn-login-google:hover{
+      background-color: #b7b8bd
+    }
+
     .text-wrap {
       display: flex;
       align-items: center;
@@ -84,26 +89,20 @@
       font-weight: 500;
       text-decoration: underline;
       transition: linear 0.25s;
-      margin-top: -35px;
-      padding-left: 300px;
+      margin-top: -30px;
+      margin-left: 300px;
       padding-top: 10px;
       &:hover {
         color: #1dc071;
+        &:active  {
+          color:red;
+        }
       }
-    }
-    .form-btn {
-      padding: 13px;
-      width: 100%;
-      height: auto;
-      background-color: #1dc071;
-      border-radius: 12px;
-      color: #fff;
-      font-weight: 500;
-      margin-top: 10px;
+     
     }
     .form-option {
       text-align: center;
-      font-size: 14px;
+      font-size: 18px;
       a {
         font-weight: 500;
         text-decoration: underline;
@@ -111,9 +110,11 @@
         &:hover {
           color: #1dc071;
         }
+        &:active  {
+          color:red;
+        }
       }
-    }
-  
+    } 
     .form-btn {
       display: inline-block;
       padding: 16px 40px;
@@ -124,10 +125,11 @@
       font-weight: 600;
       border-radius: 8px;
     //   user-select: none;
-      cursor: pointer;
       position: relative;
       isolation: isolate;
-      overflow: hidden;
+      width: 100%;
+      height: auto;
+      margin-top: 10px;      
     }
     .form-btn:hover::before {
       left: auto;

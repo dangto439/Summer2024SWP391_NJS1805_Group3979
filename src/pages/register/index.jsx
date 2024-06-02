@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Form, Input, Radio } from "antd";
+import { Button, Form, Input, Radio } from "antd";
 import "./index.scss";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../config/axios";
@@ -108,7 +108,11 @@ function Register() {
               },
             ]}
           >
-            <Input id="phone" placeholder="0987654321" className="form-input" />
+            <Input
+              id="phone"
+              placeholder="(+84) 123-456-789"
+              className="form-input"
+            />
           </Form.Item>
         </div>
 
@@ -181,9 +185,9 @@ function Register() {
             </Radio.Group>
           </Form.Item>
         </div>
-        <button type="submit" className="form-btn">
+        <Button type="primary" htmlType="submit" className="form-btn">
           Register
-        </button>
+        </Button>
 
         <div className="register__option">
           Already have an account?
