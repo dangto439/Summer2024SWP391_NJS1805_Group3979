@@ -8,6 +8,7 @@ import api from "../../config/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { login, selectUser } from "../../redux/features/counterSlice";
 import { useNavigate } from "react-router-dom/dist";
+import { toast } from "react-toastify";
 
 function Login() {
   // để sử dụng, tương tác với redux
@@ -26,6 +27,7 @@ function Login() {
       .catch((error) => {
         const errorMessage = error.message;
         console.log(errorMessage);
+        toast.error("Login Failed!");
       });
   };
 
@@ -40,11 +42,15 @@ function Login() {
       const { token } = response.data;
       // save vo local storage
       localStorage.setItem("token", token);
+
       const role = response.data.role;
+
+      toast.success("Login Successfully!");
 
       if (role === "CUSTOMER") navigate("/");
       else if (role === "ADMIN") navigate("/dashboard");
     } catch (error) {
+      toast.error("Incorrect Email or Password!");
       console.log(error);
     }
   };

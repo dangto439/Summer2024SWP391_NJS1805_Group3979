@@ -1,4 +1,4 @@
-import { Form, Input } from "antd";
+import { Button, Form, Input } from "antd";
 import "./index.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -17,10 +17,10 @@ function ForgetPassword() {
         email: values.email,
       });
       console.log(response.data);
-      toast.success("Password reset email sent successfully");
+      toast.success("Password reset Email sent successfully!");
     } catch (error) {
       console.error(error.message);
-      toast.error("Error sending password reset email");
+      toast.error("Error sending password reset Email!");
     } finally {
       navigate("/login");
       setLoading(false);
@@ -65,9 +65,14 @@ function ForgetPassword() {
           </Form.Item>
         </div>
 
-        <button type="submit" className="form-btn" disabled={loading}>
+        <Button
+          type="primary"
+          htmlType="submit"
+          className="form-btn"
+          disabled={loading}
+        >
           Reset Password
-        </button>
+        </Button>
         <Link to="/login" className="form-link-login">
           Login
         </Link>

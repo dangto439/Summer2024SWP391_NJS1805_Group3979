@@ -1,4 +1,4 @@
-import { Form, Input } from "antd";
+import { Button, Form, Input } from "antd";
 import "./index.scss";
 
 function ResetPassword() {
@@ -68,9 +68,9 @@ function ResetPassword() {
             />
           </Form.Item>
         </div>
-        <button type="submit" className="form-btn">
+        <Button type="primary" htmlType="submit" className="form-btn">
           Change Password
-        </button>
+        </Button>
       </Form>
     </div>
   );

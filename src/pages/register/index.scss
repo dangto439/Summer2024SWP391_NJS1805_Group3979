@@ -38,23 +38,21 @@
         margin-top: 20px;
         display: inline-block;
         width: 100%;
+        height: auto;
         padding: 16px 40px;
         font-size: 1.125rem;
         line-height: 1.75rem;
-        background-color: rgb(67, 129, 211);
+        background-color: #1dc071;
         color: white;
         font-weight: 600;
         border-radius: 8px;
-      //   user-select: none;
-        cursor: pointer;
         position: relative;
         isolation: isolate;
-        overflow: hidden;
       }
       .form-btn:hover::before {
         left: auto;
         right: 0;
-        width: 100%;
+        width: 100%;  
       }
       .form-btn::before {
         content: "";
@@ -64,21 +62,25 @@
         top: 0;
         height: 100%;
         width: 0;
-        background-color: #fff;
+        background-color: #ffffff;
         opacity: 0.1;
         z-index: -1;
-        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        transition: all 0.4s cubic-bezier(1, 0, 0, 1);
+        border-radius: 8px;
       }
       .register__option {
         padding-top: 20px;
         text-align: center;
-        font-size: 14px;
+        font-size: 16px;
         a {
           font-weight: 500;
           text-decoration: underline;
           transition: linear 0.25s;
           &:hover {
             color: #1dc071;
+            &:active{
+              color: red;
+            }
           }
         }
       }
@@ -90,9 +92,6 @@
         }
         &:last-child {
           margin-bottom: 0;
-        }
-        a{
-          margin-left: 230px;
         }
       }
       .form-input {
