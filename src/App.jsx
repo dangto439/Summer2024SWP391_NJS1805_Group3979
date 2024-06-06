@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "./redux/features/counterSlice";
 import { Navigate } from "react-router-dom/dist";
 import { toast } from "react-toastify";
+import Profile from "./components/profile";
 
 function App() {
   const user = useSelector(selectUser);
@@ -92,7 +93,7 @@ function App() {
         },
         {
           path: "/dashboard/profile",
-          element: <div>Your Profile</div>,
+          element: <Profile />,
         },
         {
           path: "/dashboard/overview",
