@@ -91,12 +91,7 @@ const Dashboard = () => {
           getItem("Club 3", "club3"),
           getItem("All Promotion", "all-promotion"),
         ]),
-        getItem("Quản lý Accounts", "accounts", <TeamOutlined />, [
-          getItem("Club 1", "account-club-1"),
-          getItem("Club 2", "account-club-2"),
-          getItem("Club 3", "account-club-3"),
-          getItem("All Staffs", "all-staffs"),
-        ]),
+        getItem("Quản lý Accounts", "manage-account", <TeamOutlined />),
         getItem("Thống kê", "statistics", <BarChartOutlined />, [
           getItem("Club 1", "stats-club-1"),
           getItem("Club 2", "stats-club-2"),

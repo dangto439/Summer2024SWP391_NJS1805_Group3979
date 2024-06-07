@@ -35,11 +35,10 @@ function Login() {
     try {
       const response = await api.post("/login", values);
       // response.data = data back end tra ve
-      console.log(response.data);
+      const token = response.data.token;
       //luu vo redux
       dispatch(login(response.data));
       //lay token ra
-      const { token } = response.data;
       // save vo local storage
       localStorage.setItem("token", token);
 

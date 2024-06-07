@@ -14,6 +14,7 @@ import { selectUser } from "./redux/features/counterSlice";
 import { Navigate } from "react-router-dom/dist";
 import { toast } from "react-toastify";
 import Profile from "./components/profile";
+import ManageAccount from "./components/manage-account";
 
 function App() {
   const user = useSelector(selectUser);
@@ -50,6 +51,7 @@ function App() {
         },
       ],
     },
+
     {
       path: "/login",
       element: <Login />,
@@ -102,6 +104,10 @@ function App() {
         {
           path: "/dashboard/manage",
           element: <div>Manage</div>,
+        },
+        {
+          path: "/dashboard/manage-account",
+          element: <ManageAccount />,
         },
       ],
     },
