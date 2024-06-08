@@ -1,18 +1,70 @@
 import { useState } from "react";
 import { Menu, MenuItem } from "react-pro-sidebar";
-import { Box, Drawer, IconButton, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Drawer,
+  IconButton,
+  Typography,
+  useTheme,
+  Collapse,
+  List,
+  ListItem,
+} from "@mui/material";
+import { Link } from "react-router-dom";
 import { tokens } from "../../theme";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
+import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
+import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
+import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import StarOutlineIcon from "@mui/icons-material/StarOutline";
+import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
+import InventoryOutlinedIcon from "@mui/icons-material/InventoryOutlined";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
+const Item = ({ title, to, icon, selected, setSelected }) => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  return (
+    <MenuItem
+      active={selected === title}
+      style={{ color: colors.grey[100] }}
+      onClick={() => setSelected(title)}
+      icon={icon}
+    >
+      <Typography>{title}</Typography>
+      <Link to={to} />
+    </MenuItem>
+  );
+};
 
 const MySidebar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [selected, setSelected] = useState("Dashboard");
+  const [openStaffs, setOpenStaffs] = useState(false);
+  const [openClubs, setOpenClubs] = useState(false);
+  const [openBooking, setOpenBooking] = useState(false);
+
+  const handleStaffsClick = () => {
+    setOpenStaffs(!openStaffs);
+  };
+
+  const handleClubsClick = () => {
+    setOpenClubs(!openClubs);
+  };
+
+  const handleBookingClick = () => {
+    setOpenBooking(!openBooking);
+  };
+
   return (
     <Box
       sx={{
         "& .MuiDrawer-paper": {
-          // width: 240,
           backgroundColor: colors.primary[400],
           borderRadius: "30px",
         },
@@ -92,9 +144,176 @@ const MySidebar = () => {
               </Box>
             </Box>
           )}
+
+          {/* Menu Items */}
+          <Box paddingLeft={isCollapsed ? undefined : "10%"}>
+            <Item
+              title="Home"
+              to="/"
+              icon={<HomeOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Typography
+              variant="h8"
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 0 20px" }}
+              fontSize="15px"
+            >
+              Management
+            </Typography>
+            <MenuItem
+              onClick={handleStaffsClick}
+              style={{ color: colors.grey[100] }}
+              icon={openStaffs ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            >
+              <Typography>Manage Staffs</Typography>
+            </MenuItem>
+            <Collapse in={openStaffs} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem sx={{ m: "0 0 0 17px" }}>
+                  <Item
+                    title="ClubID1"
+                    to="/staff/clubid1"
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                </ListItem>
+                <ListItem sx={{ m: "0 0 0 17px" }}>
+                  <Item
+                    title="ClubID2"
+                    to="/staff/clubid2"
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                </ListItem>
+                <ListItem sx={{ m: "0 0 0 17px" }}>
+                  <Item
+                    title="ClubID3"
+                    to="/staff/clubid3"
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                </ListItem>
+              </List>
+            </Collapse>
+            <MenuItem
+              onClick={handleClubsClick}
+              style={{ color: colors.grey[100] }}
+              icon={openClubs ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            >
+              <Typography>Manage Clubs</Typography>
+            </MenuItem>
+            <Collapse in={openClubs} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem sx={{ pl: 4 }}>
+                  <Item
+                    title="ClubID1"
+                    to="/club/clubid1"
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                </ListItem>
+                <ListItem sx={{ pl: 4 }}>
+                  <Item
+                    title="ClubID2"
+                    to="/club/clubid2"
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                </ListItem>
+                <ListItem sx={{ pl: 4 }}>
+                  <Item
+                    title="ClubID3"
+                    to="/club/clubid3"
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                </ListItem>
+              </List>
+            </Collapse>
+            <MenuItem
+              onClick={handleBookingClick}
+              style={{ color: colors.grey[100] }}
+              icon={openBooking ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            >
+              <Typography>Manage Booking</Typography>
+            </MenuItem>
+            <Collapse in={openBooking} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem sx={{ pl: 4 }}>
+                  <Item
+                    title="ClubID1"
+                    to="/booking/clubid1"
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                </ListItem>
+                <ListItem sx={{ pl: 4 }}>
+                  <Item
+                    title="ClubID2"
+                    to="/booking/clubid2"
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                </ListItem>
+                <ListItem sx={{ pl: 4 }}>
+                  <Item
+                    title="ClubID3"
+                    to="/booking/clubid3"
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                </ListItem>
+              </List>
+            </Collapse>
+            <Typography
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 0 20px" }}
+              fontSize="15px"
+            >
+              Statistical
+            </Typography>
+            <Item
+              title="Bar Chart"
+              to="/bar"
+              icon={<BarChartOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            {/* <Item
+              title="Pie Chart"
+              to="/pie"
+              icon={<PieChartOutlineOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            /> */}
+            <Typography
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 0 20px" }}
+              fontSize="15px"
+            >
+              Other
+            </Typography>
+            <Item
+              title="Profile"
+              to="/profile"
+              icon={<AccountBoxOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            {/* <Item
+              title="Calendar"
+              to="/calendar"
+              icon={<CalendarTodayOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            /> */}
+          </Box>
         </Menu>
       </Drawer>
     </Box>
   );
 };
+
 export default MySidebar;
