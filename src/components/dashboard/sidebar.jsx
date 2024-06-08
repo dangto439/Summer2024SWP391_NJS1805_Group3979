@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, MenuItem } from "react-pro-sidebar";
 import {
   Box,
@@ -13,16 +13,18 @@ import {
 import { Link } from "react-router-dom";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
+// import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
+import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutline";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 import InventoryOutlinedIcon from "@mui/icons-material/InventoryOutlined";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
+// import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -43,11 +45,18 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 const MySidebar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const [isCollapsed, setIsCollapsed] = useState(
+    JSON.parse(localStorage.getItem("isCollapsed")) || false
+  );
   const [selected, setSelected] = useState("Dashboard");
   const [openStaffs, setOpenStaffs] = useState(false);
   const [openClubs, setOpenClubs] = useState(false);
   const [openBooking, setOpenBooking] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("isCollapsed", JSON.stringify(isCollapsed));
+  }, [isCollapsed]);
 
   const handleStaffsClick = () => {
     setOpenStaffs(!openStaffs);
@@ -78,18 +87,25 @@ const MySidebar = () => {
       }}
     >
       <Drawer
-        variant="permanent"
+        variant="persistent"
         sx={{
-          width: 240,
+          width: isCollapsed ? 80 : 240,
           flexShrink: 0,
+          transition: "width 0.3s",
         }}
-        open={!isCollapsed}
+        PaperProps={{
+          style: {
+            width: isCollapsed ? 80 : 240,
+            overflowX: "hidden",
+          },
+        }}
+        open
       >
         <Menu iconShape="square">
           {/* Logo and menu */}
           <MenuItem
             onClick={() => setIsCollapsed(!isCollapsed)}
-            icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
+            icon={<MenuOutlinedIcon />}
             style={{
               margin: "10px 0 10px 0",
               color: colors.grey[100],
@@ -165,9 +181,12 @@ const MySidebar = () => {
             <MenuItem
               onClick={handleStaffsClick}
               style={{ color: colors.grey[100] }}
-              icon={openStaffs ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              icon={<GroupOutlinedIcon />}
             >
-              <Typography>Manage Staffs</Typography>
+              <Typography display="flex">
+                Staffs
+                {openStaffs ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              </Typography>
             </MenuItem>
             <Collapse in={openStaffs} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
@@ -200,9 +219,12 @@ const MySidebar = () => {
             <MenuItem
               onClick={handleClubsClick}
               style={{ color: colors.grey[100] }}
-              icon={openClubs ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              icon={<StarOutlineIcon />}
             >
-              <Typography>Manage Clubs</Typography>
+              <Typography display="flex">
+                Clubs
+                {openClubs ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              </Typography>
             </MenuItem>
             <Collapse in={openClubs} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
@@ -235,9 +257,12 @@ const MySidebar = () => {
             <MenuItem
               onClick={handleBookingClick}
               style={{ color: colors.grey[100] }}
-              icon={openBooking ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              icon={<InventoryOutlinedIcon />}
             >
-              <Typography>Manage Booking</Typography>
+              <Typography display="flex">
+                Booking
+                {openBooking ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              </Typography>
             </MenuItem>
             <Collapse in={openBooking} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
@@ -272,28 +297,7 @@ const MySidebar = () => {
               sx={{ m: "15px 0 0 20px" }}
               fontSize="15px"
             >
-              Statistical
-            </Typography>
-            <Item
-              title="Bar Chart"
-              to="/bar"
-              icon={<BarChartOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            {/* <Item
-              title="Pie Chart"
-              to="/pie"
-              icon={<PieChartOutlineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            /> */}
-            <Typography
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 0 20px" }}
-              fontSize="15px"
-            >
-              Other
+              Pages
             </Typography>
             <Item
               title="Profile"
@@ -302,10 +306,33 @@ const MySidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            {/* <Item
+
+            <Item
               title="Calendar"
               to="/calendar"
               icon={<CalendarTodayOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            {/* <Typography
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 0 20px" }}
+              fontSize="15px"
+            >
+              Charts
+            </Typography>
+            <Item
+              title="Bar Chart"
+              to="/bar"
+              icon={<BarChartOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Pie Chart"
+              to="/pie"
+              icon={<PieChartOutlineOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             /> */}
