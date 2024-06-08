@@ -7,6 +7,7 @@ import Header from "../dashboard/Header";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
+import "./index.scss";
 
 const Staff = () => {
   const theme = useTheme();
@@ -29,7 +30,11 @@ const Staff = () => {
           onClick: () => {},
         },
       ],
+      overlayClassName: "custom-confirm-alert-overlay",
     });
+  };
+  const handleAddNewStaffAccount = () => {
+    return <div></div>;
   };
 
   const columns = [
@@ -92,8 +97,12 @@ const Staff = () => {
   ];
 
   return (
-    <Box m="20px">
-      <Header title="Manage Staff Account" subtitle="Dĩm nè" />
+    <Box m="20px" className="team-container">
+      <Header
+        title="Manage Staff Account"
+        subtitle="Dĩm nè"
+        onAddStaff={handleAddNewStaffAccount}
+      />
       <Box
         m="40px 0 0 0"
         height="75vh"
