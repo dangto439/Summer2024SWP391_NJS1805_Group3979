@@ -13,7 +13,6 @@ import {
 import { Link } from "react-router-dom";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-// import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutline";
@@ -24,7 +23,6 @@ import InventoryOutlinedIcon from "@mui/icons-material/InventoryOutlined";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
-// import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -35,9 +33,9 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       style={{ color: colors.grey[100] }}
       onClick={() => setSelected(title)}
       icon={icon}
+      component={<Link to={to} />}
     >
       <Typography>{title}</Typography>
-      <Link to={to} />
     </MenuItem>
   );
 };
@@ -189,33 +187,42 @@ const MySidebar = () => {
               </Typography>
             </MenuItem>
             <Collapse in={openStaffs} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItem sx={{ m: "0 0 0 17px" }}>
+              <Box component="div" sx={{ padding: 0 }}>
+                <Box sx={{ pl: 4 }}>
                   <Item
                     title="ClubID1"
-                    to="/staff/clubid1"
+                    to="staff/clubid1"
                     selected={selected}
                     setSelected={setSelected}
                   />
-                </ListItem>
-                <ListItem sx={{ m: "0 0 0 17px" }}>
+                </Box>
+                <Box sx={{ pl: 4 }}>
                   <Item
                     title="ClubID2"
-                    to="/staff/clubid2"
+                    to="staff/clubid2"
                     selected={selected}
                     setSelected={setSelected}
                   />
-                </ListItem>
-                <ListItem sx={{ m: "0 0 0 17px" }}>
+                </Box>
+                <Box sx={{ pl: 4 }}>
                   <Item
                     title="ClubID3"
-                    to="/staff/clubid3"
+                    to="staff/clubid3"
                     selected={selected}
                     setSelected={setSelected}
                   />
-                </ListItem>
-              </List>
+                </Box>
+                <Box sx={{ pl: 4 }}>
+                  <Item
+                    title="All Staff"
+                    to="staff/allstaff"
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                </Box>
+              </Box>
             </Collapse>
+
             <MenuItem
               onClick={handleClubsClick}
               style={{ color: colors.grey[100] }}
@@ -227,32 +234,40 @@ const MySidebar = () => {
               </Typography>
             </MenuItem>
             <Collapse in={openClubs} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItem sx={{ pl: 4 }}>
+              <Box component="div" disablePadding>
+                <Box sx={{ pl: 4 }}>
                   <Item
                     title="ClubID1"
-                    to="/club/clubid1"
+                    to="club/clubid1"
                     selected={selected}
                     setSelected={setSelected}
                   />
-                </ListItem>
-                <ListItem sx={{ pl: 4 }}>
+                </Box>
+                <Box sx={{ pl: 4 }}>
                   <Item
                     title="ClubID2"
-                    to="/club/clubid2"
+                    to="club/clubid2"
                     selected={selected}
                     setSelected={setSelected}
                   />
-                </ListItem>
-                <ListItem sx={{ pl: 4 }}>
+                </Box>
+                <Box sx={{ pl: 4 }}>
                   <Item
                     title="ClubID3"
-                    to="/club/clubid3"
+                    to="club/clubid3"
                     selected={selected}
                     setSelected={setSelected}
                   />
-                </ListItem>
-              </List>
+                </Box>
+                <Box sx={{ pl: 4 }}>
+                  <Item
+                    title="All Club"
+                    to="club/allclub"
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                </Box>
+              </Box>
             </Collapse>
             <MenuItem
               onClick={handleBookingClick}
@@ -265,34 +280,27 @@ const MySidebar = () => {
               </Typography>
             </MenuItem>
             <Collapse in={openBooking} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItem sx={{ pl: 4 }}>
+              <Box component="div" disablePadding>
+                <Box sx={{ pl: 4 }}>
                   <Item
-                    title="ClubID1"
-                    to="/booking/clubid1"
+                    title="Delete"
+                    to="booking/delete"
                     selected={selected}
                     setSelected={setSelected}
                   />
-                </ListItem>
-                <ListItem sx={{ pl: 4 }}>
+                </Box>
+                <Box sx={{ pl: 4 }}>
                   <Item
-                    title="ClubID2"
-                    to="/booking/clubid2"
+                    title="Box"
+                    to="booking/list"
                     selected={selected}
                     setSelected={setSelected}
                   />
-                </ListItem>
-                <ListItem sx={{ pl: 4 }}>
-                  <Item
-                    title="ClubID3"
-                    to="/booking/clubid3"
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                </ListItem>
-              </List>
+                </Box>
+              </Box>
             </Collapse>
             <Typography
+              variant="h8"
               color={colors.grey[300]}
               sx={{ m: "15px 0 0 20px" }}
               fontSize="15px"
@@ -301,41 +309,32 @@ const MySidebar = () => {
             </Typography>
             <Item
               title="Profile"
-              to="/profile"
+              to="profile"
               icon={<AccountBoxOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
-
             <Item
               title="Calendar"
-              to="/calendar"
+              to="calendar"
               icon={<CalendarTodayOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
-
-            {/* <Typography
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 0 20px" }}
-              fontSize="15px"
-            >
-              Charts
-            </Typography>
             <Item
               title="Bar Chart"
-              to="/bar"
+              to="bar"
               icon={<BarChartOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="Pie Chart"
-              to="/pie"
+              to="pie"
               icon={<PieChartOutlineOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            /> */}
+            />
           </Box>
         </Menu>
       </Drawer>

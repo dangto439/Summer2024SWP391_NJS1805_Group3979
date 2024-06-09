@@ -74,7 +74,7 @@ function App() {
       element: <Dashboard />,
       children: [
         {
-          path: "allstaff",
+          path: "staff/allstaff",
           element: <Staff />,
         },
 
