@@ -15,6 +15,7 @@ import { Navigate } from "react-router-dom/dist";
 import { toast } from "react-toastify";
 import Profile from "./components/profile";
 import ManageAccount from "./components/manage-account";
+import Staff from "./components/staff";
 
 function App() {
   const user = useSelector(selectUser);
@@ -69,44 +70,21 @@ function App() {
       element: <ResetPassword />,
     },
     {
-      path: "/dashboard",
-
-      element: (
-        <AuthRoute>
-          <Dashboard />
-        </AuthRoute>
-      ),
+      path: "/dashboard/*",
+      element: <Dashboard />,
       children: [
         {
-          path: "/dashboard/club1",
-          element: <div>Club</div>,
+          path: "allstaff",
+          element: <Staff />,
         },
+
         {
-          path: "/dashboard/club2",
-          element: <div>Club2</div>,
-        },
-        {
-          path: "/dashboard/club3",
-          element: <div>Club3</div>,
-        },
-        {
-          path: "/dashboard/all-promotion",
-          element: <div>All Promotion</div>,
-        },
-        {
-          path: "/dashboard/profile",
+          path: "profile",
           element: <Profile />,
         },
+
         {
-          path: "/dashboard/overview",
-          element: <div>Overview</div>,
-        },
-        {
-          path: "/dashboard/manage",
-          element: <div>Manage</div>,
-        },
-        {
-          path: "/dashboard/manage-account",
+          path: "manage-account",
           element: <ManageAccount />,
         },
       ],
