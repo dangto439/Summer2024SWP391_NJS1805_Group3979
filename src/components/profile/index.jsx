@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./index.scss";
 import { Button, Form, Input, Modal, Radio } from "antd";
 import { ExclamationCircleFilled } from "@ant-design/icons";
@@ -29,7 +29,7 @@ function Profile() {
 
   const fetchProfileData = async () => {
     try {
-      const response = await api.get("/profile"); // Đổi thành endpoint thực tế của bạn
+      const response = await api.get("/profile");
       const profileData = response.data;
       setAvatarUrl(profileData.avatar);
       form.setFieldsValue({
@@ -38,7 +38,6 @@ function Profile() {
         name: profileData.name,
         gender: profileData.gender,
         phone: profileData.phone,
-        // Bạn có thể thêm các field khác nếu cần
       });
     } catch (error) {
       console.error("Error fetching profile data:", error);
