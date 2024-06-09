@@ -1,19 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, IconButton, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { mockDataTeam } from "../../data/mockData";
 import Header from "../dashboard/Header";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import "./index.scss";
 import AddNewStaffAccountForm from "./formaddnewstaffaccount";
+import api from "../../config/axios";
 
 const Staff = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [rows, setRows] = useState(mockDataTeam);
+  const [rows, setRows] = useState([]);
   const [isAddFormOpen, setAddFormOpen] = useState(false);
 
   const handleDelete = (id) => {
@@ -52,12 +52,12 @@ const Staff = () => {
   const columns = [
     {
       field: "id",
-      headerName: "Staff ID",
+      headerName: "Staff ID", //tên cột
       headerAlign: "center",
       align: "center",
     },
     {
-      field: "clubid",
+      field: "clubId",
       headerName: "Club ID",
       headerAlign: "center",
       align: "center",
@@ -71,9 +71,8 @@ const Staff = () => {
       align: "center",
     },
     {
-      field: "age",
-      headerName: "Age",
-      type: "number",
+      field: "gender",
+      headerName: "Gender",
       headerAlign: "center",
       align: "center",
     },
@@ -88,6 +87,12 @@ const Staff = () => {
       field: "email",
       headerName: "Email",
       flex: 1,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "accountStatus",
+      headerName: "Account Status",
       headerAlign: "center",
       align: "center",
     },
@@ -107,6 +112,29 @@ const Staff = () => {
       ),
     },
   ];
+
+  const fetchaccountstaff = async () => {
+    try {
+      const response = await api.get("/staff");
+      const accounts = response.data;
+      const rows = accounts.map((account, index) => ({
+        id: index + 1,
+        clubId: account.club.clubId,
+        name: account.name,
+        email: account.email,
+        gender: account.gender,
+        phone: account.phone,
+        accountStatus: account.accountStatus,
+      }));
+      setRows(rows);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchaccountstaff();
+  }, []);
 
   return (
     <Box m="20px" className="team-container">

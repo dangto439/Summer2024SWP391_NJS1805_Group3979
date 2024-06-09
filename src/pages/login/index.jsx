@@ -47,7 +47,7 @@ function Login() {
       toast.success("Login Successfully!");
 
       if (role === "CUSTOMER") navigate("/");
-      else if (role === "ADMIN") navigate("/dashboard");
+      else if (role === "CLUB_OWNER") navigate("/dashboard");
     } catch (error) {
       toast.error("Incorrect Email or Password!");
       console.log(error);
