@@ -4,6 +4,7 @@ import Topbar from "./topbar";
 import Sidebar from "./sidebar";
 import Staff from "../staff/index";
 import { Route, Routes } from "react-router-dom";
+import Profile from "../profile";
 
 function Dashboard() {
   const [theme, colorMode] = useMode();
@@ -17,9 +18,8 @@ function Dashboard() {
           <Box component="main" className="content" flexGrow={1}>
             <Topbar />
             <Routes>
-              <Route path="allstaff" element={<Staff />} />
-              {/* <Route path="profile" element={<Profile />} />
-              <Route path="manage-account" element={<ManageAccount />} /> */}
+              <Route path="staff/allstaff" element={<Staff />} />
+              <Route path="profile" element={<Profile />} />
             </Routes>
           </Box>
         </Box>

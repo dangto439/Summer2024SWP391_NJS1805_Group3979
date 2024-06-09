@@ -8,11 +8,13 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import "./index.scss";
+import AddNewStaffAccountForm from "./formaddnewstaffaccount";
 
 const Staff = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState(mockDataTeam);
+  const [isAddFormOpen, setAddFormOpen] = useState(false);
 
   const handleDelete = (id) => {
     confirmAlert({
@@ -33,8 +35,18 @@ const Staff = () => {
       overlayClassName: "custom-confirm-alert-overlay",
     });
   };
+
   const handleAddNewStaffAccount = () => {
-    return <div></div>;
+    setAddFormOpen(true);
+  };
+
+  const handleFormClose = () => {
+    setAddFormOpen(false);
+  };
+
+  const handleFormSubmit = (value) => {
+    //Viết hàm submit vào đây nè
+    handleFormClose();
   };
 
   const columns = [
@@ -138,6 +150,11 @@ const Staff = () => {
       >
         <DataGrid rows={rows} columns={columns} />
       </Box>
+      <AddNewStaffAccountForm
+        open={isAddFormOpen}
+        onClose={handleFormClose}
+        onSubmit={handleFormSubmit}
+      />
     </Box>
   );
 };
