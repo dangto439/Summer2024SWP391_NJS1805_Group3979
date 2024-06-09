@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import Profile from "./components/profile";
 import ManageAccount from "./components/manage-account";
 import Staff from "./components/staff";
+import Club from "./club";
 
 function App() {
   const user = useSelector(selectUser);
@@ -76,6 +77,11 @@ function App() {
         {
           path: "staff/allstaff",
           element: <Staff />,
+        },
+
+        {
+          path: "club/allcourt",
+          element: <Club />,
         },
 
         {

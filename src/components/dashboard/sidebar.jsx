@@ -261,8 +261,8 @@ const MySidebar = () => {
                 </Box>
                 <Box sx={{ pl: 4 }}>
                   <Item
-                    title="All Club"
-                    to="club/allclub"
+                    title="All Court"
+                    to="club/allcourt"
                     selected={selected}
                     setSelected={setSelected}
                   />
@@ -291,7 +291,7 @@ const MySidebar = () => {
                 </Box>
                 <Box sx={{ pl: 4 }}>
                   <Item
-                    title="Box"
+                    title="List"
                     to="booking/list"
                     selected={selected}
                     setSelected={setSelected}

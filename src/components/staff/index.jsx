@@ -113,7 +113,8 @@ const Staff = () => {
       <Header
         title="Manage Staff Account"
         subtitle="Dĩm nè"
-        onAddStaff={handleAddNewStaffAccount}
+        buttonText="Thêm mới Staff account"
+        onButtonClick={handleAddNewStaffAccount}
       />
       <Box
         m="40px 0 0 0"
