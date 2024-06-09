@@ -5,6 +5,7 @@ import { tokens } from "../theme";
 import { mockDataTeam } from "../data/mockData";
 import Header from "../components/dashboard/Header";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import "./index.scss";
@@ -39,14 +40,7 @@ const Club = () => {
       overlayClassName: "custom-confirm-alert-overlay",
     });
   };
-
-  //   const handleAddNewCourt = () => {
-  //     setAddFormOpen(true);
-  //   };
-
-  //   const handleFormClose = () => {
-  //     setAddFormOpen(false);
-  //   };
+  const handleUpdate = (id) => {};
 
   const handleChooseExistingClub = () => {
     setChooseFormOpen(false);
@@ -76,19 +70,19 @@ const Club = () => {
   const columns = [
     {
       field: "id",
-      headerName: "Court ID",
+      headerName: "Mã Club",
       headerAlign: "center",
       align: "center",
     },
     {
-      field: "clubid",
-      headerName: "Club ID",
+      field: "courtid",
+      headerName: "Mã Sân",
       headerAlign: "center",
       align: "center",
     },
     {
       field: "name",
-      headerName: "Club Name",
+      headerName: "Tên Sân",
       flex: 1,
       cellClassName: "name-column--cell",
       headerAlign: "center",
@@ -96,28 +90,29 @@ const Club = () => {
     },
     {
       field: "age",
-      headerName: "",
+      headerName: "Trạng thái",
       type: "number",
       headerAlign: "center",
       align: "center",
     },
     {
-      field: "phone",
-      headerName: "Phone Number",
+      field: "update",
+      headerName: "Cập Nhật Sân",
       flex: 1,
       headerAlign: "center",
       align: "center",
-    },
-    {
-      field: "email",
-      headerName: "Email",
-      flex: 1,
-      headerAlign: "center",
-      align: "center",
+      renderCell: (params) => (
+        <IconButton
+          onClick={() => handleUpdate(params.id)}
+          sx={{ color: "#CE671B" }}
+        >
+          <PublishedWithChangesIcon />
+        </IconButton>
+      ),
     },
     {
       field: "delete",
-      headerName: "Delete Account",
+      headerName: "Xóa Sân",
       flex: 1,
       headerAlign: "center",
       align: "center",

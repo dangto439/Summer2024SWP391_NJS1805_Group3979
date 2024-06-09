@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -45,7 +45,6 @@ const CreateNewClubForm = ({ open, onClose, onSubmit }) => {
 
   const handleProvinceChange = (event) => {
     setProvince(event.target.value);
-    // Giả sử bạn có một danh sách các quận/huyện dựa trên tỉnh
     setDistricts(["District 1", "District 2", "District 3"]);
   };
 
@@ -119,7 +118,6 @@ const CreateNewClubForm = ({ open, onClose, onSubmit }) => {
               defaultValue=""
               render={({ field }) => (
                 <Select {...field} label="Giờ mở cửa">
-                  {/* Giả sử bạn có danh sách giờ mở cửa */}
                   <MenuItem value="06:00">06:00</MenuItem>
                   <MenuItem value="07:00">07:00</MenuItem>
                   <MenuItem value="08:00">08:00</MenuItem>
@@ -137,7 +135,6 @@ const CreateNewClubForm = ({ open, onClose, onSubmit }) => {
               defaultValue=""
               render={({ field }) => (
                 <Select {...field} label="Giờ đóng cửa">
-                  {/* Giả sử bạn có danh sách giờ đóng cửa */}
                   <MenuItem value="18:00">18:00</MenuItem>
                   <MenuItem value="19:00">19:00</MenuItem>
                   <MenuItem value="20:00">20:00</MenuItem>
