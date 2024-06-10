@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import Profile from "./components/profile";
 import ManageAccount from "./components/manage-account";
 import Staff from "./components/staff";
+import Court from "../src/components/club";
 import Club from "../src/components/club";
 
 function App() {
@@ -75,14 +76,26 @@ function App() {
       element: <Dashboard />,
       children: [
         {
+          path: "club",
+          element: <Club />,
+        },
+        {
+          path: "staff/clubid1",
+          element: <Staff />,
+        },
+        {
           path: "staff/allstaff",
           element: <Staff />,
         },
 
         {
-          path: "club/allcourt",
-          element: <Club />,
+          path: "court/clubid1",
+          element: <Court />,
         },
+        // {
+        //   path: "booking/clubid1",
+        //   element: <Staff />,
+        // },
 
         {
           path: "profile",

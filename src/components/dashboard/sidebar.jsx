@@ -204,22 +204,6 @@ const MySidebar = () => {
                 </Box>
                 <Box sx={{ pl: 4 }}>
                   <Item
-                    title="ClubID2"
-                    to="staff/clubid2"
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                </Box>
-                <Box sx={{ pl: 4 }}>
-                  <Item
-                    title="ClubID3"
-                    to="staff/clubid3"
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                </Box>
-                <Box sx={{ pl: 4 }}>
-                  <Item
                     title="All Staff"
                     to="staff/allstaff"
                     selected={selected}
@@ -240,39 +224,13 @@ const MySidebar = () => {
               </Typography>
             </MenuItem>
             <Collapse in={openCourts} timeout="auto" unmountOnExit>
-              <Box component="div" disablePadding>
-                <Box sx={{ pl: 4 }}>
-                  <Item
-                    title="ClubID1"
-                    to="court/clubid1"
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                </Box>
-                <Box sx={{ pl: 4 }}>
-                  <Item
-                    title="ClubID2"
-                    to="court/clubid2"
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                </Box>
-                <Box sx={{ pl: 4 }}>
-                  <Item
-                    title="ClubID3"
-                    to="court/clubid3"
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                </Box>
-                {/* <Box sx={{ pl: 4 }}>
-                  <Item
-                    title="All Court"
-                    to="club/allcourt"
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                </Box> */}
+              <Box component="div" disablePadding sx={{ pl: 4 }}>
+                <Item
+                  title="ClubID1"
+                  to="court/clubid1"
+                  selected={selected}
+                  setSelected={setSelected}
+                />
               </Box>
             </Collapse>
 
@@ -290,16 +248,8 @@ const MySidebar = () => {
               <Box component="div" disablePadding>
                 <Box sx={{ pl: 4 }}>
                   <Item
-                    title="Delete"
-                    to="booking/delete"
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                </Box>
-                <Box sx={{ pl: 4 }}>
-                  <Item
-                    title="List"
-                    to="booking/list"
+                    title="ClubID1"
+                    to="booking/clubid1"
                     selected={selected}
                     setSelected={setSelected}
                   />

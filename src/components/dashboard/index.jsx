@@ -6,6 +6,8 @@ import Staff from "../staff/index";
 import { Route, Routes } from "react-router-dom";
 import Profile from "../profile";
 import Club from "../club/index";
+import Court from "../court/index";
+// import Booking from "../booking/index";
 
 function Dashboard() {
   const [theme, colorMode] = useMode();
@@ -19,8 +21,11 @@ function Dashboard() {
           <Box component="main" className="content" flexGrow={1}>
             <Topbar />
             <Routes>
+              <Route path="club" element={<Club />} />
+              <Route path="staff/clubid1" element={<Staff />} />
               <Route path="staff/allstaff" element={<Staff />} />
-              <Route path="club/allcourt" element={<Club />} />
+              <Route path="court/clubid1" element={<Court />} />
+              {/* <Route path="booking/clubid1" element={<Booking />} /> */}
 
               <Route path="profile" element={<Profile />} />
             </Routes>
