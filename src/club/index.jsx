@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, IconButton, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../theme";
-import { mockDataTeam } from "../data/mockData";
+// import { mockDataTeam } from "../data/mockData";
 import Header from "../components/dashboard/Header";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
@@ -12,10 +12,11 @@ import "./index.scss";
 import ChooseFormDialog from "./chooseformdialog.jsx";
 import AddNewCourtForm from "./addnewcourtform.jsx";
 import CreateNewClubForm from "./createnewclubform.jsx";
+import api from "../config/axios.js";
 const Club = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [rows, setRows] = useState(mockDataTeam);
+  const [rows, setRows] = useState([]);
   //   const [isAddFormOpen, setAddFormOpen] = useState(false);
   const [isChooseFormOpen, setChooseFormOpen] = useState(false);
   const [isAddCourtFormOpen, setAddCourtFormOpen] = useState(false);
@@ -75,13 +76,13 @@ const Club = () => {
       align: "center",
     },
     {
-      field: "courtid",
+      field: "courtId",
       headerName: "Mã Sân",
       headerAlign: "center",
       align: "center",
     },
     {
-      field: "name",
+      field: "courtName",
       headerName: "Tên Sân",
       flex: 1,
       cellClassName: "name-column--cell",
@@ -89,7 +90,7 @@ const Club = () => {
       align: "center",
     },
     {
-      field: "age",
+      field: "courtStatus",
       headerName: "Trạng thái",
       type: "number",
       headerAlign: "center",
@@ -126,6 +127,20 @@ const Club = () => {
       ),
     },
   ];
+
+  const fetchallClubs = async (id) => {
+    try {
+      const response = await api.get(`/courts/${id}`);
+      const clubs = response.data;
+      setRows(clubs);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchallClubs(26);
+  }, []);
 
   return (
     <Box m="20px" className="team-container">
@@ -168,7 +183,11 @@ const Club = () => {
           },
         }}
       >
-        <DataGrid rows={rows} columns={columns} />
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          getRowId={(row) => row.courtId}
+        />
       </Box>
       <ChooseFormDialog
         open={isChooseFormOpen}
