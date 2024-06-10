@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import Profile from "./components/profile";
 import ManageAccount from "./components/manage-account";
 import Staff from "./components/staff";
-import Club from "./club";
+import Club from "../src/components/club";
 
 function App() {
   const user = useSelector(selectUser);

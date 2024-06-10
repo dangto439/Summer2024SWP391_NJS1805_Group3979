@@ -7,8 +7,6 @@ import {
   Typography,
   useTheme,
   Collapse,
-  List,
-  ListItem,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { tokens } from "../../theme";
@@ -23,6 +21,7 @@ import InventoryOutlinedIcon from "@mui/icons-material/InventoryOutlined";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
+import PlaceIcon from "@mui/icons-material/Place";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -49,7 +48,7 @@ const MySidebar = () => {
   );
   const [selected, setSelected] = useState("Dashboard");
   const [openStaffs, setOpenStaffs] = useState(false);
-  const [openClubs, setOpenClubs] = useState(false);
+  const [openCourts, setOpenClubs] = useState(false);
   const [openBooking, setOpenBooking] = useState(false);
 
   useEffect(() => {
@@ -60,8 +59,8 @@ const MySidebar = () => {
     setOpenStaffs(!openStaffs);
   };
 
-  const handleClubsClick = () => {
-    setOpenClubs(!openClubs);
+  const handleCourtClick = () => {
+    setOpenClubs(!openCourts);
   };
 
   const handleBookingClick = () => {
@@ -176,13 +175,20 @@ const MySidebar = () => {
             >
               Management
             </Typography>
+            <Item
+              title="Club"
+              to="club"
+              icon={<PlaceIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
             <MenuItem
               onClick={handleStaffsClick}
               style={{ color: colors.grey[100] }}
               icon={<GroupOutlinedIcon />}
             >
               <Typography display="flex">
-                Staffs
+                Staff
                 {openStaffs ? <ExpandLessIcon /> : <ExpandMoreIcon />}
               </Typography>
             </MenuItem>
@@ -224,21 +230,21 @@ const MySidebar = () => {
             </Collapse>
 
             <MenuItem
-              onClick={handleClubsClick}
+              onClick={handleCourtClick}
               style={{ color: colors.grey[100] }}
               icon={<StarOutlineIcon />}
             >
               <Typography display="flex">
-                Clubs
-                {openClubs ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                Court
+                {openCourts ? <ExpandLessIcon /> : <ExpandMoreIcon />}
               </Typography>
             </MenuItem>
-            <Collapse in={openClubs} timeout="auto" unmountOnExit>
+            <Collapse in={openCourts} timeout="auto" unmountOnExit>
               <Box component="div" disablePadding>
                 <Box sx={{ pl: 4 }}>
                   <Item
                     title="ClubID1"
-                    to="club/clubid1"
+                    to="court/clubid1"
                     selected={selected}
                     setSelected={setSelected}
                   />
@@ -246,7 +252,7 @@ const MySidebar = () => {
                 <Box sx={{ pl: 4 }}>
                   <Item
                     title="ClubID2"
-                    to="club/clubid2"
+                    to="court/clubid2"
                     selected={selected}
                     setSelected={setSelected}
                   />
@@ -254,21 +260,22 @@ const MySidebar = () => {
                 <Box sx={{ pl: 4 }}>
                   <Item
                     title="ClubID3"
-                    to="club/clubid3"
+                    to="court/clubid3"
                     selected={selected}
                     setSelected={setSelected}
                   />
                 </Box>
-                <Box sx={{ pl: 4 }}>
+                {/* <Box sx={{ pl: 4 }}>
                   <Item
                     title="All Court"
                     to="club/allcourt"
                     selected={selected}
                     setSelected={setSelected}
                   />
-                </Box>
+                </Box> */}
               </Box>
             </Collapse>
+
             <MenuItem
               onClick={handleBookingClick}
               style={{ color: colors.grey[100] }}
