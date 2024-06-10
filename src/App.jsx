@@ -14,6 +14,8 @@ import { selectUser } from "./redux/features/counterSlice";
 import { Navigate } from "react-router-dom/dist";
 import { toast } from "react-toastify";
 import Profile from "./components/profile";
+import Intro from "./pages/intro";
+import Contact from "./pages/contact";
 
 function App() {
   const user = useSelector(selectUser);
@@ -21,7 +23,7 @@ function App() {
 
   const AuthRoute = ({ children }) => {
     if (user == null || user.role != "ADMIN") {
-      toast.error("m ko co quyen vao day th lz ");
+      toast.error("You are not Admin!");
       return <Navigate to="/login" />;
     }
     return children;
@@ -45,6 +47,22 @@ function App() {
           element: (
             // <PrivateRoute>
             <HomePage />
+            // </PrivateRoute>
+          ),
+        },
+        {
+          path: "/introduction",
+          element: (
+            // <PrivateRoute>
+            <Intro />
+            // </PrivateRoute>
+          ),
+        },
+        {
+          path: "/contact",
+          element: (
+            // <PrivateRoute>
+            <Contact />
             // </PrivateRoute>
           ),
         },
