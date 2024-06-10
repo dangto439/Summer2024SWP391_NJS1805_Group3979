@@ -35,11 +35,10 @@ function Login() {
     try {
       const response = await api.post("/login", values);
       // response.data = data back end tra ve
-      console.log(response.data);
+      const token = response.data.token;
       //luu vo redux
       dispatch(login(response.data));
       //lay token ra
-      const { token } = response.data;
       // save vo local storage
       localStorage.setItem("token", token);
 
@@ -48,7 +47,7 @@ function Login() {
       toast.success("Login Successfully!");
 
       if (role === "CUSTOMER") navigate("/");
-      else if (role === "ADMIN") navigate("/dashboard");
+      else if (role === "CLUB_OWNER") navigate("/dashboard");
     } catch (error) {
       toast.error("Incorrect Email or Password!");
       console.log(error);

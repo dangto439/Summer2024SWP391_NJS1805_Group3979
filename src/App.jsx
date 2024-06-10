@@ -16,6 +16,9 @@ import { toast } from "react-toastify";
 import Profile from "./components/profile";
 import Intro from "./pages/intro";
 import Contact from "./pages/contact";
+import ManageAccount from "./components/manage-account";
+import Staff from "./components/staff";
+import Club from "./club";
 
 function App() {
   const user = useSelector(selectUser);
@@ -68,6 +71,7 @@ function App() {
         },
       ],
     },
+
     {
       path: "/login",
       element: <Login />,
@@ -85,41 +89,27 @@ function App() {
       element: <ResetPassword />,
     },
     {
-      path: "/dashboard",
-
-      element: (
-        <AuthRoute>
-          <Dashboard />
-        </AuthRoute>
-      ),
+      path: "/dashboard/*",
+      element: <Dashboard />,
       children: [
         {
-          path: "/dashboard/club1",
-          element: <div>Club</div>,
+          path: "staff/allstaff",
+          element: <Staff />,
         },
+
         {
-          path: "/dashboard/club2",
-          element: <div>Club2</div>,
+          path: "club/allcourt",
+          element: <Club />,
         },
+
         {
-          path: "/dashboard/club3",
-          element: <div>Club3</div>,
-        },
-        {
-          path: "/dashboard/all-promotion",
-          element: <div>All Promotion</div>,
-        },
-        {
-          path: "/dashboard/profile",
+          path: "profile",
           element: <Profile />,
         },
+
         {
-          path: "/dashboard/overview",
-          element: <div>Overview</div>,
-        },
-        {
-          path: "/dashboard/manage",
-          element: <div>Manage</div>,
+          path: "manage-account",
+          element: <ManageAccount />,
         },
       ],
     },

@@ -1,12 +1,16 @@
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
+
 import "./index.scss";
 import { Button, Form, Input, Modal, Radio } from "antd";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { useForm } from "antd/es/form/Form";
+import api from "../../config/axios";
 
 function Profile() {
   const [form] = useForm();
   const { confirm } = Modal;
+  const [avatarUrl, setAvatarUrl] = useState("");
   const showConfirm = () => {
     confirm({
       title: "Are you sure?",
@@ -41,9 +45,35 @@ function Profile() {
       reader.readAsDataURL(file);
     }
   };
+
+  const fetchProfileData = async () => {
+    try {
+      const response = await api.get("/profile");
+      const profileData = response.data;
+      setAvatarUrl(profileData.avatar);
+      form.setFieldsValue({
+        avatar: profileData.avatar,
+        email: profileData.email,
+        name: profileData.name,
+        gender: profileData.gender,
+        phone: profileData.phone,
+      });
+    } catch (error) {
+      console.error("Error fetching profile data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfileData();
+  }, []);
+
   return (
     <div className="container">
       <h1>Edit Profile</h1>
+
+      <div className="profile-pic-container">
+        <img src={avatarUrl} alt="Profile Picture" className="profile-pic" />
+      </div>
 
       <Form
         form={form}
