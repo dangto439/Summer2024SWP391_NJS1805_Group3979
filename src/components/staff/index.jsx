@@ -9,12 +9,14 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import "./index.scss";
 import AddNewStaffAccountForm from "./formaddnewstaffaccount";
+import { useLocation } from "react-router-dom";
 
 const Staff = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState(mockDataTeam);
   const [isAddFormOpen, setAddFormOpen] = useState(false);
+  const location = useLocation();
 
   const handleDelete = (id) => {
     confirmAlert({
@@ -45,20 +47,20 @@ const Staff = () => {
   };
 
   const handleFormSubmit = (value) => {
-    //Viết hàm submit vào đây nè
+    // Viết hàm submit vào đây
     handleFormClose();
   };
 
-  const columns = [
+  const allColumns = [
     {
-      field: "id",
-      headerName: "Staff ID",
+      field: "clubid",
+      headerName: "Club ID",
       headerAlign: "center",
       align: "center",
     },
     {
-      field: "clubid",
-      headerName: "Club ID",
+      field: "id",
+      headerName: "Staff ID",
       headerAlign: "center",
       align: "center",
     },
@@ -108,6 +110,11 @@ const Staff = () => {
     },
   ];
 
+  const columns =
+    location.pathname === "/dashboard/staff/clubid1"
+      ? allColumns.filter((column) => column.field !== "clubid")
+      : allColumns;
+
   return (
     <Box m="20px" className="team-container">
       <Header
@@ -136,7 +143,7 @@ const Staff = () => {
             backgroundColor: colors.greenAccent[800],
             borderBottom: "none",
           },
-          "&.MuIDataGrid-virtualScroller": {
+          "& .MuiDataGrid-virtualScroller": {
             backgroundColor: colors.primary[400],
           },
           "& .MuiDataGrid-footerContainer": {
