@@ -9,6 +9,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import "./index.scss";
 import AddNewStaffAccountForm from "./formaddnewstaffaccount";
 import api from "../../config/axios";
+import { Popconfirm } from "antd";
 
 const Staff = () => {
   const theme = useTheme();
@@ -16,16 +17,22 @@ const Staff = () => {
   const [rows, setRows] = useState([]);
   const [isAddFormOpen, setAddFormOpen] = useState(false);
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
+    //call api cho nay
+    const response = await api.put(`/block-staff/${id}`);
+
+    console.log(response.data);
+    fetchaccountstaff();
+  };
+
+  const handleConfirm = (id) => {
     confirmAlert({
       title: "Confirm to delete",
       message: "Are you sure you want to delete this account?",
       buttons: [
         {
           label: "Yes",
-          onClick: () => {
-            setRows(rows.filter((row) => row.id !== id));
-          },
+          onClick: () => handleDelete(id),
         },
         {
           label: "No",
@@ -91,12 +98,6 @@ const Staff = () => {
       align: "center",
     },
     {
-      field: "accountStatus",
-      headerName: "Account Status",
-      headerAlign: "center",
-      align: "center",
-    },
-    {
       field: "delete",
       headerName: "Delete Account",
       flex: 1,
@@ -104,7 +105,7 @@ const Staff = () => {
       align: "center",
       renderCell: (params) => (
         <IconButton
-          onClick={() => handleDelete(params.id)}
+          onClick={() => handleConfirm(params.id)}
           sx={{ color: "#AF2525" }}
         >
           <DeleteOutlineIcon />
@@ -117,16 +118,17 @@ const Staff = () => {
     try {
       const response = await api.get("/staff");
       const accounts = response.data;
-      const rows = accounts.map((account, index) => ({
-        id: index + 1,
-        clubId: account.club.clubId,
-        name: account.name,
-        email: account.email,
-        gender: account.gender,
-        phone: account.phone,
-        accountStatus: account.accountStatus,
-      }));
-      setRows(rows);
+      const activeAccounts = accounts
+        .filter((account) => account.accountStatus === "ACTIVE")
+        .map((account) => ({
+          id: account.id,
+          clubId: account.club.clubId,
+          name: account.name,
+          email: account.email,
+          gender: account.gender,
+          phone: account.phone,
+        }));
+      setRows(activeAccounts);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
