@@ -22,16 +22,14 @@ const Club = () => {
   const [isAddCourtFormOpen, setAddCourtFormOpen] = useState(false);
   const [isCreateClubFormOpen, setCreateClubFormOpen] = useState(false);
 
-  const handleDelete = (id) => {
+  const handleConfirm = (id) => {
     confirmAlert({
       title: "Confirm to delete",
       message: "Are you sure you want to delete this club?",
       buttons: [
         {
           label: "Yes",
-          onClick: () => {
-            setRows(rows.filter((row) => row.id !== id));
-          },
+          onClick: () => handleDelete(id),
         },
         {
           label: "No",
@@ -41,6 +39,16 @@ const Club = () => {
       overlayClassName: "custom-confirm-alert-overlay",
     });
   };
+
+  const handleDelete = async (id) => {
+    //call api cho nay
+    const response = await api.put(`/court/${id}`);
+
+    console.log(response.data);
+
+    fetchallClubs(26);
+  };
+
   const handleUpdate = (id) => {};
 
   const handleChooseExistingClub = () => {
@@ -119,7 +127,7 @@ const Club = () => {
       align: "center",
       renderCell: (params) => (
         <IconButton
-          onClick={() => handleDelete(params.id)}
+          onClick={() => handleConfirm(params.id)}
           sx={{ color: "#AF2525" }}
         >
           <DeleteOutlineIcon />
