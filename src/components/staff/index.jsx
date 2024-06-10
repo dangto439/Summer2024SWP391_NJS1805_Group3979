@@ -25,23 +25,23 @@ const Staff = () => {
     fetchaccountstaff();
   };
 
-  // const handleConfirm = (email) => {
-  //   confirmAlert({
-  //     title: "Confirm to delete",
-  //     message: "Are you sure you want to delete this account?",
-  //     buttons: [
-  //       {
-  //         label: "Yes",
-  //         onClick: handleDelete(email),
-  //       },
-  //       {
-  //         label: "No",
-  //         onClick: () => {},
-  //       },
-  //     ],
-  //     overlayClassName: "custom-confirm-alert-overlay",
-  //   });
-  // };
+  const handleConfirm = (id) => {
+    confirmAlert({
+      title: "Confirm to delete",
+      message: "Are you sure you want to delete this account?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => handleDelete(id),
+        },
+        {
+          label: "No",
+          onClick: () => {},
+        },
+      ],
+      overlayClassName: "custom-confirm-alert-overlay",
+    });
+  };
 
   const handleAddNewStaffAccount = () => {
     setAddFormOpen(true);
@@ -103,16 +103,13 @@ const Staff = () => {
       flex: 1,
       headerAlign: "center",
       align: "center",
-      renderCell: (item) => (
-        <Popconfirm
-          title="Delete the task"
-          description="Are you sure to delete this task?"
-          onConfirm={() => handleDelete(item.id)}
-          okText="Yes"
-          cancelText="No"
+      renderCell: (params) => (
+        <IconButton
+          onClick={() => handleConfirm(params.id)}
+          sx={{ color: "#AF2525" }}
         >
           <DeleteOutlineIcon />
-        </Popconfirm>
+        </IconButton>
       ),
     },
   ];
