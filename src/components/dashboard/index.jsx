@@ -5,6 +5,7 @@ import Sidebar from "./sidebar";
 import Staff from "../staff/index";
 import { Route, Routes } from "react-router-dom";
 import Profile from "../profile";
+import Club from "../../club/index";
 
 function Dashboard() {
   const [theme, colorMode] = useMode();
@@ -19,6 +20,8 @@ function Dashboard() {
             <Topbar />
             <Routes>
               <Route path="staff/allstaff" element={<Staff />} />
+              <Route path="club/allcourt" element={<Club />} />
+
               <Route path="profile" element={<Profile />} />
             </Routes>
           </Box>

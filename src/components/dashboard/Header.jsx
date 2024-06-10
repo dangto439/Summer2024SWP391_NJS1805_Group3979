@@ -2,7 +2,7 @@ import React from "react";
 import { Typography, Box, Button, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 
-const Header = ({ title, subtitle, onAddStaff }) => {
+const Header = ({ title, subtitle, buttonText, onButtonClick }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -26,20 +26,22 @@ const Header = ({ title, subtitle, onAddStaff }) => {
           {subtitle}
         </Typography>
       </Box>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={onAddStaff}
-        sx={{
-          backgroundColor: colors.greenAccent[600],
-          color: colors.grey[100],
-          "&:hover": {
-            backgroundColor: colors.greenAccent[800],
-          },
-        }}
-      >
-        Thêm mới Staff account
-      </Button>
+      {buttonText && onButtonClick && (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={onButtonClick}
+          sx={{
+            backgroundColor: colors.greenAccent[600],
+            color: colors.grey[100],
+            "&:hover": {
+              backgroundColor: colors.greenAccent[800],
+            },
+          }}
+        >
+          {buttonText}
+        </Button>
+      )}
     </Box>
   );
 };

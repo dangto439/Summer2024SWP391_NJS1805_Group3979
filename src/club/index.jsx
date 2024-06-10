@@ -1,25 +1,30 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Box, IconButton, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { tokens } from "../../theme";
-import Header from "../dashboard/Header";
+import { tokens } from "../theme";
+import { mockDataTeam } from "../data/mockData";
+import Header from "../components/dashboard/Header";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import "./index.scss";
-import AddNewStaffAccountForm from "./formaddnewstaffaccount";
-import api from "../../config/axios";
-
-const Staff = () => {
+import ChooseFormDialog from "./chooseformdialog.jsx";
+import AddNewCourtForm from "./addnewcourtform.jsx";
+import CreateNewClubForm from "./createnewclubform.jsx";
+const Club = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [rows, setRows] = useState([]);
-  const [isAddFormOpen, setAddFormOpen] = useState(false);
+  const [rows, setRows] = useState(mockDataTeam);
+  //   const [isAddFormOpen, setAddFormOpen] = useState(false);
+  const [isChooseFormOpen, setChooseFormOpen] = useState(false);
+  const [isAddCourtFormOpen, setAddCourtFormOpen] = useState(false);
+  const [isCreateClubFormOpen, setCreateClubFormOpen] = useState(false);
 
   const handleDelete = (id) => {
     confirmAlert({
       title: "Confirm to delete",
-      message: "Are you sure you want to delete this account?",
+      message: "Are you sure you want to delete this club?",
       buttons: [
         {
           label: "Yes",
@@ -35,15 +40,28 @@ const Staff = () => {
       overlayClassName: "custom-confirm-alert-overlay",
     });
   };
+  const handleUpdate = (id) => {};
 
-  const handleAddNewStaffAccount = () => {
-    setAddFormOpen(true);
+  const handleChooseExistingClub = () => {
+    setChooseFormOpen(false);
+    setAddCourtFormOpen(true);
+  };
+
+  const handleChooseNewClub = () => {
+    setChooseFormOpen(false);
+    setCreateClubFormOpen(true);
   };
 
   const handleFormClose = () => {
-    setAddFormOpen(false);
+    setChooseFormOpen(false);
+    setAddCourtFormOpen(false);
+    setCreateClubFormOpen(false);
+  };
+  const handleChooseFormOpen = () => {
+    setChooseFormOpen(true);
   };
 
+  //viet 2 ham handlesubmit
   const handleFormSubmit = (value) => {
     //Viết hàm submit vào đây nè
     handleFormClose();
@@ -52,53 +70,49 @@ const Staff = () => {
   const columns = [
     {
       field: "id",
-      headerName: "Staff ID", //tên cột
+      headerName: "Mã Club",
       headerAlign: "center",
       align: "center",
     },
     {
-      field: "clubId",
-      headerName: "Club ID",
+      field: "courtid",
+      headerName: "Mã Sân",
       headerAlign: "center",
       align: "center",
     },
     {
       field: "name",
-      headerName: "Name",
+      headerName: "Tên Sân",
       flex: 1,
       cellClassName: "name-column--cell",
       headerAlign: "center",
       align: "center",
     },
     {
-      field: "gender",
-      headerName: "Gender",
+      field: "age",
+      headerName: "Trạng thái",
+      type: "number",
       headerAlign: "center",
       align: "center",
     },
     {
-      field: "phone",
-      headerName: "Phone Number",
+      field: "update",
+      headerName: "Cập Nhật Sân",
       flex: 1,
       headerAlign: "center",
       align: "center",
-    },
-    {
-      field: "email",
-      headerName: "Email",
-      flex: 1,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "accountStatus",
-      headerName: "Account Status",
-      headerAlign: "center",
-      align: "center",
+      renderCell: (params) => (
+        <IconButton
+          onClick={() => handleUpdate(params.id)}
+          sx={{ color: "#CE671B" }}
+        >
+          <PublishedWithChangesIcon />
+        </IconButton>
+      ),
     },
     {
       field: "delete",
-      headerName: "Delete Account",
+      headerName: "Xóa Sân",
       flex: 1,
       headerAlign: "center",
       align: "center",
@@ -113,36 +127,13 @@ const Staff = () => {
     },
   ];
 
-  const fetchaccountstaff = async () => {
-    try {
-      const response = await api.get("/staff");
-      const accounts = response.data;
-      const rows = accounts.map((account, index) => ({
-        id: index + 1,
-        clubId: account.club.clubId,
-        name: account.name,
-        email: account.email,
-        gender: account.gender,
-        phone: account.phone,
-        accountStatus: account.accountStatus,
-      }));
-      setRows(rows);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchaccountstaff();
-  }, []);
-
   return (
     <Box m="20px" className="team-container">
       <Header
         title="Manage Staff Account"
         subtitle="Dĩm nè"
-        buttonText="Thêm mới Staff account"
-        onButtonClick={handleAddNewStaffAccount}
+        buttonText="Thêm mới sân"
+        onButtonClick={handleChooseFormOpen}
       />
       <Box
         m="40px 0 0 0"
@@ -179,8 +170,19 @@ const Staff = () => {
       >
         <DataGrid rows={rows} columns={columns} />
       </Box>
-      <AddNewStaffAccountForm
-        open={isAddFormOpen}
+      <ChooseFormDialog
+        open={isChooseFormOpen}
+        onClose={() => setChooseFormOpen(false)}
+        onChooseExistingClub={handleChooseExistingClub}
+        onChooseNewClub={handleChooseNewClub}
+      />
+      <AddNewCourtForm
+        open={isAddCourtFormOpen}
+        onClose={handleFormClose}
+        onSubmit={handleFormSubmit}
+      />
+      <CreateNewClubForm
+        open={isCreateClubFormOpen}
         onClose={handleFormClose}
         onSubmit={handleFormSubmit}
       />
@@ -188,4 +190,4 @@ const Staff = () => {
   );
 };
 
-export default Staff;
+export default Club;
