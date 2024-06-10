@@ -1,12 +1,86 @@
-import { Link } from "react-router-dom";
-import { SearchOutlined, CloseOutlined } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  SearchOutlined,
+  CloseOutlined,
+  UserOutlined,
+  BarsOutlined,
+  HistoryOutlined,
+  PoweroffOutlined,
+} from "@ant-design/icons";
 import "./index.scss";
-import { useState } from "react";
-import { Button } from "antd";
+import { useEffect, useState } from "react";
+import { Button, Dropdown } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, selectUser } from "../../redux/features/counterSlice";
+import { toast } from "react-toastify";
+import api from "../../config/axios";
 
-function Headerr() {
+function Header() {
   const [isShowSearch, setIsShowSearch] = useState(false);
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  const navigate = useNavigate();
 
+  const handleLogOut = () => {
+    dispatch(logout());
+    toast.success("Đăng xuất thành công!");
+    navigate("/");
+  };
+
+  const onClick = ({ key }) => {
+    switch (key) {
+      case "1":
+        navigate("/register");
+        break;
+      case "2":
+        navigate("/login");
+        break;
+      case "3":
+        handleLogOut();
+        break;
+      default:
+        break;
+    }
+  };
+
+  const items = [
+    {
+      label: "Hồ sơ",
+      key: "1",
+      icon: <UserOutlined />,
+    },
+    {
+      label: "Lịch sử đặt lịch",
+      key: "2",
+      icon: <HistoryOutlined />,
+    },
+    {
+      label: "Đăng xuất",
+      key: "3",
+      icon: <PoweroffOutlined />,
+      danger: true,
+    },
+  ];
+  const menuProps = {
+    items,
+    onClick,
+  };
+  const [tab, setTab] = useState([]);
+
+  const [name, setName] = useState("");
+  const fetchProfileData = async () => {
+    try {
+      const response = await api.get("/profile");
+      const profileData = response.data;
+      setName(profileData.name);
+    } catch (error) {
+      console.error("Error fetching profile data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfileData();
+  }, []);
   return (
     <header className="header">
       <div className="header__logo">
@@ -367,45 +441,108 @@ function Headerr() {
       </div>
       <nav className="header__nav">
         <ul>
-          <li>
-            <Link to="/">Trang chủ</Link>
-          </li>
-          <li>
-            <Link to="/">Giới thiệu</Link>
-          </li>
-          <li>
-            <Link to="/">Chính sách</Link>
-          </li>
-          <li>
-            <Link to="/">Danh sách sân</Link>
-          </li>
-
-          <li
+          <button
             onClick={() => {
-              setIsShowSearch(true);
+              setTab(1);
+              setIsShowSearch(false);
             }}
+            className={`header__link ${tab == 1 && "active"}`}
           >
-            <SearchOutlined />
-          </li>
+            <li className="header__list">
+              <Link to="/">TRANG CHỦ</Link>
+            </li>
+          </button>
+          <button
+            onClick={() => {
+              setTab(2);
+              setIsShowSearch(false);
+            }}
+            className={`header__link ${tab == 2 && "active"}`}
+          >
+            <li>
+              <Link to="/introduction">GIỚI THIỆU</Link>
+            </li>
+          </button>
+          <button
+            onClick={() => {
+              setTab(3);
+              setIsShowSearch(false);
+            }}
+            className={`header__link ${tab == 3 && "active"}`}
+          >
+            <li>
+              <Link to="/">DANH SÁCH SÂN</Link>
+            </li>
+          </button>
+          <button
+            onClick={() => {
+              setTab(4);
+              setIsShowSearch(false);
+            }}
+            className={`header__link ${tab == 4 && "active"}`}
+          >
+            <li>
+              <Link to="/">LỊCH THI ĐẤU</Link>
+            </li>
+          </button>
+          <button
+            onClick={() => {
+              setTab(5);
+              setIsShowSearch(false);
+            }}
+            className={`header__link ${tab == 5 && "active"}`}
+          >
+            <li>
+              <Link to="/contact">LIÊN HỆ</Link>
+            </li>
+          </button>
+          <button
+            onClick={() => {
+              setTab(6);
+            }}
+            className={`header__link ${tab == 6 && "active"}`}
+          >
+            <li
+              onClick={() => {
+                setIsShowSearch(true);
+              }}
+            >
+              <SearchOutlined />
+            </li>
+          </button>
         </ul>
       </nav>
       <div className="header__button">
-        <div>
-          <Link to="login">
-            <Button className="custome">Đăng nhập</Button>
-          </Link>
-        </div>
-        <div>
-          <Link to="register">
-            <Button className="custome">Đăng ký</Button>
-          </Link>
-        </div>
+        {user == null ? (
+          <>
+            <div>
+              <Link to="login">
+                <Button className="custome">Đăng nhập</Button>
+              </Link>
+            </div>
+            <div>
+              <Link to="register">
+                <Button className="custome">Đăng ký</Button>
+              </Link>
+            </div>
+          </>
+        ) : (
+          <Dropdown.Button
+            menu={menuProps}
+            placement="bottom"
+            icon={<BarsOutlined />}
+          >
+            {name}
+          </Dropdown.Button>
+        )}
       </div>
+
       <div className={`header__search ${isShowSearch ? "active" : ""}`}>
         <input type="text" placeholder="Tìm kiếm sân..." />
         <CloseOutlined
           onClick={() => {
             setIsShowSearch(false);
+            setTab([]);
           }}
         />
       </div>
@@ -413,4 +550,4 @@ function Headerr() {
   );
 }
 
-export default Headerr;
+export default Header;

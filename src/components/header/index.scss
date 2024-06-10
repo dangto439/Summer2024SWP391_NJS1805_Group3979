@@ -1,11 +1,11 @@
 .header{
-    background-color:rgb(45, 114, 11) ;
+    background-color:#24bd16a1;
     display: flex;
     justify-content: space-between;
-    padding: 10px 300px;
+    padding: 10px 50px;
     position: fixed;
 
-    // position: relative;
+    position: relative;
     top: 0;
     right: 0;
     left: 0;
@@ -13,7 +13,8 @@
     
 
     &__logo{
-        margin-top: 10px;
+        margin-top: 15px;
+        
     }
 
     &__button {
@@ -21,8 +22,9 @@
         align-items: center;
         outline: 0; 
         gap: 20px;
+        padding-left: 20px;
         Button{
-            background-color: rgb(83, 170, 81);
+            background-color: rgb(29, 141, 29);
             color: #fff;
             border: none;
             padding: 1px 32px;
@@ -42,9 +44,10 @@
         left: 0;
         right: 0;
         background-color: white;
-        padding: 10px 200px;
+        padding: 10px 400px;
         display: flex;
         transition: all 0.5s;
+        cursor: pointer;
         input{
             flex-grow: 1;
             border: none;
@@ -55,24 +58,63 @@
             top: 100%
         }
     }
-
     &__nav{
         ul{
             display: flex;
             gap: 30px;
             list-style: none;
             cursor: pointer;
-            margin-top: 15px;      
+            margin-top: 10px;     
+         
             a{
                 text-decoration: none;
-                color: rgb(221, 210, 210);
+                color: rgb(255, 255, 255);
             }
-        
             li{
-                font-size: 20px;
+                font-size: 16px;
                 color: #fff;
             }         
         }
+    }
+    &__link{
+        text-align: center;
+        border-radius: 50px;
+        background-color: #75D56C;
+        width: auto;
+        height: auto;
+        border: none;
+        margin-bottom: 15px;
+        
+              
+        li{
+            margin-top: 10px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            // margin-left: 2px;
+            padding-left: 8px;
+        }
+    }
+    &__link:hover{
+        text-align: center;
+        border-radius: 50px;
+        background-color: rgb(29, 141, 29);
+        width: auto;
+        height: auto;
+        border: none;
+        margin-bottom: 15px;
+        color: #75D56C;
+        cursor: pointer;
+        li{
+            margin-top: 10px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            // margin-left: 3px;
+            padding-left: 8px;
+        }
+    }
+    &__link.active{
+        background-color:rgb(29, 141, 29);
+        
     }
 }
 
