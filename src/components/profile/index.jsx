@@ -1,11 +1,13 @@
-
 import { useEffect, useState } from "react";
 
 import "./index.scss";
-import { Button, Form, Input, Modal, Radio } from "antd";
+import { Button, Form, Input, Modal, Radio, Upload } from "antd";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { useForm } from "antd/es/form/Form";
 import api from "../../config/axios";
+import { toast } from "react-toastify";
+import { UploadOutlined } from "@mui/icons-material";
+import uploadFile from "../../utils/upload";
 
 function Profile() {
   const [form] = useForm();
@@ -17,7 +19,7 @@ function Profile() {
       icon: <ExclamationCircleFilled />,
       content: "Change your infomation",
       onOk() {
-        console.log("OK");
+        handleOk();
       },
       onCancel() {
         console.log("Cancel");
@@ -25,22 +27,20 @@ function Profile() {
     });
   };
 
+  function handleOk() {
+    form.submit();
+  }
+
   const resetChange = () => {
-    form.resetFields();
-    setProfilePic(
-      "https://allimages.sgp1.digitaloceanspaces.com/photographereduvn/2022/06/1654263156_418_Hinh-anh-hinh-nen-Minion-cute-de-thuong-Full-HD.jpg"
-    );
+    fetchProfileData();
   };
 
-  const [profilePic, setProfilePic] = useState(
-    "https://allimages.sgp1.digitaloceanspaces.com/photographereduvn/2022/06/1654263156_418_Hinh-anh-hinh-nen-Minion-cute-de-thuong-Full-HD.jpg"
-  );
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfilePic(reader.result);
+        setAvatarUrl(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -67,34 +67,51 @@ function Profile() {
     fetchProfileData();
   }, []);
 
+  const handleUpdateProfile = async (values) => {
+    try {
+      const response = await uploadFile(values.avatar.file.originFileObj);
+      values.avatar = response;
+      const account = await api.put("/profile", values);
+      fetchProfileData();
+    } catch (error) {
+      toast.error("Update thông tin thất bại!");
+    }
+  };
+
+  const props = {
+    action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
+    onChange({ file, fileList }) {
+      if (file.status !== "uploading") {
+        console.log(file, fileList);
+      }
+    },
+    defaultFileList: [],
+  };
+
   return (
     <div className="container">
       <h1>Edit Profile</h1>
-
-      <div className="profile-pic-container">
-        <img src={avatarUrl} alt="Profile Picture" className="profile-pic" />
-      </div>
 
       <Form
         form={form}
         className="form"
         autoComplete="off"
         labelCol={{ span: 24 }}
+        onFinish={handleUpdateProfile}
       >
         <div className="form-group">
           <div className="profile-pic-container">
             <img
-              src={profilePic}
+              src={avatarUrl}
               alt="Profile Picture"
               className="profile-pic"
             />
-            <Input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="file-input"
-            />
           </div>
+          <Form.Item name="avatar">
+            <Upload {...props}>
+              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            </Upload>
+          </Form.Item>
           <Form.Item label="Email" name="email">
             <Input
               disabled
