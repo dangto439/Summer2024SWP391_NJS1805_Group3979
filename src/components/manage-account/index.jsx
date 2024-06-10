@@ -50,8 +50,8 @@ function ManageAccount() {
       key: "email",
       render: (email) => (
         <Popconfirm
-          title="Delete the task"
-          description="Are you sure to delete this task?"
+          title="Confirm to delete"
+          description="Are you sure you want to delete this account?"
           onConfirm={() => handleDeleteAccount(email)}
           okText="Yes"
           cancelText="No"
