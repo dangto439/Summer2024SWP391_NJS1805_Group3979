@@ -4,37 +4,15 @@ import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme.js";
 import { mockDataTeam } from "../../data/mockData.js";
 import Header from "../../components/dashboard/Header.jsx";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
-import { confirmAlert } from "react-confirm-alert";
-import "react-confirm-alert/src/react-confirm-alert.css";
-import "./index.scss";
 import CreateNewClubForm from "./createnewclubform.jsx";
+import DeleteButton from "../global/deletebutton";
 const Club = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState(mockDataTeam);
   const [isCreateNewClub, setCreateNewClub] = useState(false);
 
-  const handleDelete = (id) => {
-    confirmAlert({
-      title: "Confirm to delete",
-      message: "Are you sure you want to delete this club?",
-      buttons: [
-        {
-          label: "Yes",
-          onClick: () => {
-            setRows(rows.filter((row) => row.id !== id));
-          },
-        },
-        {
-          label: "No",
-          onClick: () => {},
-        },
-      ],
-      overlayClassName: "custom-confirm-alert-overlay",
-    });
-  };
   const handleUpdate = (id) => {};
 
   const handleFormOpen = () => {
@@ -59,36 +37,36 @@ const Club = () => {
       headerAlign: "center",
       align: "center",
     },
-    {
-      field: "name",
-      headerName: "Địa chỉ",
-      flex: 1,
-      cellClassName: "name-column--cell",
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "name",
-      headerName: "Hotline",
-      flex: 1,
-      cellClassName: "name-column--cell",
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "age",
-      headerName: "Số lượng sân",
-      type: "number",
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "age",
-      headerName: "Thời gian hoạt động",
-      type: "number",
-      headerAlign: "center",
-      align: "center",
-    },
+    // {
+    //   field: "name",
+    //   headerName: "Địa chỉ",
+    //   flex: 1,
+    //   cellClassName: "name-column--cell",
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
+    // {
+    //   field: "name",
+    //   headerName: "Hotline",
+    //   flex: 1,
+    //   cellClassName: "name-column--cell",
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
+    // {
+    //   field: "age",
+    //   headerName: "Số lượng sân",
+    //   type: "number",
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
+    // {
+    //   field: "age",
+    //   headerName: "Thời gian hoạt động",
+    //   type: "number",
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
 
     {
       field: "age",
@@ -119,12 +97,7 @@ const Club = () => {
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
-        <IconButton
-          onClick={() => handleDelete(params.id)}
-          sx={{ color: "#AF2525" }}
-        >
-          <DeleteOutlineIcon />
-        </IconButton>
+        <DeleteButton id={params.id} rows={rows} setRows={setRows} />
       ),
     },
   ];

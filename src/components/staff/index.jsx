@@ -1,15 +1,12 @@
 import { useState } from "react";
-import { Box, IconButton, useTheme } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { mockDataTeam } from "../../data/mockData";
 import Header from "../dashboard/Header";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import { confirmAlert } from "react-confirm-alert";
-import "react-confirm-alert/src/react-confirm-alert.css";
-import "./index.scss";
 import AddNewStaffAccountForm from "./formaddnewstaffaccount";
 import { useLocation } from "react-router-dom";
+import DeleteButton from "../global/deletebutton";
 
 const Staff = () => {
   const theme = useTheme();
@@ -17,26 +14,6 @@ const Staff = () => {
   const [rows, setRows] = useState(mockDataTeam);
   const [isAddFormOpen, setAddFormOpen] = useState(false);
   const location = useLocation();
-
-  const handleDelete = (id) => {
-    confirmAlert({
-      title: "Confirm to delete",
-      message: "Are you sure you want to delete this account?",
-      buttons: [
-        {
-          label: "Yes",
-          onClick: () => {
-            setRows(rows.filter((row) => row.id !== id));
-          },
-        },
-        {
-          label: "No",
-          onClick: () => {},
-        },
-      ],
-      overlayClassName: "custom-confirm-alert-overlay",
-    });
-  };
 
   const handleAddNewStaffAccount = () => {
     setAddFormOpen(true);
@@ -100,18 +77,13 @@ const Staff = () => {
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
-        <IconButton
-          onClick={() => handleDelete(params.id)}
-          sx={{ color: "#AF2525" }}
-        >
-          <DeleteOutlineIcon />
-        </IconButton>
+        <DeleteButton id={params.id} rows={rows} setRows={setRows} />
       ),
     },
   ];
 
   const columns =
-    location.pathname === "/dashboard/staff/clubid1"
+    location.pathname === "/staff/clubid1"
       ? allColumns.filter((column) => column.field !== "clubid")
       : allColumns;
 
