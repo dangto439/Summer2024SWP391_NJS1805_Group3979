@@ -1,4 +1,6 @@
+
 import { useEffect, useState } from "react";
+
 import "./index.scss";
 import { Button, Form, Input, Modal, Radio } from "antd";
 import { ExclamationCircleFilled } from "@ant-design/icons";
@@ -25,6 +27,23 @@ function Profile() {
 
   const resetChange = () => {
     form.resetFields();
+    setProfilePic(
+      "https://allimages.sgp1.digitaloceanspaces.com/photographereduvn/2022/06/1654263156_418_Hinh-anh-hinh-nen-Minion-cute-de-thuong-Full-HD.jpg"
+    );
+  };
+
+  const [profilePic, setProfilePic] = useState(
+    "https://allimages.sgp1.digitaloceanspaces.com/photographereduvn/2022/06/1654263156_418_Hinh-anh-hinh-nen-Minion-cute-de-thuong-Full-HD.jpg"
+  );
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfilePic(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const fetchProfileData = async () => {
@@ -51,9 +70,11 @@ function Profile() {
   return (
     <div className="container">
       <h1>Edit Profile</h1>
+
       <div className="profile-pic-container">
         <img src={avatarUrl} alt="Profile Picture" className="profile-pic" />
       </div>
+
       <Form
         form={form}
         className="form"
@@ -61,9 +82,22 @@ function Profile() {
         labelCol={{ span: 24 }}
       >
         <div className="form-group">
+          <div className="profile-pic-container">
+            <img
+              src={profilePic}
+              alt="Profile Picture"
+              className="profile-pic"
+            />
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="file-input"
+            />
+          </div>
           <Form.Item label="Email" name="email">
             <Input
-              readOnly
+              disabled
               id="email"
               placeholder="name@example.com"
               className="form-input"
@@ -123,59 +157,6 @@ function Profile() {
             <Input
               id="phone"
               placeholder="(+84) 123-456-789"
-              className="form-input"
-            />
-          </Form.Item>
-        </div>
-
-        <div className="form-group">
-          <Form.Item
-            label="New Password"
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: "Please input your Password!",
-              },
-              {
-                min: 6,
-                message: "Password must be at least 6 characters long!",
-              },
-            ]}
-          >
-            <Input.Password
-              id="password"
-              placeholder="Password"
-              className="form-input"
-            />
-          </Form.Item>
-        </div>
-
-        <div className="form-group">
-          <Form.Item
-            label="Confirm New Password"
-            name="confirm-password"
-            dependencies={["password"]}
-            rules={[
-              {
-                required: true,
-                message: "Please confirm your Password!",
-              },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || getFieldValue("password") === value) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(
-                    new Error("The two passwords do not match!")
-                  );
-                },
-              }),
-            ]}
-          >
-            <Input.Password
-              id="confirm-password"
-              placeholder="Confirm Password"
               className="form-input"
             />
           </Form.Item>
