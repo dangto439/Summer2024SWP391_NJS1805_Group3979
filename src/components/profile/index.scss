@@ -16,8 +16,9 @@ h1 {
 
 .profile-pic-container {
   position: relative;
-  display: inline-block;
+  display: flex;
   margin-bottom: 20px;
+  justify-content: center;
 }
 
 .profile-pic {
