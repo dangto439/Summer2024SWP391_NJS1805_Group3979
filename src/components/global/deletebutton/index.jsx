@@ -2,17 +2,16 @@ import { IconButton } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
+import api from "../../../config/axios";
 
-const handleDelete = (id, rows, setRows) => {
+const handleConfirm = (id, rows, setRows, linkapi, fetfunction) => {
   confirmAlert({
     title: "Confirm to delete",
     message: "Are you sure you want to delete this account?",
     buttons: [
       {
         label: "Yes",
-        onClick: () => {
-          setRows(rows.filter((row) => row.id !== id));
-        },
+        onClick: () => handleDelete(id, linkapi, fetfunction),
       },
       {
         label: "No",
@@ -23,9 +22,14 @@ const handleDelete = (id, rows, setRows) => {
   });
 };
 
-const DeleteButton = ({ id, rows, setRows }) => (
+const handleDelete = async (id, linkapi, fetfunction) => {
+  await api.delete(`/${linkapi}/${id}`);
+  fetfunction();
+};
+
+const DeleteButton = ({ id, rows, setRows, linkapi, fetfunction }) => (
   <IconButton
-    onClick={() => handleDelete(id, rows, setRows)}
+    onClick={() => handleConfirm(id, rows, setRows, linkapi, fetfunction)}
     sx={{ color: "#AF2525" }}
   >
     <DeleteOutlineIcon />
