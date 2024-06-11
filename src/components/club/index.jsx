@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, IconButton, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme.js";
@@ -7,6 +7,7 @@ import Header from "../../components/dashboard/Header.jsx";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import CreateNewClubForm from "./createnewclubform.jsx";
 import DeleteButton from "../global/deletebutton";
+import api from "../../config/axios.js";
 const Club = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -23,36 +24,36 @@ const Club = () => {
     setCreateNewClub(false);
   };
 
-  const handleFormSubmit = (value) => {
+  const handleFormSubmit = () => {
     //Viết hàm submit vào đây nè
     handleFormClose();
   };
 
   const columns = [
     {
-      field: "name",
+      field: "clubName",
       headerName: "Tên Club",
       flex: 1,
       cellClassName: "name-column--cell",
       headerAlign: "center",
       align: "center",
     },
-    // {
-    //   field: "name",
-    //   headerName: "Địa chỉ",
-    //   flex: 1,
-    //   cellClassName: "name-column--cell",
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
-    // {
-    //   field: "name",
-    //   headerName: "Hotline",
-    //   flex: 1,
-    //   cellClassName: "name-column--cell",
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
+    {
+      field: "clubAddress",
+      headerName: "Địa chỉ",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "hotline",
+      headerName: "Hotline",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      headerAlign: "center",
+      align: "center",
+    },
     // {
     //   field: "age",
     //   headerName: "Số lượng sân",
@@ -69,7 +70,15 @@ const Club = () => {
     // },
 
     {
-      field: "age",
+      field: "description",
+      headerName: "Ghi chú",
+      type: "number",
+      headerAlign: "center",
+      align: "center",
+    },
+
+    {
+      field: "clubStatus",
       headerName: "Trạng thái",
       type: "number",
       headerAlign: "center",
@@ -97,10 +106,44 @@ const Club = () => {
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
-        <DeleteButton id={params.id} rows={rows} setRows={setRows} />
+        <DeleteButton
+          id={params.id}
+          rows={rows}
+          setRows={setRows}
+          linkapi={"club"}
+          fetfunction={fetchallClubs}
+        />
       ),
     },
   ];
+
+  const fetchallClubs = async () => {
+    try {
+      const response = await api.get(`current-clubs`);
+      const clubs = response.data;
+
+      const filteredClubs = clubs.filter(
+        (club) => club.clubStatus !== "DELETED"
+      );
+      const rows = filteredClubs.map((club, index) => ({
+        id: club.clubId || index,
+        clubName: club.clubName,
+        clubStatus: club.clubStatus,
+        clubAddress: club.clubAddress,
+        hotline: club.hotline,
+        openTime: club.openTime,
+        closeTime: club.closeTime,
+        description: club.description,
+      }));
+      setRows(rows);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchallClubs();
+  }, []);
 
   return (
     <Box m="20px" className="team-container">
@@ -149,6 +192,7 @@ const Club = () => {
         open={isCreateNewClub}
         onClose={handleFormClose}
         onSubmit={handleFormSubmit}
+        fetFunction={fetchallClubs}
       />
     </Box>
   );
