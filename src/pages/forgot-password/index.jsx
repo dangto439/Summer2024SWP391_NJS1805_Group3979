@@ -17,10 +17,10 @@ function ForgetPassword() {
         email: values.email,
       });
       console.log(response.data);
-      toast.success("Password reset Email sent successfully!");
+      toast.success("Đặt lại mật khẩu đã gửi Email thành công!");
     } catch (error) {
       console.error(error.message);
-      toast.error("Error sending password reset Email!");
+      toast.error("Lỗi gửi Email đặt lại mật khẩu!");
     } finally {
       navigate("/login");
       setLoading(false);
@@ -28,8 +28,8 @@ function ForgetPassword() {
   };
   return (
     <div className="forget-password">
-      <h1 className="forget-password__heading">Forgot Password</h1>
-      <p className="forget-password__form-desc">Enter your email address</p>
+      <h1 className="forget-password__heading">Quên mật khẩu</h1>
+      <p className="forget-password__form-desc">Nhập địa chỉ Email của bạn</p>
       <div className="text-wrap">
         <div className="text-line"></div>
         <div className="text-line"></div>
@@ -49,17 +49,17 @@ function ForgetPassword() {
             rules={[
               {
                 type: "email",
-                message: "The input is not valid E-mail!",
+                message: "Email không hơp lệ!",
               },
               {
                 required: true,
-                message: "Please input your E-mail!",
+                message: "Vui lòng nhập Email của bạn!",
               },
             ]}
           >
             <Input
               id="email"
-              placeholder="name@example.com"
+              placeholder="name@gmail.com"
               className="form-input"
             />
           </Form.Item>
@@ -71,14 +71,14 @@ function ForgetPassword() {
           className="form-btn"
           disabled={loading}
         >
-          Reset Password
+          Đặt lại mật khẩu
         </Button>
         <Link to="/login" className="form-link-login">
-          Login
+          Đăng nhập
         </Link>
 
         <Link to="/register" className="form-link-register">
-          Register
+          Đăng kí
         </Link>
       </Form>
     </div>

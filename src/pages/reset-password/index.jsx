@@ -4,7 +4,7 @@ import "./index.scss";
 function ResetPassword() {
   return (
     <div className="reset-password">
-      <h1 className="reset-password__heading">Reset Password</h1>
+      <h1 className="reset-password__heading">Thay đổi mật khẩu</h1>
       {/* <p className="reset-password__form-desc">Please </p> */}
       <div className="text-wrap">
         <div className="text-line"></div>
@@ -18,22 +18,22 @@ function ResetPassword() {
       >
         <div className="form-group">
           <Form.Item
-            label="Password"
+            label="Mật khẩu mới"
             name="password"
             rules={[
               {
                 required: true,
-                message: "Please input your Password!",
+                message: "Vui lòng nhập mật khẩu mới!",
               },
               {
                 min: 6,
-                message: "Password must be at least 6 characters long!",
+                message: "Mật khẩu phải có độ dài ít nhất 6 ký tự!",
               },
             ]}
           >
             <Input.Password
               id="password"
-              placeholder="Password"
+              placeholder="******"
               className="form-input"
             />
           </Form.Item>
@@ -41,13 +41,13 @@ function ResetPassword() {
 
         <div className="form-group">
           <Form.Item
-            label="Confirm Password"
+            label="Xác nhận mật khẩu mới"
             name="confirm-password"
             dependencies={["password"]}
             rules={[
               {
                 required: true,
-                message: "Please confirm your Password!",
+                message: "Vui lòng xác nhận mật khẩu của bạn!",
               },
               ({ getFieldValue }) => ({
                 validator(_, value) {
@@ -55,7 +55,7 @@ function ResetPassword() {
                     return Promise.resolve();
                   }
                   return Promise.reject(
-                    new Error("The two passwords do not match!")
+                    new Error("Xác nhận mật khẩu không khớp!")
                   );
                 },
               }),
@@ -63,13 +63,13 @@ function ResetPassword() {
           >
             <Input.Password
               id="confirm-password"
-              placeholder="Confirm Password"
+              placeholder="******"
               className="form-input"
             />
           </Form.Item>
         </div>
         <Button type="primary" htmlType="submit" className="form-btn">
-          Change Password
+          Đổi mật khẩu
         </Button>
       </Form>
     </div>

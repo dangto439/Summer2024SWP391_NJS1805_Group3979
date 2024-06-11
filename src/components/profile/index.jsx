@@ -15,9 +15,9 @@ function Profile() {
   const [avatarUrl, setAvatarUrl] = useState("");
   const showConfirm = () => {
     confirm({
-      title: "Are you sure?",
+      title: "Bạn chắc chứ?",
       icon: <ExclamationCircleFilled />,
-      content: "Change your infomation",
+      content: "Thay đổi thông tin của bạn",
       onOk() {
         handleOk();
       },
@@ -74,7 +74,7 @@ function Profile() {
       const account = await api.put("/profile", values);
       fetchProfileData();
     } catch (error) {
-      toast.error("Update thông tin thất bại!");
+      toast.error("Cập nhật thông tin thất bại!");
     }
   };
 
@@ -90,7 +90,7 @@ function Profile() {
 
   return (
     <div className="container">
-      <h1>Edit Profile</h1>
+      <h1>Chỉnh sửa hồ sơ</h1>
 
       <Form
         form={form}
@@ -124,7 +124,7 @@ function Profile() {
 
         <div className="form-group">
           <Form.Item
-            label="Name"
+            label="Tên"
             name="name"
             rules={[
               {
@@ -139,7 +139,7 @@ function Profile() {
 
         <div className="form-group">
           <Form.Item
-            label="Gender"
+            label="Giới Tính"
             name="gender"
             rules={[
               {
@@ -149,16 +149,16 @@ function Profile() {
             ]}
           >
             <Radio.Group id="gender" className="form-input">
-              <Radio value="MALE">Male</Radio>
-              <Radio value="FEMALE">Female</Radio>
-              <Radio value="OTHERS">Other</Radio>
+              <Radio value="MALE">Nam</Radio>
+              <Radio value="FEMALE">Nữ</Radio>
+              <Radio value="OTHERS">Khác</Radio>
             </Radio.Group>
           </Form.Item>
         </div>
 
         <div className="form-group">
           <Form.Item
-            label="Phone"
+            label="Điện Thoại"
             name="phone"
             rules={[
               {
