@@ -1,19 +1,25 @@
-import React from "react";
+import { useEffect, useState } from "react";
+
 import "./index.scss";
-import { Button, Form, Input, Modal, Radio } from "antd";
+import { Button, Form, Input, Modal, Radio, Upload } from "antd";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { useForm } from "antd/es/form/Form";
+import api from "../../config/axios";
+import { toast } from "react-toastify";
+import { UploadOutlined } from "@mui/icons-material";
+import uploadFile from "../../utils/upload";
 
 function Profile() {
   const [form] = useForm();
   const { confirm } = Modal;
+  const [avatarUrl, setAvatarUrl] = useState("");
   const showConfirm = () => {
     confirm({
       title: "Are you sure?",
       icon: <ExclamationCircleFilled />,
       content: "Change your infomation",
       onOk() {
-        console.log("OK");
+        handleOk();
       },
       onCancel() {
         console.log("Cancel");
@@ -21,29 +27,94 @@ function Profile() {
     });
   };
 
+  function handleOk() {
+    form.submit();
+  }
+
   const resetChange = () => {
-    form.resetFields();
+    fetchProfileData();
   };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarUrl(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const fetchProfileData = async () => {
+    try {
+      const response = await api.get("/profile");
+      const profileData = response.data;
+      setAvatarUrl(profileData.avatar);
+      form.setFieldsValue({
+        avatar: profileData.avatar,
+        email: profileData.email,
+        name: profileData.name,
+        gender: profileData.gender,
+        phone: profileData.phone,
+      });
+    } catch (error) {
+      console.error("Error fetching profile data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfileData();
+  }, []);
+
+  const handleUpdateProfile = async (values) => {
+    try {
+      const response = await uploadFile(values.avatar.file.originFileObj);
+      values.avatar = response;
+      const account = await api.put("/profile", values);
+      fetchProfileData();
+    } catch (error) {
+      toast.error("Update thông tin thất bại!");
+    }
+  };
+
+  const props = {
+    action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
+    onChange({ file, fileList }) {
+      if (file.status !== "uploading") {
+        console.log(file, fileList);
+      }
+    },
+    defaultFileList: [],
+  };
+
   return (
     <div className="container">
       <h1>Edit Profile</h1>
-      <div className="profile-pic-container">
-        <img
-          src="https://allimages.sgp1.digitaloceanspaces.com/photographereduvn/2022/06/1654263156_418_Hinh-anh-hinh-nen-Minion-cute-de-thuong-Full-HD.jpg"
-          alt="Profile Picture"
-          className="profile-pic"
-        />
-      </div>
+
       <Form
         form={form}
         className="form"
         autoComplete="off"
         labelCol={{ span: 24 }}
+        onFinish={handleUpdateProfile}
       >
         <div className="form-group">
+          <div className="profile-pic-container">
+            <img
+              src={avatarUrl}
+              alt="Profile Picture"
+              className="profile-pic"
+            />
+          </div>
+          <Form.Item name="avatar" className="profile-pic-container">
+            <Upload {...props}>
+              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            </Upload>
+          </Form.Item>
           <Form.Item label="Email" name="email">
             <Input
-              readOnly
+              disabled
               id="email"
               placeholder="name@example.com"
               className="form-input"
@@ -103,59 +174,6 @@ function Profile() {
             <Input
               id="phone"
               placeholder="(+84) 123-456-789"
-              className="form-input"
-            />
-          </Form.Item>
-        </div>
-
-        <div className="form-group">
-          <Form.Item
-            label="New Password"
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: "Please input your Password!",
-              },
-              {
-                min: 6,
-                message: "Password must be at least 6 characters long!",
-              },
-            ]}
-          >
-            <Input.Password
-              id="password"
-              placeholder="Password"
-              className="form-input"
-            />
-          </Form.Item>
-        </div>
-
-        <div className="form-group">
-          <Form.Item
-            label="Confirm New Password"
-            name="confirm-password"
-            dependencies={["password"]}
-            rules={[
-              {
-                required: true,
-                message: "Please confirm your Password!",
-              },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || getFieldValue("password") === value) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(
-                    new Error("The two passwords do not match!")
-                  );
-                },
-              }),
-            ]}
-          >
-            <Input.Password
-              id="confirm-password"
-              placeholder="Confirm Password"
               className="form-input"
             />
           </Form.Item>

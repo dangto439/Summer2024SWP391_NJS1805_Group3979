@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { mockDataTeam } from "../../data/mockData";
 import Header from "../dashboard/Header";
 import AddNewStaffAccountForm from "./formaddnewstaffaccount";
 import { useLocation } from "react-router-dom";
@@ -11,7 +10,7 @@ import DeleteButton from "../global/deletebutton";
 const Staff = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [rows, setRows] = useState(mockDataTeam);
+  const [rows, setRows] = useState([]);
   const [isAddFormOpen, setAddFormOpen] = useState(false);
   const location = useLocation();
 
@@ -50,9 +49,8 @@ const Staff = () => {
       align: "center",
     },
     {
-      field: "age",
-      headerName: "Age",
-      type: "number",
+      field: "gender",
+      headerName: "Gender",
       headerAlign: "center",
       align: "center",
     },

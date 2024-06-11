@@ -22,6 +22,7 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
 import PlaceIcon from "@mui/icons-material/Place";
+import api from "../../config/axios";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -42,6 +43,8 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 const MySidebar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [avatarUrl, setAvatarUrl] = useState("");
+  const [name, setName] = useState("");
 
   const [isCollapsed, setIsCollapsed] = useState(
     JSON.parse(localStorage.getItem("isCollapsed")) || false
@@ -66,6 +69,21 @@ const MySidebar = () => {
   const handleBookingClick = () => {
     setOpenBooking(!openBooking);
   };
+
+  const fetchProfileData = async () => {
+    try {
+      const response = await api.get("/profile");
+      const profileData = response.data;
+      setAvatarUrl(profileData.avatar);
+      setName(profileData.name);
+    } catch (error) {
+      console.error("Error fetching profile data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfileData();
+  }, []);
 
   return (
     <Box
@@ -138,7 +156,7 @@ const MySidebar = () => {
                   alt="profile-user"
                   width="60px"
                   height="60px"
-                  src="https://images.unsplash.com/photo-1716798084682-decdb59ca364?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  src={avatarUrl}
                   style={{ cursor: "pointer", borderRadius: "50%" }}
                 />
               </Box>
@@ -149,7 +167,7 @@ const MySidebar = () => {
                   sx={{ m: "8px 0 0 0" }}
                   fontSize="20px"
                 >
-                  Demi
+                  {name}
                 </Typography>
                 <Typography color={colors.greenAccent[500]} fontSize="10px">
                   FE DatSan79

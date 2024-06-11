@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Box, IconButton, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme.js";
-import { mockDataTeam } from "../../data/mockData.js";
+// import { mockDataTeam } from "../../data/mockData.js";
 import Header from "../../components/dashboard/Header.jsx";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import CreateNewClubForm from "./createnewclubform.jsx";
@@ -10,7 +10,7 @@ import DeleteButton from "../global/deletebutton";
 const Club = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [rows, setRows] = useState(mockDataTeam);
+  const [rows, setRows] = useState([]);
   const [isCreateNewClub, setCreateNewClub] = useState(false);
 
   const handleUpdate = (id) => {};
