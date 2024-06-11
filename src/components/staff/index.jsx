@@ -1,47 +1,18 @@
-import { useEffect, useState } from "react";
-import { Box, IconButton, useTheme } from "@mui/material";
+import { useState } from "react";
+import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "../dashboard/Header";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import { confirmAlert } from "react-confirm-alert";
-import "react-confirm-alert/src/react-confirm-alert.css";
-import "./index.scss";
 import AddNewStaffAccountForm from "./formaddnewstaffaccount";
-import api from "../../config/axios";
-import { Popconfirm } from "antd";
+import { useLocation } from "react-router-dom";
+import DeleteButton from "../global/deletebutton";
 
 const Staff = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState([]);
   const [isAddFormOpen, setAddFormOpen] = useState(false);
-
-  const handleDelete = async (id) => {
-    //call api cho nay
-    const response = await api.put(`/block-staff/${id}`);
-
-    console.log(response.data);
-    fetchaccountstaff();
-  };
-
-  const handleConfirm = (id) => {
-    confirmAlert({
-      title: "Confirm to delete",
-      message: "Are you sure you want to delete this account?",
-      buttons: [
-        {
-          label: "Yes",
-          onClick: () => handleDelete(id),
-        },
-        {
-          label: "No",
-          onClick: () => {},
-        },
-      ],
-      overlayClassName: "custom-confirm-alert-overlay",
-    });
-  };
+  const location = useLocation();
 
   const handleAddNewStaffAccount = () => {
     setAddFormOpen(true);
@@ -52,20 +23,20 @@ const Staff = () => {
   };
 
   const handleFormSubmit = (value) => {
-    //Viết hàm submit vào đây nè
+    // Viết hàm submit vào đây
     handleFormClose();
   };
 
-  const columns = [
+  const allColumns = [
     {
-      field: "id",
-      headerName: "Staff ID", //tên cột
+      field: "clubid",
+      headerName: "Club ID",
       headerAlign: "center",
       align: "center",
     },
     {
-      field: "clubId",
-      headerName: "Club ID",
+      field: "id",
+      headerName: "Staff ID",
       headerAlign: "center",
       align: "center",
     },
@@ -104,39 +75,15 @@ const Staff = () => {
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
-        <IconButton
-          onClick={() => handleConfirm(params.id)}
-          sx={{ color: "#AF2525" }}
-        >
-          <DeleteOutlineIcon />
-        </IconButton>
+        <DeleteButton id={params.id} rows={rows} setRows={setRows} />
       ),
     },
   ];
 
-  const fetchaccountstaff = async () => {
-    try {
-      const response = await api.get("/staff");
-      const accounts = response.data;
-      const activeAccounts = accounts
-        .filter((account) => account.accountStatus === "ACTIVE")
-        .map((account) => ({
-          id: account.id,
-          clubId: account.club.clubId,
-          name: account.name,
-          email: account.email,
-          gender: account.gender,
-          phone: account.phone,
-        }));
-      setRows(activeAccounts);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchaccountstaff();
-  }, []);
+  const columns =
+    location.pathname === "/staff/clubid1"
+      ? allColumns.filter((column) => column.field !== "clubid")
+      : allColumns;
 
   return (
     <Box m="20px" className="team-container">
@@ -166,7 +113,7 @@ const Staff = () => {
             backgroundColor: colors.greenAccent[800],
             borderBottom: "none",
           },
-          "&.MuIDataGrid-virtualScroller": {
+          "& .MuiDataGrid-virtualScroller": {
             backgroundColor: colors.primary[400],
           },
           "& .MuiDataGrid-footerContainer": {

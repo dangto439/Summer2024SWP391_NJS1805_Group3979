@@ -31,7 +31,7 @@ const schema = yup.object().shape({
     }),
 });
 
-const CreateNewClubForm = ({ open, onClose, onSubmit }) => {
+const UpdateCourtForm = ({ open, onClose, onSubmit }) => {
   const {
     control,
     handleSubmit,
@@ -54,7 +54,7 @@ const CreateNewClubForm = ({ open, onClose, onSubmit }) => {
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Tạo mới Club</DialogTitle>
+      <DialogTitle>Cập nhật sân</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(handleFormSubmit)}>
           <FormControl fullWidth margin="normal" error={!!errors.name}>
@@ -149,7 +149,7 @@ const CreateNewClubForm = ({ open, onClose, onSubmit }) => {
               Hủy
             </Button>
             <Button type="submit" color="primary">
-              Tạo
+              Cập nhật
             </Button>
           </DialogActions>
         </form>
@@ -158,4 +158,4 @@ const CreateNewClubForm = ({ open, onClose, onSubmit }) => {
   );
 };
 
-export default CreateNewClubForm;
+export default UpdateCourtForm;

@@ -107,7 +107,7 @@ function Profile() {
               className="profile-pic"
             />
           </div>
-          <Form.Item name="avatar">
+          <Form.Item name="avatar" className="profile-pic-container">
             <Upload {...props}>
               <Button icon={<UploadOutlined />}>Click to Upload</Button>
             </Upload>
