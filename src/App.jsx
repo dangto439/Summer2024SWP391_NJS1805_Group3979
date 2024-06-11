@@ -18,7 +18,8 @@ import Intro from "./pages/intro";
 import Contact from "./pages/contact";
 import ManageAccount from "./components/manage-account";
 import Staff from "./components/staff";
-import Club from "./club";
+import Court from "../src/components/club";
+import Club from "../src/components/club";
 
 function App() {
   const user = useSelector(selectUser);
@@ -93,14 +94,26 @@ function App() {
       element: <Dashboard />,
       children: [
         {
+          path: "club",
+          element: <Club />,
+        },
+        {
+          path: "staff/clubid1",
+          element: <Staff />,
+        },
+        {
           path: "staff/allstaff",
           element: <Staff />,
         },
 
         {
-          path: "club/allcourt",
-          element: <Club />,
+          path: "court/clubid1",
+          element: <Court />,
         },
+        // {
+        //   path: "booking/clubid1",
+        //   element: <Staff />,
+        // },
 
         {
           path: "profile",

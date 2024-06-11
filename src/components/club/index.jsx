@@ -1,76 +1,98 @@
 import { useState } from "react";
-import { Box, useTheme } from "@mui/material";
+import { Box, IconButton, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { tokens } from "../../theme";
-import Header from "../dashboard/Header";
-import AddNewStaffAccountForm from "./formaddnewstaffaccount";
-import { useLocation } from "react-router-dom";
+import { tokens } from "../../theme.js";
+// import { mockDataTeam } from "../../data/mockData.js";
+import Header from "../../components/dashboard/Header.jsx";
+import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
+import CreateNewClubForm from "./createnewclubform.jsx";
 import DeleteButton from "../global/deletebutton";
-
-const Staff = () => {
+const Club = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState([]);
-  const [isAddFormOpen, setAddFormOpen] = useState(false);
-  const location = useLocation();
+  const [isCreateNewClub, setCreateNewClub] = useState(false);
 
-  const handleAddNewStaffAccount = () => {
-    setAddFormOpen(true);
+  const handleUpdate = (id) => {};
+
+  const handleFormOpen = () => {
+    setCreateNewClub(true);
   };
 
   const handleFormClose = () => {
-    setAddFormOpen(false);
+    setCreateNewClub(false);
   };
 
   const handleFormSubmit = (value) => {
-    // Viết hàm submit vào đây
+    //Viết hàm submit vào đây nè
     handleFormClose();
   };
 
-  const allColumns = [
-    {
-      field: "clubid",
-      headerName: "Club ID",
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "id",
-      headerName: "Staff ID",
-      headerAlign: "center",
-      align: "center",
-    },
+  const columns = [
     {
       field: "name",
-      headerName: "Name",
+      headerName: "Tên Club",
       flex: 1,
       cellClassName: "name-column--cell",
       headerAlign: "center",
       align: "center",
     },
+    // {
+    //   field: "name",
+    //   headerName: "Địa chỉ",
+    //   flex: 1,
+    //   cellClassName: "name-column--cell",
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
+    // {
+    //   field: "name",
+    //   headerName: "Hotline",
+    //   flex: 1,
+    //   cellClassName: "name-column--cell",
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
+    // {
+    //   field: "age",
+    //   headerName: "Số lượng sân",
+    //   type: "number",
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
+    // {
+    //   field: "age",
+    //   headerName: "Thời gian hoạt động",
+    //   type: "number",
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
+
     {
-      field: "gender",
-      headerName: "Gender",
+      field: "age",
+      headerName: "Trạng thái",
+      type: "number",
       headerAlign: "center",
       align: "center",
     },
     {
-      field: "phone",
-      headerName: "Phone Number",
+      field: "update",
+      headerName: "Cập Nhật Club",
       flex: 1,
       headerAlign: "center",
       align: "center",
-    },
-    {
-      field: "email",
-      headerName: "Email",
-      flex: 1,
-      headerAlign: "center",
-      align: "center",
+      renderCell: (params) => (
+        <IconButton
+          onClick={() => handleUpdate(params.id)}
+          sx={{ color: "#CE671B" }}
+        >
+          <PublishedWithChangesIcon />
+        </IconButton>
+      ),
     },
     {
       field: "delete",
-      headerName: "Delete Account",
+      headerName: "Xóa Club",
       flex: 1,
       headerAlign: "center",
       align: "center",
@@ -80,18 +102,13 @@ const Staff = () => {
     },
   ];
 
-  const columns =
-    location.pathname === "/staff/clubid1"
-      ? allColumns.filter((column) => column.field !== "clubid")
-      : allColumns;
-
   return (
     <Box m="20px" className="team-container">
       <Header
-        title="Manage Staff Account"
+        title="Manage Club"
         subtitle="Dĩm nè"
-        buttonText="Thêm mới Staff account"
-        onButtonClick={handleAddNewStaffAccount}
+        buttonText="Thêm mới sân"
+        onButtonClick={handleFormOpen}
       />
       <Box
         m="40px 0 0 0"
@@ -113,7 +130,7 @@ const Staff = () => {
             backgroundColor: colors.greenAccent[800],
             borderBottom: "none",
           },
-          "& .MuiDataGrid-virtualScroller": {
+          "&.MuIDataGrid-virtualScroller": {
             backgroundColor: colors.primary[400],
           },
           "& .MuiDataGrid-footerContainer": {
@@ -128,8 +145,8 @@ const Staff = () => {
       >
         <DataGrid rows={rows} columns={columns} />
       </Box>
-      <AddNewStaffAccountForm
-        open={isAddFormOpen}
+      <CreateNewClubForm
+        open={isCreateNewClub}
         onClose={handleFormClose}
         onSubmit={handleFormSubmit}
       />
@@ -137,4 +154,4 @@ const Staff = () => {
   );
 };
 
-export default Staff;
+export default Club;
