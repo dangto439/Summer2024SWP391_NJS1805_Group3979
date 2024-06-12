@@ -1,0 +1,25 @@
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url("https://wallpapers.com/images/featured/badminton-background-dqn50jtswzsszbwf.jpg");
+  }
+  
+  .form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .form-group {
+    margin-bottom: 16px;
+  }
+  
+  .form-btn {
+    width: 100%;
+  }
+  
