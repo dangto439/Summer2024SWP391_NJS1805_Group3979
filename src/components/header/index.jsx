@@ -501,7 +501,7 @@ function Header() {
             </li>
           </button>
 
-          {role == "CLUB_OWNER" || role == "ADMIN" ? (
+          {(role == "CLUB_OWNER" || role == "ADMIN") && user != null ? (
             <button
               onClick={() => {
                 setTab(7);

@@ -1,12 +1,14 @@
-// .container {
-//     width: 80%;
-//     max-width: 1200px;
-//     margin: 0 auto;
-//     padding: 20px;
-//     background-color: #fff;
-//     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-//     margin-top: 20px;
-//   }
+.contact {
+    width: 80%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 20px;
+  }
 
   h1, h2 {
     color: #333;
@@ -36,9 +38,10 @@
 //     border-radius: 5px;
 //     cursor: pointer;
 //   }
-  .form-btn{
-    
+  .form-btn-contact{
     font-size: 16px;
+    // margin-left: 10px;
+    gap: 5px;
     margin-left: 10px;
   }
 

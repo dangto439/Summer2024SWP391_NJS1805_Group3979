@@ -862,8 +862,7 @@ const InputLocation = () => {
           <span>Chơi cầu lông ngay với DatSan79</span>
         </div>
 
-        <Form className="form" labelCol={{ span: 24 }}>
-          {/* <div className="form-group"> */}
+        <Form className="form-location" labelCol={{ span: 24 }}>
           <div className="form-icon">
             <PlaceIcon fontSize="large" />
           </div>
@@ -889,7 +888,6 @@ const InputLocation = () => {
           </div>
 
           <Form.Item className="form-item" label="Quận">
-            {/* <label htmlFor="district">Chọn Quận/Huyện:</label> */}
             <Select
               style={{ width: 200 }}
               id="district"
@@ -914,12 +912,6 @@ const InputLocation = () => {
         </Form>
       </div>
     </div>
-    // <div className="container">
-    //   <div className="block">
-    //     <h1>Xin chào!</h1>
-    //     <p>Chơi Cầu Lông ngay với DHSCBGC!!</p>
-    //   </div>
-    // </div>
   );
 };
 

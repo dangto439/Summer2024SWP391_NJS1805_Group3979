@@ -7,7 +7,7 @@ function Contact() {
   const [form] = useForm();
 
   return (
-    <div className="container">
+    <div className="contact">
       <h1>Liên Hệ DatSan3979</h1>
       <p>
         Chúng tôi luôn sẵn sàng lắng nghe ý kiến và phản hồi từ bạn. Hãy liên hệ
@@ -16,12 +16,12 @@ function Contact() {
 
       <Form
         form={form}
-        className="register__form"
+        className="contact-form"
         labelCol={{
           span: 24,
         }}
       >
-        <div className="form-group">
+        <div className="form-group-contact">
           <Form.Item
             label="Email"
             name="email"
@@ -44,7 +44,7 @@ function Contact() {
           </Form.Item>
         </div>
 
-        <div className="form-group">
+        <div className="form-group-contact">
           <Form.Item
             label="Tên của bạn"
             name="name"
@@ -59,7 +59,7 @@ function Contact() {
           </Form.Item>
         </div>
 
-        <div className="form-group">
+        <div className="form-group-contact">
           <Form.Item
             label="Điện thoại"
             name="phone"
@@ -81,7 +81,7 @@ function Contact() {
             />
           </Form.Item>
         </div>
-        <div className="form-group">
+        <div className="form-group-contact">
           <Form.Item
             label="Tin nhắn"
             name="message"
@@ -99,20 +99,20 @@ function Contact() {
             />
           </Form.Item>
         </div>
-        <Button
-          onClick={() => {
-            form.resetFields();
-          }}
-          type=""
-          htmlType="reset"
-          className="form-btn"
-        >
-          Nhập lại
-        </Button>
-        <Button type="primary" htmlType="submit" className="form-btn">
-          Gửi tin
-        </Button>
       </Form>
+      <Button type="primary" htmlType="submit" className="form-btn-contact">
+        Gửi tin
+      </Button>
+      <Button
+        onClick={() => {
+          form.resetFields();
+        }}
+        type=""
+        htmlType="reset"
+        className="form-btn-contact"
+      >
+        Nhập lại
+      </Button>
 
       <div className="contact-info">
         <h2>Thông Tin Liên Hệ</h2>
