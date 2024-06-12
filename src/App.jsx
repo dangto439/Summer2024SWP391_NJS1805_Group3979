@@ -70,6 +70,14 @@ function App() {
             // </PrivateRoute>
           ),
         },
+        {
+          path: "/profile",
+          element: (
+            // <PrivateRoute>
+            <Profile />
+            // </PrivateRoute>
+          ),
+        },
       ],
     },
 
