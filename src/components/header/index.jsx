@@ -68,10 +68,13 @@ function Header() {
   const [tab, setTab] = useState([]);
 
   const [name, setName] = useState("");
+  const [role, setRole] = useState("");
   const fetchProfileData = async () => {
     try {
       const response = await api.get("/profile");
       const profileData = response.data;
+      setRole(profileData.role);
+      console.log(role);
       setName(profileData.name);
     } catch (error) {
       console.error("Error fetching profile data:", error);
@@ -485,6 +488,7 @@ function Header() {
               <Link to="/">LỊCH THI ĐẤU</Link>
             </li>
           </button>
+
           <button
             onClick={() => {
               setTab(5);
@@ -496,6 +500,22 @@ function Header() {
               <Link to="/contact">LIÊN HỆ</Link>
             </li>
           </button>
+
+          {role == "CLUB_OWNER" || role == "ADMIN" ? (
+            <button
+              onClick={() => {
+                setTab(7);
+                setIsShowSearch(false);
+              }}
+              className={`header__link ${tab == 7 && "active"}`}
+            >
+              <li>
+                <Link to="/dashboard">QUẢN LÝ</Link>
+              </li>
+            </button>
+          ) : (
+            ""
+          )}
           <button
             onClick={() => {
               setTab(6);
