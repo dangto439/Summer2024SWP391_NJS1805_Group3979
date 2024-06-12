@@ -28,17 +28,17 @@ function Contact() {
             rules={[
               {
                 type: "email",
-                message: "The input is not valid E-mail!",
+                message: "Email không hợp lệ!",
               },
               {
                 required: true,
-                message: "Please input your E-mail!",
+                message: "Vui lòng nhập Email của bạn!",
               },
             ]}
           >
             <Input
               id="email"
-              placeholder="name@example.com"
+              placeholder="name@gmail.com"
               className="form-input"
             />
           </Form.Item>
@@ -51,7 +51,7 @@ function Contact() {
             rules={[
               {
                 required: true,
-                message: "Please input your Name!",
+                message: "Vui lòng nhập tên của bạn!",
               },
             ]}
           >
@@ -66,11 +66,11 @@ function Contact() {
             rules={[
               {
                 required: true,
-                message: "Please input your Phone number!",
+                message: "Vui lòng nhập số điện thoại của bạn!",
               },
               {
                 pattern: /^\d{10}$/,
-                message: "Please input a valid 10-digit phone number!",
+                message: "Vui lòng nhập số điện thoại hợp lệ gồm 10 chữ số!",
               },
             ]}
           >
@@ -88,7 +88,7 @@ function Contact() {
             rules={[
               {
                 required: true,
-                message: "Please input your Phone number!",
+                message: "Vui lòng nhập ý kiến của bạn!",
               },
             ]}
           >
@@ -99,20 +99,20 @@ function Contact() {
             />
           </Form.Item>
         </div>
+        <Button
+          onClick={() => {
+            form.resetFields();
+          }}
+          type=""
+          htmlType="reset"
+          className="form-btn"
+        >
+          Nhập lại
+        </Button>
+        <Button type="primary" htmlType="submit" className="form-btn">
+          Gửi tin
+        </Button>
       </Form>
-      <Button
-        onClick={() => {
-          form.resetFields();
-        }}
-        type=""
-        htmlType="reset"
-        className="form-btn"
-      >
-        Nhập lại
-      </Button>
-      <Button type="primary" htmlType="submit" className="form-btn">
-        Gửi tin
-      </Button>
 
       <div className="contact-info">
         <h2>Thông Tin Liên Hệ</h2>

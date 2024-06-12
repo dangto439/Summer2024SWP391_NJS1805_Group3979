@@ -30,10 +30,10 @@ function Header() {
   const onClick = ({ key }) => {
     switch (key) {
       case "1":
-        navigate("/register");
+        navigate("/profile");
         break;
       case "2":
-        navigate("/login");
+        navigate("/register");
         break;
       case "3":
         handleLogOut();
