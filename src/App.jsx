@@ -72,10 +72,10 @@ function App() {
           ),
         },
         {
-
           path: "/booking",
           element: <Booking />,
-
+        },
+        {
           path: "/profile",
           element: (
             // <PrivateRoute>

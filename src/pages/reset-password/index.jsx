@@ -19,15 +19,13 @@ function ResetPassword() {
       },
     };
 
-    // Thêm token vào values
-    // const payload = { ...values, token };
-
     try {
       await axios.put(
         "http://157.245.153.47:8080/api/reset-password",
         { newPassword: values.password },
         config
       );
+      toast.success("Đặt lại mật khẩu mới thành công!");
       navigate("/login");
     } catch (error) {
       toast.error(error.response.data);
