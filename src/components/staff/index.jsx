@@ -28,49 +28,49 @@ const Staff = () => {
   };
 
   const allColumns = [
-    {
-      field: "clubid",
-      headerName: "Club ID",
-      headerAlign: "center",
-      align: "center",
-    },
+    // {
+    //   field: "clubid",
+    //   headerName: "Club ID",
+    //   headerAlign: "left",
+    //   align: "left",
+    // },
     {
       field: "id",
-      headerName: "Staff ID",
-      headerAlign: "center",
-      align: "center",
+      headerName: "Mã",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "name",
-      headerName: "Name",
+      headerName: "Tên",
       flex: 1,
       cellClassName: "name-column--cell",
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "gender",
-      headerName: "Gender",
-      headerAlign: "center",
-      align: "center",
+      headerName: "Giới tính",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "phone",
-      headerName: "Phone Number",
+      headerName: "Số điện thoại",
       flex: 1,
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "email",
       headerName: "Email",
       flex: 1,
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "delete",
-      headerName: "Delete Account",
+      headerName: "Xóa",
       flex: 1,
       headerAlign: "center",
       align: "center",
@@ -93,9 +93,9 @@ const Staff = () => {
   return (
     <Box m="20px" className="team-container">
       <Header
-        title="Manage Staff Account"
-        subtitle="Dĩm nè"
-        buttonText="Thêm mới Staff account"
+        title="Quản lý nhân viên"
+        subtitle=""
+        buttonText="Tạo tài khoản mới"
         onButtonClick={handleAddNewStaffAccount}
       />
       <Box

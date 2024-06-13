@@ -44,58 +44,58 @@ const Club = () => {
       headerName: "Tên Club",
       flex: 1,
       cellClassName: "name-column--cell",
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "clubAddress",
       headerName: "Địa chỉ",
       flex: 1,
       cellClassName: "name-column--cell",
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "hotline",
       headerName: "Hotline",
       flex: 1,
       cellClassName: "name-column--cell",
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
     // {
     //   field: "age",
     //   headerName: "Số lượng sân",
     //   type: "number",
-    //   headerAlign: "center",
-    //   align: "center",
+    //   headerAlign: "left",
+    //   align: "left",
     // },
     // {
     //   field: "age",
     //   headerName: "Thời gian hoạt động",
     //   type: "number",
-    //   headerAlign: "center",
-    //   align: "center",
+    //   headerAlign: "left",
+    //   align: "left",
     // },
 
     {
       field: "description",
-      headerName: "Ghi chú",
+      headerName: "Mô tả",
       type: "number",
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
 
     {
       field: "clubStatus",
       headerName: "Trạng thái",
       type: "number",
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "update",
-      headerName: "Cập Nhật Club",
+      headerName: "Cập Nhật",
       flex: 1,
       headerAlign: "center",
       align: "center",
@@ -110,7 +110,7 @@ const Club = () => {
     },
     {
       field: "delete",
-      headerName: "Xóa Club",
+      headerName: "Xóa",
       flex: 1,
       headerAlign: "center",
       align: "center",
@@ -157,9 +157,9 @@ const Club = () => {
   return (
     <Box m="20px" className="team-container">
       <Header
-        title="Manage Club"
-        subtitle="Dĩm nè"
-        buttonText="Thêm mới sân"
+        title="Quản lý club"
+        subtitle=""
+        buttonText="Tạo club mới"
         onButtonClick={handleCreate}
       />
       <Box

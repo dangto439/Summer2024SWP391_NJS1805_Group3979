@@ -32,27 +32,27 @@ const Club = () => {
     {
       field: "courtid",
       headerName: "Mã Sân",
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "courtName",
       headerName: "Tên Sân",
       flex: 1,
       cellClassName: "name-column--cell",
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "courtStatus",
       headerName: "Trạng thái",
       type: "number",
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "update",
-      headerName: "Cập Nhật Sân",
+      headerName: "Cập Nhật",
       flex: 1,
       headerAlign: "center",
       align: "center",
@@ -67,7 +67,7 @@ const Club = () => {
     },
     {
       field: "delete",
-      headerName: "Xóa Sân",
+      headerName: "Xóa",
       flex: 1,
       headerAlign: "center",
       align: "center",
@@ -94,9 +94,9 @@ const Club = () => {
   return (
     <Box m="20px" className="team-container">
       <Header
-        title="Manage Court"
-        subtitle="Dĩm nè"
-        buttonText="Thêm mới sân"
+        title="Quản lý sân"
+        subtitle=""
+        buttonText="Tạo sân mới"
         onButtonClick={handleAddNewCourtForm}
       />
       <Box
