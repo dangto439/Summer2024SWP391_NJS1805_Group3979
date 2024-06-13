@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
@@ -80,10 +80,15 @@ const Staff = () => {
     },
   ];
 
-  const columns =
-    location.pathname === "/staff/clubid1"
-      ? allColumns.filter((column) => column.field !== "clubid")
-      : allColumns;
+  const [columns, setColumns] = useState([]);
+
+  useEffect(() => {
+    setColumns(
+      location.pathname === "/dashboard/staff/clubid1"
+        ? allColumns.filter((column) => column.field !== "clubid")
+        : allColumns
+    );
+  }, [location]);
 
   return (
     <Box m="20px" className="team-container">

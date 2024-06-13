@@ -14,8 +14,10 @@ import {
   FormControl,
   InputLabel,
   FormHelperText,
+  useTheme,
 } from "@mui/material";
 import api from "../../config/axios";
+import { tokens } from "../../theme";
 
 const schema = yup.object().shape({
   clubName: yup.string().required("Name is required"),
@@ -36,7 +38,7 @@ const schema = yup.object().shape({
     }),
 });
 
-const CreateNewClubForm = ({ open, onClose, onSubmit, fetFunction }) => {
+const Forms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
   const {
     control,
     handleSubmit,
@@ -47,6 +49,12 @@ const CreateNewClubForm = ({ open, onClose, onSubmit, fetFunction }) => {
 
   const [province, setProvince] = useState("");
   const [districts, setDistricts] = useState([]);
+
+  useEffect(() => {
+    if (mode === "update" && clubid) {
+      //viet cu phap update du lieu tu DB len
+    }
+  }, [mode, clubid]);
 
   const handleProvinceChange = (event) => {
     setProvince(event.target.value);
@@ -62,17 +70,23 @@ const CreateNewClubForm = ({ open, onClose, onSubmit, fetFunction }) => {
     };
 
     try {
+      if (mode === "create") {
+        await api.post("/club", adjustedData);
+      } else if (mode === "update") {
+        // cu phap cho submit cho update
+      }
       onSubmit(adjustedData);
-      await api.post("/club", adjustedData);
       fetFunction();
     } catch (error) {
-      console.error("Error creating club: ", error);
+      console.error("Error submitting form: ", error);
     }
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Tạo mới Club</DialogTitle>
+      <DialogTitle>
+        {mode === "create" ? "Tạo mới Club" : "Cập nhật Club"}
+      </DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(handleFormSubmit)}>
           <FormControl fullWidth margin="normal" error={!!errors.clubName}>
@@ -170,7 +184,7 @@ const CreateNewClubForm = ({ open, onClose, onSubmit, fetFunction }) => {
               Hủy
             </Button>
             <Button type="submit" color="primary">
-              Tạo
+              {mode === "create" ? "Tạo" : "Cập nhật"}
             </Button>
           </DialogActions>
         </form>
@@ -179,4 +193,4 @@ const CreateNewClubForm = ({ open, onClose, onSubmit, fetFunction }) => {
   );
 };
 
-export default CreateNewClubForm;
+export default Forms;

@@ -5,23 +5,32 @@ import { tokens } from "../../theme.js";
 // import { mockDataTeam } from "../../data/mockData.js";
 import Header from "../../components/dashboard/Header.jsx";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
-import CreateNewClubForm from "./createnewclubform.jsx";
 import DeleteButton from "../global/deletebutton";
 import api from "../../config/axios.js";
+import Forms from "./forms.jsx";
 const Club = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState([]);
-  const [isCreateNewClub, setCreateNewClub] = useState(false);
+  const [isFormOpen, setFormOpen] = useState(false);
+  const [mode, setMode] = useState("");
+  const [selectedClubId, setSelectedClubId] = useState("");
 
-  const handleUpdate = (id) => {};
+  const handleUpdate = (id) => {
+    setMode("update");
+    setSelectedClubId(id);
+    console.log(id);
+    setFormOpen(true);
+  };
 
-  const handleFormOpen = () => {
-    setCreateNewClub(true);
+  const handleCreate = () => {
+    setMode("create");
+    setSelectedClubId(null);
+    setFormOpen(true);
   };
 
   const handleFormClose = () => {
-    setCreateNewClub(false);
+    setFormOpen(false);
   };
 
   const handleFormSubmit = () => {
@@ -151,7 +160,7 @@ const Club = () => {
         title="Manage Club"
         subtitle="Dĩm nè"
         buttonText="Thêm mới sân"
-        onButtonClick={handleFormOpen}
+        onButtonClick={handleCreate}
       />
       <Box
         m="40px 0 0 0"
@@ -188,11 +197,13 @@ const Club = () => {
       >
         <DataGrid rows={rows} columns={columns} />
       </Box>
-      <CreateNewClubForm
-        open={isCreateNewClub}
+      <Forms
+        open={isFormOpen}
         onClose={handleFormClose}
         onSubmit={handleFormSubmit}
         fetFunction={fetchallClubs}
+        mode={mode}
+        id={selectedClubId}
       />
     </Box>
   );
