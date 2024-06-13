@@ -3,28 +3,34 @@ import { Box, IconButton, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme.js";
 // import { mockDataTeam } from "../../data/mockData.js";
-import Header from "../../components/dashboard/Header.jsx";
+import Header from "../dashboard/Header.jsx";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
-import AddNewCourtForm from "./addnewcourtform.jsx";
-import DeleteButton from "../global/deletebutton";
+import DeleteButton from "../global/deletebutton/index.jsx";
+import Forms from "./forms.jsx";
 const Club = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState([]);
-  const [isAddCourtFormOpen, setAddCourtFormOpen] = useState(false);
+  const [isFormOpen, setFormOpen] = useState(false);
+  const [mode, setMode] = useState("");
+  const [selectedCourtId, setSelectedCourtId] = useState("");
 
-  const handleUpdate = (id) => {};
+  const handleUpdate = (id) => {
+    setMode("update");
+    setSelectedCourtId(id);
+    setFormOpen(true);
+  };
 
+  const handleCreate = () => {
+    setMode("create");
+    setSelectedCourtId(null);
+    setFormOpen(true);
+  };
   const handleFormClose = () => {
-    setAddCourtFormOpen(false);
-  };
-  const handleAddNewCourtForm = () => {
-    setAddCourtFormOpen(true);
+    setFormOpen(false);
   };
 
-  //viet 2 ham handlesubmit
-  const handleFormSubmit = (value) => {
-    //Viết hàm submit vào đây nè
+  const handleFormSubmit = () => {
     handleFormClose();
   };
 
@@ -77,18 +83,17 @@ const Club = () => {
     },
   ];
 
-  const fetchallClubs = async (id) => {
+  const fetchCourts = async () => {
     try {
-      const response = await api.get(`/courts/${id}`);
-      const clubs = response.data;
-      setRows(clubs);
+      // nội dung fetch
+      setRows(rows);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   useEffect(() => {
-    fetchallClubs(26);
+    fetchCourts();
   }, []);
 
   return (
@@ -97,7 +102,7 @@ const Club = () => {
         title="Quản lý sân"
         subtitle=""
         buttonText="Tạo sân mới"
-        onButtonClick={handleAddNewCourtForm}
+        onButtonClick={handleCreate}
       />
       <Box
         m="40px 0 0 0"
@@ -139,10 +144,13 @@ const Club = () => {
         />
       </Box>
 
-      <AddNewCourtForm
-        open={isAddCourtFormOpen}
+      <Forms
+        open={isFormOpen}
         onClose={handleFormClose}
         onSubmit={handleFormSubmit}
+        fetFunction={fetchCourts}
+        mode={mode}
+        id={selectedCourtId}
       />
     </Box>
   );

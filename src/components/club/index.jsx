@@ -34,7 +34,6 @@ const Club = () => {
   };
 
   const handleFormSubmit = () => {
-    //Viết hàm submit vào đây nè
     handleFormClose();
   };
 

@@ -3,7 +3,7 @@ import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "../dashboard/Header";
-import AddNewStaffAccountForm from "./formaddnewstaffaccount";
+import Forms from "./forms";
 import { useLocation } from "react-router-dom";
 import DeleteButton from "../global/deletebutton";
 
@@ -11,29 +11,28 @@ const Staff = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState([]);
-  const [isAddFormOpen, setAddFormOpen] = useState(false);
+  const [isFormOpen, setFormOpen] = useState(false);
   const location = useLocation();
 
   const handleAddNewStaffAccount = () => {
-    setAddFormOpen(true);
+    setFormOpen(true);
   };
 
   const handleFormClose = () => {
-    setAddFormOpen(false);
+    setFormOpen(false);
   };
 
-  const handleFormSubmit = (value) => {
-    // Viết hàm submit vào đây
+  const handleFormSubmit = () => {
     handleFormClose();
   };
 
   const allColumns = [
-    // {
-    //   field: "clubid",
-    //   headerName: "Club ID",
-    //   headerAlign: "left",
-    //   align: "left",
-    // },
+    {
+      field: "clubid",
+      headerName: "Club ID",
+      headerAlign: "left",
+      align: "left",
+    },
     {
       field: "id",
       headerName: "Mã",
@@ -133,8 +132,8 @@ const Staff = () => {
       >
         <DataGrid rows={rows} columns={columns} />
       </Box>
-      <AddNewStaffAccountForm
-        open={isAddFormOpen}
+      <Forms
+        open={isFormOpen}
         onClose={handleFormClose}
         onSubmit={handleFormSubmit}
       />
