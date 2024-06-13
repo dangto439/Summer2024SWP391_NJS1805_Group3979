@@ -89,25 +89,24 @@ function Profile() {
   };
 
   return (
-    <div className="container">
-      <h1>Chỉnh sửa hồ sơ</h1>
-
+    <div className="profile">
       <Form
         form={form}
-        className="form"
+        className="form-profile"
         autoComplete="off"
         labelCol={{ span: 24 }}
         onFinish={handleUpdateProfile}
       >
+        <h1>Chỉnh sửa hồ sơ</h1>
         <div className="form-group">
-          <div className="profile-pic-container">
+          <div className="profile-pic-form">
             <img
               src={avatarUrl}
               alt="Profile Picture"
               className="profile-pic"
             />
           </div>
-          <Form.Item name="avatar" className="profile-pic-container">
+          <Form.Item name="avatar" className="profile-pic-form">
             <Upload {...props}>
               <Button icon={<UploadOutlined />}>Click to Upload</Button>
             </Upload>
