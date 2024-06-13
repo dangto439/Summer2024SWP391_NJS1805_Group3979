@@ -95,7 +95,7 @@ function Login() {
         </div>
 
         <Form
-          className="form"
+          className="form-login"
           autoComplete="off"
           labelCol={{ span: 24 }}
           onFinish={handleLogin}

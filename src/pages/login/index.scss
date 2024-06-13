@@ -55,7 +55,7 @@
       width: 100%;
       background-color: #f1f1f3;
     }
-    .form {
+    .form-login {
       display: flex;
       flex-direction: column;
       margin-bottom: 20px;
@@ -90,7 +90,7 @@
       text-decoration: underline;
       transition: linear 0.25s;
       margin-top: -30px;
-      margin-left: 250px;
+      margin-left: 310px;
       padding-top: 10px;
       &:hover {
         color: #1dc071;
