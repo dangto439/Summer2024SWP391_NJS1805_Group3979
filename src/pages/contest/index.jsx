@@ -52,16 +52,35 @@ const Contest = () => {
   }, []);
 
   const renderContests = () => {
+    const months = [
+      "Tháng 1",
+      "Tháng 2",
+      "Tháng 3",
+      "Tháng 4",
+      "Tháng 5",
+      "Tháng 6",
+      "Tháng 7",
+      "Tháng 8",
+      "Tháng 9",
+      "Tháng 10",
+      "Tháng 11",
+      "Tháng 12",
+    ];
+
+    const formatDate = (dateString) => {
+      const date = new Date(dateString);
+      const month = months[date.getMonth()];
+      const year = date.getFullYear();
+      return `${month} năm ${year}`;
+    };
+
     return contests.map((contest) => (
       <Box key={contest.id} mb={3}>
-        <Divider />
-        <Box display="flex" justifyContent="space-between" mt={2}>
-          <Typography variant="h6" color="textSecondary">
-            {new Date(contest.date).toLocaleString("default", {
-              month: "long",
-              year: "numeric",
-            })}
+        <Box display="flex" alignItems="center" mt={2}>
+          <Typography variant="h6" color="textSecondary" sx={{ mr: 2 }}>
+            {formatDate(contest.date)}
           </Typography>
+          <Divider sx={{ flexGrow: 1 }} />
         </Box>
         <Box display="flex" mt={2}>
           <img
@@ -91,10 +110,7 @@ const Contest = () => {
             <Box mt={2}>
               <Button
                 variant="contained"
-                sx={{
-                  marginRight: "15px",
-                  backgroundColor: "#6992CE",
-                }}
+                sx={{ marginRight: "15px", backgroundColor: "#6992CE" }}
               >
                 Chi tiết
               </Button>
