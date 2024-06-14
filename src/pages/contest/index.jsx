@@ -9,6 +9,7 @@ import {
   useTheme,
   Typography,
   Divider,
+  Pagination,
 } from "@mui/material";
 import { useLocation, Link as RouterLink } from "react-router-dom";
 import { tokens } from "../../theme";
@@ -19,6 +20,8 @@ const Contest = () => {
   const colors = tokens(theme.palette.mode);
   const location = useLocation();
   const [contests, setContests] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 2; // Số lượng mục trên mỗi trang
 
   // dữ liệu thử nghiệm
   const sampleContests = [
@@ -44,37 +47,78 @@ const Contest = () => {
       scale: "200 người",
       hotline: "0987654321",
     },
+    {
+      id: 3,
+      date: "2024-09-10",
+      image: "https://via.placeholder.com/150",
+      name: "Cuộc thi C",
+      location: "Đà Nẵng",
+      time: "10:00 AM",
+      description: "Mô tả cuộc thi C",
+      scale: "150 người",
+      hotline: "0981234567",
+    },
   ];
+  const months = [
+    "Tháng 1",
+    "Tháng 2",
+    "Tháng 3",
+    "Tháng 4",
+    "Tháng 5",
+    "Tháng 6",
+    "Tháng 7",
+    "Tháng 8",
+    "Tháng 9",
+    "Tháng 10",
+    "Tháng 11",
+    "Tháng 12",
+  ];
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    return `${month} năm ${year}`;
+  };
 
   useEffect(() => {
     // upload dữ liệu DB
     setContests(sampleContests);
   }, []);
 
+  const Breadcrumb = () => {
+    const pathnames = location.pathname.split("/").filter((x) => x);
+    return (
+      <Breadcrumbs aria-label="breadcrumb" sx={{ mb: "20px" }}>
+        <Link component={RouterLink} to="/" color="inherit">
+          Home
+        </Link>
+        {pathnames.map((value, index) => {
+          const to = `/${pathnames.slice(0, index + 1).join("/")}`;
+          return (
+            <Link
+              key={to}
+              component={RouterLink}
+              to={to}
+              color="inherit"
+              sx={{ textTransform: "capitalize" }}
+            >
+              {value}
+            </Link>
+          );
+        })}
+      </Breadcrumbs>
+    );
+  };
+
   const renderContests = () => {
-    const months = [
-      "Tháng 1",
-      "Tháng 2",
-      "Tháng 3",
-      "Tháng 4",
-      "Tháng 5",
-      "Tháng 6",
-      "Tháng 7",
-      "Tháng 8",
-      "Tháng 9",
-      "Tháng 10",
-      "Tháng 11",
-      "Tháng 12",
-    ];
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentContests = contests.slice(
+      startIndex,
+      startIndex + itemsPerPage
+    );
 
-    const formatDate = (dateString) => {
-      const date = new Date(dateString);
-      const month = months[date.getMonth()];
-      const year = date.getFullYear();
-      return `${month} năm ${year}`;
-    };
-
-    return contests.map((contest) => (
+    return currentContests.map((contest) => (
       <Box key={contest.id} mb={3}>
         <Box display="flex" alignItems="center" mt={2}>
           <Typography variant="h6" color="textSecondary" sx={{ mr: 2 }}>
@@ -82,6 +126,7 @@ const Contest = () => {
           </Typography>
           <Divider sx={{ flexGrow: 1 }} />
         </Box>
+
         <Box display="flex" mt={2}>
           <img
             // đang giả sử link hình
@@ -110,7 +155,10 @@ const Contest = () => {
             <Box mt={2}>
               <Button
                 variant="contained"
-                sx={{ marginRight: "15px", backgroundColor: "#6992CE" }}
+                sx={{
+                  marginRight: "15px",
+                  backgroundColor: "#6992CE",
+                }}
               >
                 Chi tiết
               </Button>
@@ -124,29 +172,8 @@ const Contest = () => {
     ));
   };
 
-  const Breadcrumb = () => {
-    const pathnames = location.pathname.split("/").filter((x) => x);
-    return (
-      <Breadcrumbs aria-label="breadcrumb" sx={{ mb: "20px" }}>
-        <Link component={RouterLink} to="/" color="inherit">
-          Home
-        </Link>
-        {pathnames.map((value, index) => {
-          const to = `/${pathnames.slice(0, index + 1).join("/")}`;
-          return (
-            <Link
-              key={to}
-              component={RouterLink}
-              to={to}
-              color="inherit"
-              sx={{ textTransform: "capitalize" }}
-            >
-              {value}
-            </Link>
-          );
-        })}
-      </Breadcrumbs>
-    );
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
   };
 
   return (
@@ -183,7 +210,15 @@ const Contest = () => {
           <Button>Tháng</Button>
         </Box>
       </Box>
+
       <Box mt={3}>{renderContests()}</Box>
+      <Box display="flex" justifyContent="center" mt={3}>
+        <Pagination
+          count={Math.ceil(contests.length / itemsPerPage)}
+          page={currentPage}
+          onChange={handlePageChange}
+        />
+      </Box>
     </Box>
   );
 };
