@@ -72,12 +72,18 @@ function App() {
           ),
         },
         {
-          path: "/contest",
+          path: "/contest/*",
           element: (
             // <PrivateRoute>
             <Contest />
             // </PrivateRoute>
           ),
+          children: [
+            {
+              path: "danhsach",
+              element: <Contest />,
+            },
+          ],
         },
       ],
     },

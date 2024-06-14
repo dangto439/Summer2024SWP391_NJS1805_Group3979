@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Breadcrumbs,
@@ -11,7 +11,12 @@ import {
   Divider,
   Pagination,
 } from "@mui/material";
-import { useLocation, Link as RouterLink } from "react-router-dom";
+import {
+  useLocation,
+  Link as RouterLink,
+  Routes,
+  Route,
+} from "react-router-dom";
 import { tokens } from "../../theme";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -199,19 +204,54 @@ const Contest = () => {
           </IconButton>
         </Box>
 
-        <Box
-          display="flex"
-          backgroundColor={colors.greenAccent[900]}
-          color={colors.grey[100]}
-          borderRadius="3px"
-        >
-          <Button>Danh sách</Button>
-          <Button>Ngày</Button>
-          <Button>Tháng</Button>
+        <Box display="flex">
+          <Button
+            component={RouterLink}
+            to="danhsach"
+            sx={{
+              borderBottom:
+                // dĩm ko còn cách nào hay hơn nữa
+                location.pathname === "/contest/danhsach" || "/contest"
+                  ? `2px solid ${colors.greenAccent[500]}`
+                  : "none",
+            }}
+          >
+            Danh sách
+          </Button>
+          {/* <Button
+            component={RouterLink}
+            to="ngay"
+            sx={{
+              borderBottom:
+                location.pathname === "/contest/ngay"
+                  ? `2px solid ${colors.greenAccent[500]}`
+                  : "none",
+            }}
+          >
+            Ngày
+          </Button>
+          <Button
+            component={RouterLink}
+            to="thang"
+            sx={{
+              borderBottom:
+                location.pathname === "/contest/thang"
+                  ? `2px solid ${colors.greenAccent[500]}`
+                  : "none",
+            }}
+          >
+            Tháng
+          </Button> */}
         </Box>
       </Box>
 
-      <Box mt={3}>{renderContests()}</Box>
+      <Routes>
+        <Route path="" element={<Box mt={3}>{renderContests()}</Box>} />
+        <Route path="danhsach" element={<Box mt={3}>{renderContests()}</Box>} />
+        {/* <Route path="ngay" element={<Box mt={3}>Page Ngày</Box>} />
+        <Route path="thang" element={<Box mt={3}>Pgae Tháng</Box>} /> */}
+      </Routes>
+
       <Box display="flex" justifyContent="center" mt={3}>
         <Pagination
           count={Math.ceil(contests.length / itemsPerPage)}
