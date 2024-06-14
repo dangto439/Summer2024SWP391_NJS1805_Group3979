@@ -20,6 +20,7 @@ import ManageAccount from "./components/manage-account";
 import Staff from "./components/staff";
 import Court from "../src/components/club";
 import Club from "../src/components/club";
+import Contest from "../src/pages/contest";
 
 function App() {
   const user = useSelector(selectUser);
@@ -67,6 +68,14 @@ function App() {
           element: (
             // <PrivateRoute>
             <Contact />
+            // </PrivateRoute>
+          ),
+        },
+        {
+          path: "/contest",
+          element: (
+            // <PrivateRoute>
+            <Contest />
             // </PrivateRoute>
           ),
         },
