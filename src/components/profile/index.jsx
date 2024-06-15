@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import "./index.scss";
-import { Button, Form, Input, Modal, Radio, Upload } from "antd";
+import { Button, Form, Image, Input, Modal, Radio, Upload } from "antd";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { useForm } from "antd/es/form/Form";
 import api from "../../config/axios";
@@ -10,7 +10,8 @@ import { UploadOutlined } from "@mui/icons-material";
 import uploadFile from "../../utils/upload";
 
 function Profile() {
-  const [form] = useForm();
+  const [formProfile] = useForm();
+  const [formPassword] = useForm();
   const { confirm } = Modal;
   const [avatarUrl, setAvatarUrl] = useState("");
   const showConfirm = () => {
@@ -27,8 +28,20 @@ function Profile() {
     });
   };
 
+  const [isResetPassword, setIsResetPassword] = useState(false);
+  const showResetPassword = () => {
+    setIsResetPassword(true);
+  };
+  const handleResetPassword = () => {
+    setIsResetPassword(false);
+  };
+  const handleCancelResetPassword = () => {
+    setIsResetPassword(false);
+    formPassword.resetFields();
+  };
+
   function handleOk() {
-    form.submit();
+    formProfile.submit();
   }
 
   const resetChange = () => {
@@ -51,7 +64,7 @@ function Profile() {
       const response = await api.get("/profile");
       const profileData = response.data;
       setAvatarUrl(profileData.avatar);
-      form.setFieldsValue({
+      formProfile.setFieldsValue({
         avatar: profileData.avatar,
         email: profileData.email,
         name: profileData.name,
@@ -91,16 +104,17 @@ function Profile() {
   return (
     <div className="profile">
       <Form
-        form={form}
+        form={formProfile}
         className="form-profile"
         autoComplete="off"
         labelCol={{ span: 24 }}
         onFinish={handleUpdateProfile}
       >
         <h1>Chỉnh sửa hồ sơ</h1>
-        <div className="form-group">
+        <div className="form-group-profile">
           <div className="profile-pic-form">
-            <img
+            <Image
+              width={130}
               src={avatarUrl}
               alt="Profile Picture"
               className="profile-pic"
@@ -111,17 +125,19 @@ function Profile() {
               <Button icon={<UploadOutlined />}>Click to Upload</Button>
             </Upload>
           </Form.Item>
+        </div>
+        <div className="form-group-profile">
           <Form.Item label="Email" name="email">
             <Input
               disabled
               id="email"
               placeholder="name@example.com"
-              className="form-input"
+              className="form-input-profile"
             />
           </Form.Item>
         </div>
 
-        <div className="form-group">
+        <div className="form-group-profile">
           <Form.Item
             label="Tên"
             name="name"
@@ -132,30 +148,15 @@ function Profile() {
               },
             ]}
           >
-            <Input id="name" placeholder="Name" className="form-input" />
+            <Input
+              id="name"
+              placeholder="Name"
+              className="form-input-profile"
+            />
           </Form.Item>
         </div>
 
-        <div className="form-group">
-          <Form.Item
-            label="Giới Tính"
-            name="gender"
-            rules={[
-              {
-                required: true,
-                message: "Please select your Gender!",
-              },
-            ]}
-          >
-            <Radio.Group id="gender" className="form-input">
-              <Radio value="MALE">Nam</Radio>
-              <Radio value="FEMALE">Nữ</Radio>
-              <Radio value="OTHERS">Khác</Radio>
-            </Radio.Group>
-          </Form.Item>
-        </div>
-
-        <div className="form-group">
+        <div className="form-group-profile">
           <Form.Item
             label="Điện Thoại"
             name="phone"
@@ -173,11 +174,107 @@ function Profile() {
             <Input
               id="phone"
               placeholder="(+84) 123-456-789"
-              className="form-input"
+              className="form-input-profile"
             />
           </Form.Item>
         </div>
+        <div className="form-group-profile">
+          <Form.Item
+            label="Giới Tính"
+            name="gender"
+            rules={[
+              {
+                required: true,
+                message: "Please select your Gender!",
+              },
+            ]}
+          >
+            <Radio.Group id="gender" className="form-input-profile">
+              <Radio value="MALE">Nam</Radio>
+              <Radio value="FEMALE">Nữ</Radio>
+              <Radio value="OTHERS">Khác</Radio>
+            </Radio.Group>
+          </Form.Item>
+        </div>
+
+        <div className="form-group-password">
+          <Button
+            type="primary"
+            className="change-button"
+            onClick={showResetPassword}
+          >
+            Đổi mật khẩu
+          </Button>
+          <Modal
+            title="Thay đổi mật khẩu"
+            open={isResetPassword}
+            onOk={handleResetPassword}
+            onCancel={handleCancelResetPassword}
+          >
+            <Form
+              form={formPassword}
+              // className="form-profile"
+              autoComplete="off"
+              labelCol={{ span: 24 }}
+              onFinish={handleUpdateProfile}
+            >
+              <div className="form-group-modal">
+                <Form.Item
+                  label="Mật khẩu mới"
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Vui lòng nhập mật khẩu mới!",
+                    },
+                    {
+                      min: 6,
+                      message: "Mật khẩu phải có độ dài ít nhất 6 ký tự!",
+                    },
+                  ]}
+                >
+                  <Input.Password
+                    id="password"
+                    placeholder="******"
+                    className="form-input-profile"
+                  />
+                </Form.Item>
+              </div>
+
+              <div className="form-group-modal">
+                <Form.Item
+                  label="Xác nhận mật khẩu mới"
+                  name="confirm-password"
+                  dependencies={["password"]}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Vui lòng xác nhận mật khẩu của bạn!",
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue("password") === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(
+                          new Error("Xác nhận mật khẩu không khớp!")
+                        );
+                      },
+                    }),
+                  ]}
+                >
+                  <Input.Password
+                    id="confirm-password"
+                    placeholder="******"
+                    className="form-input-profile"
+                  />
+                </Form.Item>
+              </div>
+            </Form>
+          </Modal>
+        </div>
       </Form>
+
       <Button onClick={showConfirm} className="save-button">
         Lưu thay đổi
       </Button>
