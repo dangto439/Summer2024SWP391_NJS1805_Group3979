@@ -39,7 +39,7 @@ function Contact() {
             <Input
               id="email"
               placeholder="name@gmail.com"
-              className="form-input"
+              className="form-input-contact"
             />
           </Form.Item>
         </div>
@@ -55,7 +55,11 @@ function Contact() {
               },
             ]}
           >
-            <Input id="name" placeholder="Name" className="form-input" />
+            <Input
+              id="name"
+              placeholder="Name"
+              className="form-input-contact"
+            />
           </Form.Item>
         </div>
 
@@ -77,7 +81,7 @@ function Contact() {
             <Input
               id="phone"
               placeholder="(+84) 123-456-789"
-              className="form-input"
+              className="form-input-contact"
             />
           </Form.Item>
         </div>
@@ -95,7 +99,7 @@ function Contact() {
             <Input.TextArea
               id="message"
               placeholder="Nội dung"
-              className="form-input"
+              className="form-input-contact"
             />
           </Form.Item>
         </div>

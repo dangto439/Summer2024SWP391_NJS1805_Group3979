@@ -18,6 +18,33 @@
   p {
     font-size: 16px;
     line-height: 1.5;
+    text-align: center;
+  }
+
+  .form-group-contact {
+    margin-bottom: 5px;
+    label {
+      font-size: 14px;
+      font-weight: 500;
+    }
+    &:last-child {
+      margin-bottom: 0;
+    }
+    a{
+      margin-left: 230px;
+    }
+  }
+
+  .form-input-contact {
+    padding: 15px 25px;
+    width: 100%;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    outline: none;
+    transition: linear 0.25s;
+    &:focus {
+      border-color: #1dc071;
+    }
   }
 
 //   input, textarea {
