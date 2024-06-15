@@ -42,7 +42,7 @@ function ForgetPassword() {
         }}
         onFinish={handleForgetPassword}
       >
-        <div className="form-group">
+        <div className="form-group-forgot">
           <Form.Item
             label="Email"
             name="email"
@@ -60,7 +60,7 @@ function ForgetPassword() {
             <Input
               id="email"
               placeholder="name@gmail.com"
-              className="form-input"
+              className="form-input-forgot"
             />
           </Form.Item>
         </div>

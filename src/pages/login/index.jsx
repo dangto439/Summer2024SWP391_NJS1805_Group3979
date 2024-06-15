@@ -100,7 +100,7 @@ function Login() {
           labelCol={{ span: 24 }}
           onFinish={handleLogin}
         >
-          <div className="form-group">
+          <div className="form-group-login">
             <Form.Item
               label="Email"
               name="email"
@@ -113,12 +113,12 @@ function Login() {
                 name="email"
                 id="email"
                 placeholder="Email"
-                className="form-input"
+                className="form-input-login"
               />
             </Form.Item>
           </div>
 
-          <div className="form-group">
+          <div className="form-group-login">
             <Form.Item
               label="Mật khẩu"
               name="password"
@@ -129,7 +129,7 @@ function Login() {
               <Input.Password
                 id="password"
                 placeholder="******"
-                className="form-input"
+                className="form-input-login"
               />
             </Form.Item>
           </div>
