@@ -33,7 +33,7 @@ function Header() {
         navigate("/profile");
         break;
       case "2":
-        navigate("/register");
+        navigate("/history-booking");
         break;
       case "3":
         handleLogOut();
