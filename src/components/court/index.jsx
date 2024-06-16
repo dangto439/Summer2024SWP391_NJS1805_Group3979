@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Box, IconButton, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme.js";
-// import { mockDataTeam } from "../../data/mockData.js";
 import Header from "../dashboard/Header.jsx";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import DeleteButton from "../global/deletebutton/index.jsx";

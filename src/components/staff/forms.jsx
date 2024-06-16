@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -15,20 +15,18 @@ import {
   InputLabel,
   FormHelperText,
 } from "@mui/material";
+import api from "../../config/axios";
 
 const schema = yup.object().shape({
   clubId: yup.string().required("Club ID is required"),
   name: yup.string().required("Name is required"),
-  yearOfBirth: yup
-    .number()
-    .required("Year of Birth is required")
-    .min(1975)
-    .max(new Date().getFullYear()),
   phone: yup
     .string()
     .matches(/(0[3|5|7|8|9])+([0-9]{8})\b/, "Invalid phone number")
     .required("Phone number is required"),
   email: yup.string().email("Invalid email").required("Email is required"),
+  // gender: yup.string().required("Gender is required"),
+  // password: yup.string().required("Password is required"),
 });
 
 const AddStaffForm = ({ open, onClose, onSubmit }) => {
@@ -41,18 +39,38 @@ const AddStaffForm = ({ open, onClose, onSubmit }) => {
   });
 
   const handleFormSubmit = (data) => {
-    const age = new Date().getFullYear() - data.yearOfBirth;
-    onSubmit({ ...data, age });
+    // const age = new Date().getFullYear() - data.yearOfBirth;
+    // onSubmit({ ...data, age });
+    const gender = "MALE";
+    const password = data.phone;
+    const response = { ...data, gender, password };
+    onSubmit(response);
+    handleAddNewStaff(response);
+    // console.log(response);
   };
 
-  const generateYearOptions = () => {
-    const currentYear = new Date().getFullYear();
-    const years = [];
-    for (let year = currentYear; year >= 1975; year--) {
-      years.push(year);
+  const [clubs, setClubs] = useState([]);
+
+  const fetchClubs = async () => {
+    try {
+      const response = await api.get("/current-clubs");
+      setClubs(response.data);
+    } catch (error) {
+      console.error("Error fetching clubs:", error);
     }
-    return years;
   };
+
+  const handleAddNewStaff = async (values) => {
+    try {
+      await api.post("/staff", values);
+    } catch (error) {
+      console.error("Error fetching clubs:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchClubs();
+  }, []);
 
   return (
     <Dialog open={open} onClose={onClose}>
@@ -60,16 +78,18 @@ const AddStaffForm = ({ open, onClose, onSubmit }) => {
       <DialogContent>
         <form onSubmit={handleSubmit(handleFormSubmit)}>
           <FormControl fullWidth margin="normal" error={!!errors.clubId}>
-            <InputLabel>Club ID</InputLabel>
+            <InputLabel>Club Name</InputLabel>
             <Controller
               name="clubId"
               control={control}
               defaultValue=""
               render={({ field }) => (
-                <Select {...field} label="Club ID">
-                  <MenuItem value="ClubID1">ClubID1</MenuItem>
-                  <MenuItem value="ClubID2">ClubID2</MenuItem>
-                  <MenuItem value="ClubID3">ClubID3</MenuItem>
+                <Select {...field} label="Club Name">
+                  {clubs.map((club) => (
+                    <MenuItem key={club.clubId} value={club.clubId}>
+                      {club.clubName}
+                    </MenuItem>
+                  ))}
                 </Select>
               )}
             />
@@ -83,25 +103,6 @@ const AddStaffForm = ({ open, onClose, onSubmit }) => {
               error={!!errors.name}
               helperText={errors.name?.message}
             />
-          </FormControl>
-
-          <FormControl fullWidth margin="normal" error={!!errors.yearOfBirth}>
-            <InputLabel>Year of Birth</InputLabel>
-            <Controller
-              name="yearOfBirth"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Select {...field} label="Year of Birth">
-                  {generateYearOptions().map((year) => (
-                    <MenuItem key={year} value={year}>
-                      {year}
-                    </MenuItem>
-                  ))}
-                </Select>
-              )}
-            />
-            <FormHelperText>{errors.yearOfBirth?.message}</FormHelperText>
           </FormControl>
 
           <FormControl fullWidth margin="normal" error={!!errors.phone}>
