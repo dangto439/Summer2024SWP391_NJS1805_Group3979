@@ -20,7 +20,7 @@ import ManageAccount from "./components/manage-account";
 import Staff from "./components/staff";
 import Court from "../src/components/club";
 import Club from "../src/components/club";
-// import Booking from "./pages/booking";
+import Booking from "./pages/booking";
 import HistoryBooking from "./pages/history-booking";
 function App() {
   const user = useSelector(selectUser);
