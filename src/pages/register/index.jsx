@@ -37,7 +37,7 @@ function Register() {
         }}
         onFinish={handleRegisterAccount}
       >
-        <div className="form-group">
+        <div className="form-group-register">
           <Form.Item
             label="Email"
             name="email"
@@ -55,12 +55,12 @@ function Register() {
             <Input
               id="email"
               placeholder="name@gmail.com"
-              className="form-input"
+              className="form-input-register"
             />
           </Form.Item>
         </div>
 
-        <div className="form-group">
+        <div className="form-group-register">
           <Form.Item
             label="Tên"
             name="name"
@@ -74,11 +74,11 @@ function Register() {
             <Input
               id="name"
               placeholder="Ví dụ: Nguyễn Văn A"
-              className="form-input"
+              className="form-input-register"
             />
           </Form.Item>
         </div>
-        <div className="form-group">
+        <div className="form-group-register">
           <Form.Item
             label="Giới tính"
             name="gender"
@@ -89,7 +89,7 @@ function Register() {
               },
             ]}
           >
-            <Radio.Group id="gender" className="form-input">
+            <Radio.Group id="gender" className="form-input-register">
               <Radio value="MALE">Nam</Radio>
               <Radio value="FEMALE">Nữ</Radio>
               <Radio value="OTHERS">Khác</Radio>
@@ -97,7 +97,7 @@ function Register() {
           </Form.Item>
         </div>
 
-        <div className="form-group">
+        <div className="form-group-register">
           <Form.Item
             label="Điện thoại"
             name="phone"
@@ -115,12 +115,12 @@ function Register() {
             <Input
               id="phone"
               placeholder="(+84) 123-456-789"
-              className="form-input"
+              className="form-input-register"
             />
           </Form.Item>
         </div>
 
-        <div className="form-group">
+        <div className="form-group-register">
           <Form.Item
             label="Mật khẩu"
             name="password"
@@ -138,12 +138,12 @@ function Register() {
             <Input.Password
               id="password"
               placeholder="******"
-              className="form-input"
+              className="form-input-register"
             />
           </Form.Item>
         </div>
 
-        <div className="form-group">
+        <div className="form-group-register">
           <Form.Item
             label="Xác nhận mật khẩu"
             name="confirm-password"
@@ -168,11 +168,11 @@ function Register() {
             <Input.Password
               id="confirm-password"
               placeholder="******"
-              className="form-input"
+              className="form-input-register"
             />
           </Form.Item>
         </div>
-        <div className="form-group">
+        <div className="form-group-register">
           <Form.Item
             label="Vai trò"
             name="role"
@@ -183,7 +183,7 @@ function Register() {
               },
             ]}
           >
-            <Radio.Group id="role" className="form-input">
+            <Radio.Group id="role" className="form-input-register">
               <Radio value="CUSTOMER">Khách hàng</Radio>
               <Radio value="CLUB_OWNER">Chủ CLB</Radio>
             </Radio.Group>

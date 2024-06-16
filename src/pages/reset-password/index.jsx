@@ -47,7 +47,7 @@ function ResetPassword() {
         }}
         onFinish={handleResetPassword}
       >
-        <div className="form-group">
+        <div className="form-group-reset">
           <Form.Item
             label="Mật khẩu mới"
             name="password"
@@ -65,12 +65,12 @@ function ResetPassword() {
             <Input.Password
               id="password"
               placeholder="******"
-              className="form-input"
+              className="form-input-reset"
             />
           </Form.Item>
         </div>
 
-        <div className="form-group">
+        <div className="form-group-reset">
           <Form.Item
             label="Xác nhận mật khẩu mới"
             name="confirm-password"
@@ -95,7 +95,7 @@ function ResetPassword() {
             <Input.Password
               id="confirm-password"
               placeholder="******"
-              className="form-input"
+              className="form-input-reset"
             />
           </Form.Item>
         </div>
