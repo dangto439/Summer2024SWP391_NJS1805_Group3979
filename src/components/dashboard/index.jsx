@@ -7,12 +7,25 @@ import { Route, Routes } from "react-router-dom";
 import Profile from "../profile";
 import Club from "../club/index";
 import Court from "../court/index";
-// import Booking from "../booking/index";
-
-// import "./styles/styledeletebutton.scss";
+import api from "../../config/axios";
+import { useEffect, useState } from "react";
 
 function Dashboard() {
   const [theme, colorMode] = useMode();
+  const [clubs, setClubs] = useState([]);
+
+  const fetchClubs = async () => {
+    try {
+      const response = await api.get("/current-clubs");
+      setClubs(response.data);
+    } catch (error) {
+      console.error("Error fetching clubs:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchClubs();
+  }, []);
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -24,9 +37,21 @@ function Dashboard() {
             <Topbar />
             <Routes>
               <Route path="club" element={<Club />} />
-              <Route path="staff/clubid1" element={<Staff />} />
+              {clubs.map((club) => (
+                <Route
+                  key={club.clubId}
+                  path={`staff/${club.clubId}`}
+                  element={<Staff />}
+                />
+              ))}
               <Route path="staff/allstaff" element={<Staff />} />
-              <Route path="court/clubid1" element={<Court />} />
+              {clubs.map((club) => (
+                <Route
+                  key={club.clubId}
+                  path={`court/${club.clubId}`}
+                  element={<Court />}
+                />
+              ))}
               {/* <Route path="booking/clubid1" element={<Booking />} /> */}
 
               <Route path="profile" element={<Profile />} />

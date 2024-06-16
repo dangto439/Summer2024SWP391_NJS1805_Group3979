@@ -131,7 +131,7 @@ const Forms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
               defaultValue=""
               render={({ field }) => (
                 <Select {...field} label="Số lượng sân">
-                  {[...Array(10).keys()].map((n) => (
+                  {[...Array(20).keys()].map((n) => (
                     <MenuItem key={n + 1} value={n + 1}>
                       {n + 1}
                     </MenuItem>

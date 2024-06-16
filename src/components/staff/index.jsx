@@ -6,6 +6,7 @@ import Header from "../dashboard/Header";
 import Forms from "./forms";
 import { useLocation } from "react-router-dom";
 import DeleteButton from "../global/deletebutton";
+import api from "../../config/axios";
 
 const Staff = () => {
   const theme = useTheme();
@@ -24,15 +25,10 @@ const Staff = () => {
 
   const handleFormSubmit = () => {
     handleFormClose();
+    fetchStaffs();
   };
 
   const allColumns = [
-    {
-      field: "clubid",
-      headerName: "Club ID",
-      headerAlign: "left",
-      align: "left",
-    },
     {
       field: "id",
       headerName: "Mã",
@@ -67,6 +63,13 @@ const Staff = () => {
       headerAlign: "left",
       align: "left",
     },
+    // {
+    //   field: "accountStatus",
+    //   headerName: "Status",
+    //   flex: 1,
+    //   headerAlign: "left",
+    //   align: "left",
+    // },
     {
       field: "delete",
       headerName: "Xóa",
@@ -74,7 +77,13 @@ const Staff = () => {
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
-        <DeleteButton id={params.id} rows={rows} setRows={setRows} />
+        <DeleteButton
+          id={params.id}
+          rows={rows}
+          setRows={setRows}
+          linkapi={"block-staff"}
+          fetfunction={fetchStaffs}
+        />
       ),
     },
   ];
@@ -84,10 +93,29 @@ const Staff = () => {
   useEffect(() => {
     setColumns(
       location.pathname === "/dashboard/staff/clubid1"
-        ? allColumns.filter((column) => column.field !== "clubid")
+        ? allColumns.filter((column) => column.field !== "clubid1")
         : allColumns
     );
   }, [location]);
+
+  const fetchStaffs = async () => {
+    try {
+      const response = await api.get("/staff");
+      const staffs = response.data;
+
+      const filterStaffs = staffs.filter(
+        (staff) => staff.accountStatus != "INACTIVE"
+      );
+      // setRows(response.data);
+      setRows(filterStaffs);
+    } catch (error) {
+      console.error("Error fetching clubs:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchStaffs();
+  });
 
   return (
     <Box m="20px" className="team-container">
