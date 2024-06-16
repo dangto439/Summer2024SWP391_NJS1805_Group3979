@@ -1,7 +1,8 @@
 import { Menu, Switch } from "antd";
-import BookingDaili from "../../components/bookingdaili";
+import BookingDaily from "../../components/bookingdaily";
 import { useState } from "react";
 import { MailOutlined } from "@ant-design/icons";
+import BookingFixed from "../../components/bookingfĩed";
 
 function Booking() {
   const items = [
@@ -38,13 +39,13 @@ function Booking() {
   return (
     <div className="booking-container">
       <div className="menu-header">
-        <Switch
+        {/* <Switch
           checked={theme === "dark"}
           onChange={changeTheme}
           checkedChildren="Dark"
           unCheckedChildren="Light"
           className="theme-switch"
-        />
+        /> */}
       </div>
       <Menu
         theme={theme}
@@ -55,7 +56,8 @@ function Booking() {
         items={items}
         className="full-width-menu"
       />
-      {current === "1" && <BookingDaili clubID={1} />}
+      {current === "1" && <BookingDaily clubID={1} />}
+      {current === "2" && <BookingFixed clubID={1} />}
     </div>
   );
 }

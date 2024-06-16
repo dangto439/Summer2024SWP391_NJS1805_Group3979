@@ -34,14 +34,14 @@
   }
 
   .selected-slot {
-    background-color: #52c41a;
-    color: white;
-    border-color: #52c41a;
+    background-color: #52c41a !important;
+    color: white !important;
+    border-color: #52c41a !important;
 
     &:hover,
     &:focus {
-      background-color: #389e0d;
-      border-color: #389e0d;
+      background-color: #389e0d !important;
+      border-color: #389e0d !important;
     }
   }
 }

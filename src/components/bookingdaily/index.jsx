@@ -4,7 +4,7 @@ import moment from "moment";
 import api from "../../config/axios";
 import "./index.scss";
 
-function BookingDaili({ clubID }) {
+function BookingDaily({ clubID }) {
   const [selectedDate, setSelectedDate] = useState(moment());
   const [dataSource, setDataSource] = useState([]);
   const [selectedSlots, setSelectedSlots] = useState([]);
@@ -104,17 +104,20 @@ function BookingDaili({ clubID }) {
       return;
     }
 
-    const bookingData = selectedSlots.map((slot) => ({
-      courtSlotId: slot.courtSlotId,
-      bookingDate: selectedDate.format("YYYY-MM-DD"),
-    }));
+    const bookingData = {
+      bookingDetailRequests: selectedSlots.map((slot) => ({
+        courtSlotId: slot.courtSlotId,
+        playingDate: selectedDate.format("YYYY-MM-DD"),
+      })),
+      promotionCode: "string",
+      flexibleBookingId: 0,
+    };
 
     try {
       // Thanh Toán
 
       //Đặt sân
       const booking = await api.post("/booking/daily", bookingData);
-      // console.log(bookingData);
       message.success("Đặt sân thành công!");
     } catch (error) {
       console.error("Error submitting booking:", error);
@@ -133,7 +136,7 @@ function BookingDaili({ clubID }) {
 
   return (
     <Row className="booking">
-      <Col span={24} className="booking-sidebar">
+      <Col span={7} className="booking-sidebar">
         <Row>
           <Col span={24} className="date-picker-container">
             <DatePicker
@@ -147,23 +150,27 @@ function BookingDaili({ clubID }) {
             <h1>Ngày: {selectedDate.format("DD/MM/YYYY")}</h1>
             <h1>Tổng giờ: {totalHours} giờ</h1>
             <h1>Tổng Tiền: {totalPrice} VND</h1>
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/badminton-booking-platform.appspot.com/o/z5545153816126_834da2b1757f9fca8d39197a7ac64f93.jpg?alt=media&token=50c69782-7782-42c9-877d-c07a1e906abb"
+              alt=""
+            />
             <Button className="submit-button" onClick={handleSubmit}>
               TIẾP THEO
             </Button>
           </Col>
         </Row>
       </Col>
-      <Col span={24} className="booking-main">
+      <Col span={17} className="booking-main">
         <Table
           columns={columns}
           dataSource={dataSource}
           pagination={false}
           rowKey="time"
-          bordered
+          scroll={{ y: "calc(100vh - 200px)" }}
         />
       </Col>
     </Row>
   );
 }
 
-export default BookingDaili;
+export default BookingDaily;
