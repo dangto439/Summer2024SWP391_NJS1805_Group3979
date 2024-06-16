@@ -27,7 +27,7 @@ function Login() {
       .catch((error) => {
         const errorMessage = error.message;
         console.log(errorMessage);
-        toast.error("Login Failed!");
+        toast.error("Đăng nhập thất bại!");
       });
   };
 
@@ -44,12 +44,12 @@ function Login() {
 
       const role = response.data.role;
 
-      toast.success("Login Successfully!");
+      toast.success("Đăng nhập thành công!");
 
       if (role === "CUSTOMER") navigate("/");
       else if (role === "CLUB_OWNER") navigate("/dashboard");
     } catch (error) {
-      toast.error("Incorrect Email or Password!");
+      toast.error("Email hoặc mật khẩu sai!");
       console.log(error);
     }
   };
@@ -57,9 +57,9 @@ function Login() {
   return (
     <>
       <div className="login">
-        <h1 className="login__form-heading">Welcome Datsan79</h1>
+        <h1 className="login__form-heading">Datsan79</h1>
         <p className="login__form-desc">
-          Continue with Google or enter your details
+          Tiếp tục với Google hoặc nhập thông tin của bạn
         </p>
         <button onClick={handleLoginGoogle} className="btn-login-google">
           <svg
@@ -86,65 +86,65 @@ function Login() {
               fill="#1565C0"
             ></path>
           </svg>
-          Login in with Google
+          Đăng nhập với Google
         </button>
         <div className="text-wrap">
           <div className="text-line"></div>
-          <p className="text">or</p>
+          <p className="text">hoặc</p>
           <div className="text-line"></div>
         </div>
 
         <Form
-          className="form"
+          className="form-login"
           autoComplete="off"
           labelCol={{ span: 24 }}
           onFinish={handleLogin}
         >
-          <div className="form-group">
+          <div className="form-group-login">
             <Form.Item
               label="Email"
               name="email"
               rules={[
-                { required: true, message: "Please input your email!" },
-                { type: "email", message: "The input is not valid E-mail!" },
+                { required: true, message: "Vui lòng nhập email của bạn!" },
+                { type: "email", message: "Email không hợp lệ!" },
               ]}
             >
               <Input
                 name="email"
                 id="email"
                 placeholder="Email"
-                className="form-input"
+                className="form-input-login"
               />
             </Form.Item>
           </div>
 
-          <div className="form-group">
+          <div className="form-group-login">
             <Form.Item
-              label="Password"
+              label="Mật khẩu"
               name="password"
               rules={[
-                { required: true, message: "Please input your password!" },
+                { required: true, message: "Vui lòng nhập mật khẩu của bạn!" },
               ]}
             >
               <Input.Password
                 id="password"
-                placeholder="Password"
-                className="form-input"
+                placeholder="******"
+                className="form-input-login"
               />
             </Form.Item>
           </div>
 
           <Link to="/forgot-password" className="form-link">
-            Forgot Password?
+            Quên mật khẩu?
           </Link>
 
           <Button type="primary" htmlType="submit" className="form-btn">
-            Login
+            Đăng nhập
           </Button>
         </Form>
         <div className="form-option">
-          Do not have an account?
-          <Link to="/register">Sign up for free</Link>
+          Bạn chưa có tài khoản?
+          <Link to="/register">Đăng ký</Link>
         </div>
       </div>
     </>

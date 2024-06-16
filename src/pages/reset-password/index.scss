@@ -40,6 +40,7 @@
         color: white;
         font-weight: 600;
         border-radius: 8px;
+        margin-left: 0;
         cursor: pointer;
         position: relative;
         isolation: isolate;
@@ -62,7 +63,7 @@
         z-index: -1;
         transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
       }
-      .form-group {
+      .form-group-reset {
         margin-bottom: -20px;
         label {
           font-size: 14px;
@@ -75,7 +76,7 @@
           margin-left: 230px;
         }
       }
-      .form-input {
+      .form-input-reset {
         padding: 15px 25px;
         width: 100%;
         border: 1px solid #cbd5e1;

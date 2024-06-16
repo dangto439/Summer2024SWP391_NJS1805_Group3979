@@ -7,7 +7,7 @@ function Contact() {
   const [form] = useForm();
 
   return (
-    <div className="container">
+    <div className="contact">
       <h1>Liên Hệ DatSan3979</h1>
       <p>
         Chúng tôi luôn sẵn sàng lắng nghe ý kiến và phản hồi từ bạn. Hãy liên hệ
@@ -16,102 +16,106 @@ function Contact() {
 
       <Form
         form={form}
-        className="register__form"
+        className="contact-form"
         labelCol={{
           span: 24,
         }}
       >
-        <div className="form-group">
+        <div className="form-group-contact">
           <Form.Item
             label="Email"
             name="email"
             rules={[
               {
                 type: "email",
-                message: "The input is not valid E-mail!",
+                message: "Email không hợp lệ!",
               },
               {
                 required: true,
-                message: "Please input your E-mail!",
+                message: "Vui lòng nhập Email của bạn!",
               },
             ]}
           >
             <Input
               id="email"
-              placeholder="name@example.com"
-              className="form-input"
+              placeholder="name@gmail.com"
+              className="form-input-contact"
             />
           </Form.Item>
         </div>
 
-        <div className="form-group">
+        <div className="form-group-contact">
           <Form.Item
             label="Tên của bạn"
             name="name"
             rules={[
               {
                 required: true,
-                message: "Please input your Name!",
+                message: "Vui lòng nhập tên của bạn!",
               },
             ]}
           >
-            <Input id="name" placeholder="Name" className="form-input" />
+            <Input
+              id="name"
+              placeholder="Name"
+              className="form-input-contact"
+            />
           </Form.Item>
         </div>
 
-        <div className="form-group">
+        <div className="form-group-contact">
           <Form.Item
             label="Điện thoại"
             name="phone"
             rules={[
               {
                 required: true,
-                message: "Please input your Phone number!",
+                message: "Vui lòng nhập số điện thoại của bạn!",
               },
               {
                 pattern: /^\d{10}$/,
-                message: "Please input a valid 10-digit phone number!",
+                message: "Vui lòng nhập số điện thoại hợp lệ gồm 10 chữ số!",
               },
             ]}
           >
             <Input
               id="phone"
               placeholder="(+84) 123-456-789"
-              className="form-input"
+              className="form-input-contact"
             />
           </Form.Item>
         </div>
-        <div className="form-group">
+        <div className="form-group-contact">
           <Form.Item
             label="Tin nhắn"
             name="message"
             rules={[
               {
                 required: true,
-                message: "Please input your Phone number!",
+                message: "Vui lòng nhập ý kiến của bạn!",
               },
             ]}
           >
             <Input.TextArea
               id="message"
               placeholder="Nội dung"
-              className="form-input"
+              className="form-input-contact"
             />
           </Form.Item>
         </div>
       </Form>
+      <Button type="primary" htmlType="submit" className="form-btn-contact">
+        Gửi tin
+      </Button>
       <Button
         onClick={() => {
           form.resetFields();
         }}
         type=""
         htmlType="reset"
-        className="form-btn"
+        className="form-btn-contact"
       >
         Nhập lại
-      </Button>
-      <Button type="primary" htmlType="submit" className="form-btn">
-        Gửi tin
       </Button>
 
       <div className="contact-info">

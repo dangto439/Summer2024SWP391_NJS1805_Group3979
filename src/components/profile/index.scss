@@ -1,20 +1,17 @@
-
-.container {
+.profile {
   background-color: #ffffff;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
-  width: 100%;
-  
 }
 
 h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 50px;
 }
 
-.profile-pic-container {
+.profile-pic-form {
   position: relative;
   display: flex;
   margin-bottom: 20px;
@@ -28,14 +25,19 @@ h1 {
   object-fit: cover;
 }
 
-.form {
+.form-profile {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
+  align-items: center;
 }
 
-.form-group {
+.form-group-profile {
   margin-bottom: 5px;
+  width: 50%;
+  margin-top: -10px;
+  
+
   label {
     font-size: 14px;
     font-weight: 500;
@@ -46,9 +48,14 @@ h1 {
   a{
     margin-left: 230px;
   }
+  #gender{
+    width: 50%;
+    display: block;
+  
+  }
 }
 
-.form-input {
+.form-input-profile {
   padding: 15px 25px;
   width: 100%;
   border: 1px solid #cbd5e1;
@@ -60,11 +67,22 @@ h1 {
   }
 }
 
+.change-button{
+  width: 150px;
+  height: 54px;
+  margin-left: 150px;
+}
 
-// .button-group {
-//   text-align: center;
-//   justify-content: center;
-// }
+.form-group-password{
+  margin-left: 200px;
+  margin-top: -82px;
+  width: 50%;
+}
+
+.form-group-modal{
+  font-size: 14px;
+  font-weight: 500;
+}
 
 .save-button, .cancel-button {
   background-color: #5bc0de;
@@ -74,6 +92,8 @@ h1 {
   border-radius: 50px;
   cursor: pointer;
   margin-right: 10px;
+  margin-top: 10px;
+  
 }
 
 .cancel-button {
@@ -81,7 +101,7 @@ h1 {
 }
 
 .save-button:hover, .cancel-button:hover {
-  opacity: 0.9;
+  opacity: 0.5;
 }
 
 // .ant-form-item {

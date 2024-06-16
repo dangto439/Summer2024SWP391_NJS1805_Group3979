@@ -20,8 +20,8 @@ import ManageAccount from "./components/manage-account";
 import Staff from "./components/staff";
 import Court from "../src/components/club";
 import Club from "../src/components/club";
-import Contest from "../src/pages/contest";
-
+// import Booking from "./pages/booking";
+import HistoryBooking from "./pages/history-booking";
 function App() {
   const user = useSelector(selectUser);
   console.log(user);
@@ -71,19 +71,39 @@ function App() {
             // </PrivateRoute>
           ),
         },
+        // {
+        //   path: "/contest/*",
+        //   element: (
+        //     // <PrivateRoute>
+        //     <Contest />
+        //     // </PrivateRoute>
+        //   ),
+        //   children: [
+        //     {
+        //       path: "danhsach",
+        //       element: <Contest />,
+        //     },
+        //   ],
+        // },
         {
-          path: "/contest/*",
+          path: "/booking",
+          element: <Booking />,
+        },
+        {
+          path: "/profile",
           element: (
             // <PrivateRoute>
-            <Contest />
+            <Profile />
             // </PrivateRoute>
           ),
-          children: [
-            {
-              path: "danhsach",
-              element: <Contest />,
-            },
-          ],
+        },
+        {
+          path: "/history-booking",
+          element: (
+            // <PrivateRoute>
+            <HistoryBooking />
+            // </PrivateRoute>
+          ),
         },
       ],
     },

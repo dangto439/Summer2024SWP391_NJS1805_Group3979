@@ -55,12 +55,12 @@
       width: 100%;
       background-color: #f1f1f3;
     }
-    .form {
+    .form-login {
       display: flex;
       flex-direction: column;
       margin-bottom: 20px;
     }
-    .form-group {
+    .form-group-login {
       margin-bottom: 5px;
       label {
         font-size: 14px;
@@ -73,7 +73,7 @@
         margin-left: 230px;
       }
     }
-    .form-input {
+    .form-input-login {
       padding: 15px 25px;
       width: 100%;
       border: 1px solid #cbd5e1;
@@ -90,7 +90,7 @@
       text-decoration: underline;
       transition: linear 0.25s;
       margin-top: -30px;
-      margin-left: 300px;
+      margin-left: 310px;
       padding-top: 10px;
       &:hover {
         color: #1dc071;
@@ -129,7 +129,8 @@
       isolation: isolate;
       width: 100%;
       height: auto;
-      margin-top: 10px;      
+      margin-top: 10px;
+      margin-left: 0;      
     }
     .form-btn:hover::before {
       left: auto;

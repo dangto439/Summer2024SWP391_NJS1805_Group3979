@@ -46,6 +46,7 @@
         color: white;
         font-weight: 600;
         border-radius: 8px;
+        margin-left: 0;
         position: relative;
         isolation: isolate;
       }
@@ -84,7 +85,7 @@
           }
         }
       }
-      .form-group {
+      .form-group-register {
         margin-bottom: -20px;
         label {
           font-size: 14px;
@@ -94,7 +95,8 @@
           margin-bottom: 0;
         }
       }
-      .form-input {
+      
+      .form-input-register {
         padding: 15px 25px;
         width: 100%;
         border: 1px solid #cbd5e1;
