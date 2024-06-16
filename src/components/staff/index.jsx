@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "../dashboard/Header";
-import AddNewStaffAccountForm from "./formaddnewstaffaccount";
+import Forms from "./forms";
 import { useLocation } from "react-router-dom";
 import DeleteButton from "../global/deletebutton";
 
@@ -11,19 +11,18 @@ const Staff = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState([]);
-  const [isAddFormOpen, setAddFormOpen] = useState(false);
+  const [isFormOpen, setFormOpen] = useState(false);
   const location = useLocation();
 
   const handleAddNewStaffAccount = () => {
-    setAddFormOpen(true);
+    setFormOpen(true);
   };
 
   const handleFormClose = () => {
-    setAddFormOpen(false);
+    setFormOpen(false);
   };
 
-  const handleFormSubmit = (value) => {
-    // Viết hàm submit vào đây
+  const handleFormSubmit = () => {
     handleFormClose();
   };
 
@@ -31,46 +30,46 @@ const Staff = () => {
     {
       field: "clubid",
       headerName: "Club ID",
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "id",
-      headerName: "Staff ID",
-      headerAlign: "center",
-      align: "center",
+      headerName: "Mã",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "name",
-      headerName: "Name",
+      headerName: "Tên",
       flex: 1,
       cellClassName: "name-column--cell",
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "gender",
-      headerName: "Gender",
-      headerAlign: "center",
-      align: "center",
+      headerName: "Giới tính",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "phone",
-      headerName: "Phone Number",
+      headerName: "Số điện thoại",
       flex: 1,
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "email",
       headerName: "Email",
       flex: 1,
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "delete",
-      headerName: "Delete Account",
+      headerName: "Xóa",
       flex: 1,
       headerAlign: "center",
       align: "center",
@@ -80,17 +79,22 @@ const Staff = () => {
     },
   ];
 
-  const columns =
-    location.pathname === "/staff/clubid1"
-      ? allColumns.filter((column) => column.field !== "clubid")
-      : allColumns;
+  const [columns, setColumns] = useState([]);
+
+  useEffect(() => {
+    setColumns(
+      location.pathname === "/dashboard/staff/clubid1"
+        ? allColumns.filter((column) => column.field !== "clubid")
+        : allColumns
+    );
+  }, [location]);
 
   return (
     <Box m="20px" className="team-container">
       <Header
-        title="Manage Staff Account"
-        subtitle="Dĩm nè"
-        buttonText="Thêm mới Staff account"
+        title="Quản lý nhân viên"
+        subtitle=""
+        buttonText="Tạo tài khoản mới"
         onButtonClick={handleAddNewStaffAccount}
       />
       <Box
@@ -128,8 +132,8 @@ const Staff = () => {
       >
         <DataGrid rows={rows} columns={columns} />
       </Box>
-      <AddNewStaffAccountForm
-        open={isAddFormOpen}
+      <Forms
+        open={isFormOpen}
         onClose={handleFormClose}
         onSubmit={handleFormSubmit}
       />

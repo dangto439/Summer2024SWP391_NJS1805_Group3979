@@ -1,4 +1,3 @@
-import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -15,6 +14,7 @@ import {
   InputLabel,
   FormHelperText,
 } from "@mui/material";
+import { useEffect } from "react";
 
 const schema = yup.object().shape({
   clubId: yup.string().required("Club ID is required"),
@@ -22,7 +22,7 @@ const schema = yup.object().shape({
   numCourts: yup.number().required("Number of courts is required").min(1),
 });
 
-const AddNewCourtForm = ({ open, onClose, onSubmit }) => {
+const Forms = ({ open, onClose, onSubmit, fetFunction, mode, courtId }) => {
   const {
     control,
     handleSubmit,
@@ -31,17 +31,43 @@ const AddNewCourtForm = ({ open, onClose, onSubmit }) => {
     resolver: yupResolver(schema),
   });
 
-  const handleFormSubmit = (data) => {
-    onSubmit(data);
+  useEffect(() => {
+    if (mode === "update" && courtId) {
+      //viet cu phap update du lieu tu DB len
+    }
+  }, [mode, courtId]);
+
+  const handleFormSubmit = async (data) => {
+    const adjustedData = {
+      // ...data,
+      // openingTime: parseInt(data.openingTime, 10),
+      // closingTime: parseInt(data.closingTime, 10),
+      // urlImages: ["none image"],
+    };
+
+    try {
+      if (mode === "create") {
+        //cu phap cho submit cho create
+        // await api.post("/club", adjustedData);
+      } else if (mode === "update") {
+        // cu phap cho submit cho update
+      }
+      onSubmit(adjustedData);
+      fetFunction();
+    } catch (error) {
+      console.error("Error submitting form: ", error);
+    }
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Thêm sân mới</DialogTitle>
+      <DialogTitle>
+        {mode === "create" ? "Tạo mới sân" : "Cập nhật sân"}
+      </DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(handleFormSubmit)}>
           <FormControl fullWidth margin="normal" error={!!errors.clubId}>
-            <InputLabel>Club ID</InputLabel>
+            <InputLabel>Mã Club</InputLabel>
             <Controller
               name="clubId"
               control={control}
@@ -90,7 +116,7 @@ const AddNewCourtForm = ({ open, onClose, onSubmit }) => {
               Hủy
             </Button>
             <Button type="submit" color="primary">
-              Tạo
+              {mode === "create" ? "Tạo" : "Cập nhật"}
             </Button>
           </DialogActions>
         </form>
@@ -99,4 +125,4 @@ const AddNewCourtForm = ({ open, onClose, onSubmit }) => {
   );
 };
 
-export default AddNewCourtForm;
+export default Forms;

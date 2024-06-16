@@ -5,27 +5,35 @@ import { tokens } from "../../theme.js";
 // import { mockDataTeam } from "../../data/mockData.js";
 import Header from "../../components/dashboard/Header.jsx";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
-import CreateNewClubForm from "./createnewclubform.jsx";
 import DeleteButton from "../global/deletebutton";
 import api from "../../config/axios.js";
+import Forms from "./forms.jsx";
 const Club = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState([]);
-  const [isCreateNewClub, setCreateNewClub] = useState(false);
+  const [isFormOpen, setFormOpen] = useState(false);
+  const [mode, setMode] = useState("");
+  const [selectedClubId, setSelectedClubId] = useState("");
 
-  const handleUpdate = (id) => {};
+  const handleUpdate = (id) => {
+    setMode("update");
+    setSelectedClubId(id);
+    console.log(id);
+    setFormOpen(true);
+  };
 
-  const handleFormOpen = () => {
-    setCreateNewClub(true);
+  const handleCreate = () => {
+    setMode("create");
+    setSelectedClubId(null);
+    setFormOpen(true);
   };
 
   const handleFormClose = () => {
-    setCreateNewClub(false);
+    setFormOpen(false);
   };
 
   const handleFormSubmit = () => {
-    //Viết hàm submit vào đây nè
     handleFormClose();
   };
 
@@ -35,58 +43,58 @@ const Club = () => {
       headerName: "Tên Club",
       flex: 1,
       cellClassName: "name-column--cell",
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "clubAddress",
       headerName: "Địa chỉ",
       flex: 1,
       cellClassName: "name-column--cell",
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "hotline",
       headerName: "Hotline",
       flex: 1,
       cellClassName: "name-column--cell",
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
     // {
     //   field: "age",
     //   headerName: "Số lượng sân",
     //   type: "number",
-    //   headerAlign: "center",
-    //   align: "center",
+    //   headerAlign: "left",
+    //   align: "left",
     // },
     // {
     //   field: "age",
     //   headerName: "Thời gian hoạt động",
     //   type: "number",
-    //   headerAlign: "center",
-    //   align: "center",
+    //   headerAlign: "left",
+    //   align: "left",
     // },
 
     {
       field: "description",
-      headerName: "Ghi chú",
+      headerName: "Mô tả",
       type: "number",
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
 
     {
       field: "clubStatus",
       headerName: "Trạng thái",
       type: "number",
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "update",
-      headerName: "Cập Nhật Club",
+      headerName: "Cập Nhật",
       flex: 1,
       headerAlign: "center",
       align: "center",
@@ -101,7 +109,7 @@ const Club = () => {
     },
     {
       field: "delete",
-      headerName: "Xóa Club",
+      headerName: "Xóa",
       flex: 1,
       headerAlign: "center",
       align: "center",
@@ -148,10 +156,10 @@ const Club = () => {
   return (
     <Box m="20px" className="team-container">
       <Header
-        title="Manage Club"
-        subtitle="Dĩm nè"
-        buttonText="Thêm mới sân"
-        onButtonClick={handleFormOpen}
+        title="Quản lý club"
+        subtitle=""
+        buttonText="Tạo club mới"
+        onButtonClick={handleCreate}
       />
       <Box
         m="40px 0 0 0"
@@ -188,11 +196,13 @@ const Club = () => {
       >
         <DataGrid rows={rows} columns={columns} />
       </Box>
-      <CreateNewClubForm
-        open={isCreateNewClub}
+      <Forms
+        open={isFormOpen}
         onClose={handleFormClose}
         onSubmit={handleFormSubmit}
         fetFunction={fetchallClubs}
+        mode={mode}
+        id={selectedClubId}
       />
     </Box>
   );
