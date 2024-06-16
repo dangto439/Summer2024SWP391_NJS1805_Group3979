@@ -1,0 +1,47 @@
+.booking {
+  padding: 20px;
+
+  .date-picker-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .booking-summary {
+    text-align: center;
+    margin-bottom: 20px;
+
+    h1 {
+      margin: 5px 0;
+    }
+
+    .submit-button {
+      margin-top: 10px;
+    }
+  }
+
+  .booking-main {
+    padding: 20px;
+
+    .ant-table {
+      table-layout: fixed;
+
+      th,
+      td {
+        text-align: center;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .selected-slot {
+    background-color: #52c41a;
+    color: white;
+    border-color: #52c41a;
+
+    &:hover,
+    &:focus {
+      background-color: #389e0d;
+      border-color: #389e0d;
+    }
+  }
+}
