@@ -22,6 +22,7 @@ import Court from "../src/components/club";
 import Club from "../src/components/club";
 import Booking from "./pages/booking";
 import HistoryBooking from "./pages/history-booking";
+import CourtDetail from "./pages/court-detail";
 
 function App() {
   const user = useSelector(selectUser);
@@ -89,6 +90,14 @@ function App() {
           element: (
             // <PrivateRoute>
             <HistoryBooking />
+            // </PrivateRoute>
+          ),
+        },
+        {
+          path: "/court-detail",
+          element: (
+            // <PrivateRoute>
+            <CourtDetail />
             // </PrivateRoute>
           ),
         },
