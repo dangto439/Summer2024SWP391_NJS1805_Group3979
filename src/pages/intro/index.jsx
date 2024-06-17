@@ -2,7 +2,7 @@ import "./index.scss";
 
 function Intro() {
   return (
-    <div className="container">
+    <div className="intro">
       <h1>Chào Mừng Đến Với DatSan3979</h1>
       <p>
         Nền tảng đặt lịch sân cầu lông hiện đại và tiện lợi nhất dành cho mọi
