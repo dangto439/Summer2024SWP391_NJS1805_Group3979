@@ -1,8 +1,17 @@
-import { Button, Col, DatePicker, Row, Checkbox, Table, message } from "antd";
-import moment from "moment";
-import { useState, useEffect } from "react";
-import api from "../../config/axios";
+import moment from "moment/moment";
 import "./index.scss";
+import { useEffect, useState } from "react";
+import {
+  Button,
+  Checkbox,
+  Col,
+  DatePicker,
+  Input,
+  Row,
+  Table,
+  message,
+} from "antd";
+import api from "../../config/axios";
 
 function BookingFixed({ clubID }) {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -10,6 +19,7 @@ function BookingFixed({ clubID }) {
   const [slots, setSlots] = useState([]);
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [promotionCode, setPromotionCode] = useState("");
 
   const onChange = (date, dateString) => {
     setSelectedDate(date);
@@ -61,7 +71,7 @@ function BookingFixed({ clubID }) {
       year: selectedDate ? selectedDate.year() : 0,
       month: selectedDate ? selectedDate.month() + 1 : 0,
       clubId: clubID,
-      promotionCode: "string",
+      promotionCode: promotionCode,
       dayOfWeeks: selectedDays,
       slotIds: selectedSlots,
     };
@@ -92,52 +102,53 @@ function BookingFixed({ clubID }) {
       title: "Time",
       dataIndex: "slotId",
       key: "slotId",
-      render: (text, record) => {
-        return `${record.slotId}:00`;
-      },
-    },
-    {
-      title: "Select",
-      key: "select",
       render: (text, record) => (
-        <Button
-          style={{ width: "100%" }}
-          className={
+        <div
+          className={`slot-item ${
             selectedSlots.includes(record.slotId) ? "selected-slot" : ""
-          }
+          }`}
           onClick={() => handleSlotSelect(record.slotId)}
         >
-          {selectedSlots.includes(record.slotId) ? "Selected" : "Select"}
-        </Button>
+          {`${record.slotId}:00`}
+        </div>
       ),
     },
   ];
 
+  const handleInputChange = (e) => {
+    setPromotionCode(e.target.value);
+  };
+
   return (
-    <Row className="booking">
-      <Col span={7} className="booking-sidebar">
+    <Row className="booking-fixed">
+      <Col span={7} className="booking-sidebar-fixed">
         <Row>
-          <Col span={24} className="date-picker-container"></Col>
-          <Col span={24} className="booking-summary">
+          <Col span={24} className="booking-summary-fixed">
             <h1>Sân cầu lông Cao Lỗ</h1>
             <h1>
               Thời gian đặt:{" "}
               {selectedDate ? selectedDate.format("MM/YYYY") : ""}
             </h1>
-            <h1>Tổng giá tiền: {totalPrice} VND</h1>
+            <h1>Giá tiền tạm tính trên một ngày: {totalPrice} VND</h1>
             <img
               src="https://firebasestorage.googleapis.com/v0/b/badminton-booking-platform.appspot.com/o/z5545153816126_834da2b1757f9fca8d39197a7ac64f93.jpg?alt=media&token=50c69782-7782-42c9-877d-c07a1e906abb"
               alt=""
             />
-            <Button className="submit-button" onClick={handleSubmit}>
-              TIẾP THEO
+            <Input
+              placeholder="Nhập mã khuyến mãi"
+              variant="borderless"
+              value={promotionCode}
+              onChange={handleInputChange}
+            />
+            <Button className="submit-button-fixed" onClick={handleSubmit}>
+              THANH TOÁN
             </Button>
           </Col>
         </Row>
       </Col>
-      <Col span={17} className="booking-main">
+      <Col span={17} className="booking-main-fixed">
         <DatePicker
-          className="datepicker"
+          className="datepicker-fixed"
           onChange={onChange}
           disabledDate={disabledDate}
           picker="month"
@@ -147,13 +158,19 @@ function BookingFixed({ clubID }) {
           options={dayOptions}
           style={{ marginTop: 20 }}
         />
-        <Table
-          dataSource={slots}
-          columns={columns}
-          rowKey="slotId"
-          pagination={false}
-          style={{ marginTop: 20 }}
-        />
+        <div className="slots-container">
+          {slots.map((slot) => (
+            <div
+              key={slot.slotId}
+              className={`slot-item ${
+                selectedSlots.includes(slot.slotId) ? "selected-slot" : ""
+              }`}
+              onClick={() => handleSlotSelect(slot.slotId)}
+            >
+              {`${slot.slotId}:00`}
+            </div>
+          ))}
+        </div>
       </Col>
     </Row>
   );

@@ -2,7 +2,8 @@ import { Menu, Switch } from "antd";
 import BookingDaily from "../../components/bookingdaily";
 import { useState } from "react";
 import { MailOutlined } from "@ant-design/icons";
-import BookingFixed from "../../components/bookingfĩed";
+import BookingFixed from "../../components/bookingfixed";
+import BookingFlexible from "../../components/bookingFlexible";
 
 function Booking() {
   const items = [
@@ -58,6 +59,7 @@ function Booking() {
       />
       {current === "1" && <BookingDaily clubID={1} />}
       {current === "2" && <BookingFixed clubID={1} />}
+      {current === "3" && <BookingFlexible clubID={1} />}
     </div>
   );
 }
