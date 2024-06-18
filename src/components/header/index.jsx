@@ -547,11 +547,7 @@ function Header() {
             </div>
           </>
         ) : (
-          <Dropdown.Button
-            menu={menuProps}
-            placement="bottom"
-            icon={<BarsOutlined />}
-          >
+          <Dropdown.Button menu={menuProps} icon={<BarsOutlined />}>
             {name}
           </Dropdown.Button>
         )}

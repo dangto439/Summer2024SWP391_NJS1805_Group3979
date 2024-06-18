@@ -1,4 +1,3 @@
-import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -15,23 +14,15 @@ import {
   InputLabel,
   FormHelperText,
 } from "@mui/material";
+import { useEffect } from "react";
 
 const schema = yup.object().shape({
   clubId: yup.string().required("Club ID is required"),
   name: yup.string().required("Name is required"),
-  yearOfBirth: yup
-    .number()
-    .required("Year of Birth is required")
-    .min(1975)
-    .max(new Date().getFullYear()),
-  phone: yup
-    .string()
-    .matches(/(0[3|5|7|8|9])+([0-9]{8})\b/, "Invalid phone number")
-    .required("Phone number is required"),
-  email: yup.string().email("Invalid email").required("Email is required"),
+  numCourts: yup.number().required("Number of courts is required").min(1),
 });
 
-const AddStaffForm = ({ open, onClose, onSubmit }) => {
+const Forms = ({ open, onClose, onSubmit, fetFunction, mode, courtId }) => {
   const {
     control,
     handleSubmit,
@@ -40,27 +31,43 @@ const AddStaffForm = ({ open, onClose, onSubmit }) => {
     resolver: yupResolver(schema),
   });
 
-  const handleFormSubmit = (data) => {
-    const age = new Date().getFullYear() - data.yearOfBirth;
-    onSubmit({ ...data, age });
-  };
-
-  const generateYearOptions = () => {
-    const currentYear = new Date().getFullYear();
-    const years = [];
-    for (let year = currentYear; year >= 1975; year--) {
-      years.push(year);
+  useEffect(() => {
+    if (mode === "update" && courtId) {
+      //viet cu phap update du lieu tu DB len
     }
-    return years;
+  }, [mode, courtId]);
+
+  const handleFormSubmit = async (data) => {
+    const adjustedData = {
+      // ...data,
+      // openingTime: parseInt(data.openingTime, 10),
+      // closingTime: parseInt(data.closingTime, 10),
+      // urlImages: ["none image"],
+    };
+
+    try {
+      if (mode === "create") {
+        //cu phap cho submit cho create
+        // await api.post("/club", adjustedData);
+      } else if (mode === "update") {
+        // cu phap cho submit cho update
+      }
+      onSubmit(adjustedData);
+      fetFunction();
+    } catch (error) {
+      console.error("Error submitting form: ", error);
+    }
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Thêm mới Staff Account</DialogTitle>
+      <DialogTitle>
+        {mode === "create" ? "Tạo mới sân" : "Cập nhật sân"}
+      </DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(handleFormSubmit)}>
           <FormControl fullWidth margin="normal" error={!!errors.clubId}>
-            <InputLabel>Club ID</InputLabel>
+            <InputLabel>Mã Club</InputLabel>
             <Controller
               name="clubId"
               control={control}
@@ -85,41 +92,23 @@ const AddStaffForm = ({ open, onClose, onSubmit }) => {
             />
           </FormControl>
 
-          <FormControl fullWidth margin="normal" error={!!errors.yearOfBirth}>
-            <InputLabel>Year of Birth</InputLabel>
+          <FormControl fullWidth margin="normal" error={!!errors.numCourts}>
+            <InputLabel>Số lượng sân</InputLabel>
             <Controller
-              name="yearOfBirth"
+              name="numCourts"
               control={control}
               defaultValue=""
               render={({ field }) => (
-                <Select {...field} label="Year of Birth">
-                  {generateYearOptions().map((year) => (
-                    <MenuItem key={year} value={year}>
-                      {year}
+                <Select {...field} label="Số lượng sân">
+                  {[...Array(10).keys()].map((n) => (
+                    <MenuItem key={n + 1} value={n + 1}>
+                      {n + 1}
                     </MenuItem>
                   ))}
                 </Select>
               )}
             />
-            <FormHelperText>{errors.yearOfBirth?.message}</FormHelperText>
-          </FormControl>
-
-          <FormControl fullWidth margin="normal" error={!!errors.phone}>
-            <TextField
-              label="Phone Number"
-              {...control.register("phone")}
-              error={!!errors.phone}
-              helperText={errors.phone?.message}
-            />
-          </FormControl>
-
-          <FormControl fullWidth margin="normal" error={!!errors.email}>
-            <TextField
-              label="Email"
-              {...control.register("email")}
-              error={!!errors.email}
-              helperText={errors.email?.message}
-            />
+            <FormHelperText>{errors.numCourts?.message}</FormHelperText>
           </FormControl>
 
           <DialogActions>
@@ -127,7 +116,7 @@ const AddStaffForm = ({ open, onClose, onSubmit }) => {
               Hủy
             </Button>
             <Button type="submit" color="primary">
-              Tạo
+              {mode === "create" ? "Tạo" : "Cập nhật"}
             </Button>
           </DialogActions>
         </form>
@@ -136,4 +125,4 @@ const AddStaffForm = ({ open, onClose, onSubmit }) => {
   );
 };
 
-export default AddStaffForm;
+export default Forms;
