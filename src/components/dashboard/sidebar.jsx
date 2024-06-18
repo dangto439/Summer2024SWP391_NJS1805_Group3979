@@ -53,6 +53,7 @@ const MySidebar = () => {
   const [openStaffs, setOpenStaffs] = useState(false);
   const [openCourts, setOpenClubs] = useState(false);
   const [openBooking, setOpenBooking] = useState(false);
+  const [clubs, setClubs] = useState([]);
 
   useEffect(() => {
     localStorage.setItem("isCollapsed", JSON.stringify(isCollapsed));
@@ -81,8 +82,18 @@ const MySidebar = () => {
     }
   };
 
+  const fetchClubs = async () => {
+    try {
+      const response = await api.get("/current-clubs");
+      setClubs(response.data);
+    } catch (error) {
+      console.error("Error fetching clubs:", error);
+    }
+  };
+
   useEffect(() => {
     fetchProfileData();
+    fetchClubs();
   }, []);
 
   return (
@@ -212,14 +223,16 @@ const MySidebar = () => {
             </MenuItem>
             <Collapse in={openStaffs} timeout="auto" unmountOnExit>
               <Box component="div" sx={{ padding: 0 }}>
-                <Box sx={{ pl: 4 }}>
-                  <Item
-                    title="ClubID1"
-                    to="staff/clubid1"
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                </Box>
+                {clubs.map((club) => (
+                  <Box key={club.clubId} sx={{ pl: 4 }}>
+                    <Item
+                      title={club.clubName}
+                      to={`staff/${club.clubId}`}
+                      selected={selected}
+                      setSelected={setSelected}
+                    />
+                  </Box>
+                ))}
                 <Box sx={{ pl: 4 }}>
                   <Item
                     title="All Staff"
@@ -243,12 +256,22 @@ const MySidebar = () => {
             </MenuItem>
             <Collapse in={openCourts} timeout="auto" unmountOnExit>
               <Box component="div" disablePadding sx={{ pl: 4 }}>
-                <Item
+                {/* <Item
                   title="ClubID1"
                   to="court/clubid1"
                   selected={selected}
                   setSelected={setSelected}
-                />
+                /> */}
+                {clubs.map((club) => (
+                  <Box key={club.clubId} sx={{ pl: 4 }}>
+                    <Item
+                      title={club.clubName}
+                      to={`court/${club.clubId}`}
+                      selected={selected}
+                      setSelected={setSelected}
+                    />
+                  </Box>
+                ))}
               </Box>
             </Collapse>
 

@@ -23,8 +23,16 @@ const handleConfirm = (id, rows, setRows, linkapi, fetfunction) => {
 };
 
 const handleDelete = async (id, linkapi, fetfunction) => {
-  await api.delete(`/${linkapi}/${id}`);
-  fetfunction();
+  try {
+    if (linkapi === "club") {
+      await api.delete(`/${linkapi}/${id}`);
+    } else if (linkapi === "block-staff") {
+      await api.put(`/${linkapi}/${id}`);
+    }
+    fetfunction();
+  } catch (error) {
+    console.error(`Error handling ${linkapi} for ID ${id}:`, error);
+  }
 };
 
 const DeleteButton = ({ id, rows, setRows, linkapi, fetfunction }) => (

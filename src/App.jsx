@@ -24,6 +24,7 @@ import Booking from "./pages/booking";
 import HistoryBooking from "./pages/history-booking";
 import CourtDetail from "./pages/court-detail";
 
+
 function App() {
   const user = useSelector(selectUser);
   console.log(user);
@@ -73,6 +74,20 @@ function App() {
             // </PrivateRoute>
           ),
         },
+        // {
+        //   path: "/contest/*",
+        //   element: (
+        //     // <PrivateRoute>
+        //     <Contest />
+        //     // </PrivateRoute>
+        //   ),
+        //   children: [
+        //     {
+        //       path: "danhsach",
+        //       element: <Contest />,
+        //     },
+        //   ],
+        // },
         {
           path: "/booking",
           element: <Booking />,
