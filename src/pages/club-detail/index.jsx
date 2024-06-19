@@ -9,20 +9,53 @@ import {
   UnorderedListOutlined,
   CheckCircleOutlined,
 } from "@ant-design/icons";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import api from "../../config/axios";
+import { useParams } from "react-router-dom";
+import { Button } from "antd";
 
-function CourtDetail() {
+function ClubDetail() {
+  const { clubId } = useParams();
+  const [club, setClub] = useState({});
+  const [owner, setOwner] = useState([]);
+  // console.log(id);
+
+  const getClubById = async () => {
+    try {
+      const response = await api.get(`/club/${clubId}`);
+      const answer = await api.get(`/club/name-club-owner/${clubId}`);
+      console.log(response.data);
+      setClub(response.data);
+      setOwner(answer.data);
+    } catch (error) {
+      toast.error(error.response.data);
+    }
+  };
+  useEffect(() => {
+    getClubById();
+  }, [clubId]);
   return (
-    <div className="court-detail">
-      <h1>Sân Cầu Lông Trúc Long, Thủ Đức, HCM</h1>
-      <div className="court-content">
-        <div className="court-description">
+    <div className="club-detail">
+      <h1>{club.clubName}</h1>
+      <div className="club-content">
+        <div className="club-image">
+          <PictureOutlined />
+          <h2>HÌNH ẢNH</h2>
+          <div className="text-wrap">
+            <div className="text-line"></div>
+          </div>
+          <img src={club.urlImages} alt="Sân Cầu Lông Trúc Long" />
+        </div>
+        <div className="club-description">
           <InfoCircleOutlined />
           <h2>MÔ TẢ</h2>
           <div className="text-wrap">
             <div className="text-line"></div>
           </div>
           <p>
-            Sân Cầu Lông Trúc Long, Thủ Đức, HCM là sân mới, khai trương đầu năm
+            {club.description}
+            {/* Sân Cầu Lông Trúc Long, Thủ Đức, HCM là sân mới, khai trương đầu năm
             2024. Sân rộng rãi, nhiều sân
           </p>
           <p>Đạt tiêu chuẩn, Giải các SE.</p>
@@ -52,23 +85,12 @@ function CourtDetail() {
           </p>
           <p>
             Sân Cầu Lông đang hoàn thiện để cùng tập hợp toàn những dịch vụ và
-            mang đến cho khách hàng những trải nghiệm tốt nhất khi đến sân.
+            mang đến cho khách hàng những trải nghiệm tốt nhất khi đến sân. */}
           </p>
         </div>
-        <div className="court-image">
-          <PictureOutlined />
-          <h2>HÌNH ẢNH</h2>
-          <div className="text-wrap">
-            <div className="text-line"></div>
-          </div>
-          <img
-            src="https://khanhanlaw.com/Uploads/xin-cap-phep-kinh-doanh-mon-the-thao-cau-long-1.jpg"
-            alt="Sân Cầu Lông Trúc Long"
-          />
-        </div>
       </div>
-      <div className="court-introduction">
-        <div className="court-infomation">
+      <div className="club-introduction">
+        <div className="club-infomation">
           <InfoCircleOutlined />
           <h2>THÔNG TIN CHI TIẾT</h2>
           <div className="text-wrap">
@@ -77,41 +99,38 @@ function CourtDetail() {
           <ul>
             <li>
               <i className="fas fa-map-marker-alt"></i>
-              <RoomIcon fontSize="small" /> 75 Hoàng Hữu Nam, Phường Tân Phú,
-              Thành Phố Thủ Đức, Hồ Chí Minh
+              <RoomIcon fontSize="small" /> {club.clubAddress}, {club.district},{" "}
+              {club.province}
             </li>
             <li>
               <i className="fas fa-clock">
                 <AccessTimeFilledIcon fontSize="small" />
               </i>{" "}
-              5:00 - 23:00
+              {club.openTime}g - {club.closeTime}g
             </li>
 
             <li>
-              <i className="fas fa-futbol"></i> Tổng 9 sân
+              <i className="nav-icon fal fa-shuttlecock"></i> Tổng{" "}
+              {owner.capacity} sân
             </li>
             <li>
-              <i className="court-phone">
+              <i className="club-phone">
                 <PersonIcon fontSize="small" />
               </i>{" "}
-              Tsan Tri Duc
+              {owner.nameOwner}
             </li>
             <li>
               <i className="fas fa-phone">
                 <CallIcon fontSize="small" />
               </i>{" "}
-              0865 412 899
-            </li>
-
-            <li>
-              <i className="fas fa-money-bill-wave"></i> 120,000 VND
+              {club.hotline}
             </li>
           </ul>
         </div>
 
-        <div className="court-utilities">
+        <div className="club-utilities">
           <UnorderedListOutlined />
-          <h2>Tiện Ích</h2>
+          <h2>TIỆN ÍCH</h2>
           <div className="text-wrap">
             <div className="text-line"></div>
           </div>
@@ -138,9 +157,10 @@ function CourtDetail() {
             </li>
           </ul>
         </div>
+        <Button className="booking-button">Đặt lịch</Button>
       </div>
     </div>
   );
 }
 
-export default CourtDetail;
+export default ClubDetail;

@@ -1,12 +1,12 @@
 import "./index.scss";
 import { Button, Image } from "antd";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../config/axios";
 
 function ListClub() {
   const [listClub, setListClub] = useState([]);
+  const navigate = useNavigate();
   const fetchListClubData = async () => {
     try {
       const response = await api.get("/clubs");
@@ -20,36 +20,44 @@ function ListClub() {
     fetchListClubData();
   }, []);
 
+  const handleShowDetailClub = (club) => {
+    console.log(club);
+    navigate(`/club-detail/${club.clubId}`);
+  };
+
   return (
-    <div className="list-court">
-      {listClub.map((court) => (
+    <div className="list-club">
+      {listClub.map((club) => (
         <>
-          <div key={court.key} className="list-court-card">
-            <div className="list-court-image">
-              <Image src={court.urlImages} alt={court.clubName} />
+          <div key={club.key} className="list-club-card">
+            <div className="list-club-image">
+              <Image src={club.urlImages} alt={club.clubName} />
             </div>
-            <div className="list-court-details">
-              <h2>{court.clubName}</h2>
+            <div className="list-club-details">
+              <h2>{club.clubName}</h2>
               <p>
-                <i className="list-court-address"></i> {court.clubAddress}
+                <i className="list-club-address"></i> {club.clubAddress},{" "}
+                {club.district}, {club.province}
               </p>
               <p>
-                <i className="list-court-clock"></i> {court.openTime} -{" "}
-                {court.closeTime}
+                <i className="list-club-clock"></i> {club.openTime} -{" "}
+                {club.closeTime}
               </p>
               <p>
-                <i className="list-court-phone"></i> Hotline: {court.hotline}
+                <i className="list-club-phone"></i> Hotline: {club.hotline}
               </p>
-              <p className="list-court-description">{court.description}</p>
+              <p className="list-club-description">{club.description}</p>
 
               <div className="buttons">
                 <Button className="booking-button">
-                  <Link to="/court-detail" />
+                  <Link to="/club-detail" />
                   Đặt lịch
                 </Button>
 
-                <Button className="details-button">
-                  <Link to="/court-detail" />
+                <Button
+                  onClick={() => handleShowDetailClub(club)}
+                  className="details-button"
+                >
                   Chi tiết
                 </Button>
               </div>
