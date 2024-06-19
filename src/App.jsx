@@ -24,6 +24,7 @@ import Booking from "./pages/booking";
 import HistoryBooking from "./pages/history-booking";
 
 import CourtDetail from "./pages/court-detail";
+import PaymentSuccess from "./pages/paymentsuccess";
 
 function App() {
   const user = useSelector(selectUser);
@@ -52,19 +53,11 @@ function App() {
       children: [
         {
           path: "/",
-          element: (
-            // <PrivateRoute>
-            <HomePage />
-            // </PrivateRoute>
-          ),
+          element: <HomePage />,
         },
         {
           path: "/introduction",
-          element: (
-            // <PrivateRoute>
-            <Intro />
-            // </PrivateRoute>
-          ),
+          element: <Intro />,
         },
         {
           path: "/contact",
@@ -89,7 +82,7 @@ function App() {
         //   ],
         // },
         {
-          path: "/booking",
+          path: "/booking/:clubId",
           element: <Booking />,
         },
         {
@@ -115,6 +108,10 @@ function App() {
             <CourtDetail />
             // </PrivateRoute>
           ),
+        },
+        {
+          path: "/payment-success",
+          element: <PaymentSuccess />,
         },
       ],
     },

@@ -7,18 +7,18 @@ import {
   Col,
   DatePicker,
   Input,
+  Modal,
   Row,
-  Table,
   message,
 } from "antd";
 import api from "../../config/axios";
+import { toast } from "react-toastify";
 
-function BookingFixed({ clubID }) {
+function BookingFixed({ club }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDays, setSelectedDays] = useState([]);
   const [slots, setSlots] = useState([]);
   const [selectedSlots, setSelectedSlots] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
   const [promotionCode, setPromotionCode] = useState("");
 
   const onChange = (date, dateString) => {
@@ -30,7 +30,7 @@ function BookingFixed({ clubID }) {
   };
 
   const fetchSlots = async () => {
-    const fetchedSlots = await api.get(`/court-slot/1`); // gắn tạm
+    const fetchedSlots = await api.get(`/club/slots?clubId=${club.clubId}`);
     setSlots(fetchedSlots.data);
   };
 
@@ -44,17 +44,20 @@ function BookingFixed({ clubID }) {
       : [...selectedSlots, slotId];
 
     setSelectedSlots(updatedSelectedSlots);
-
-    // Tính tiền
-    const total = updatedSelectedSlots.reduce((sum, id) => {
-      const slot = slots.find((slot) => slot.slotId === id);
-      return sum + (slot ? slot.price : 0);
-    }, 0);
-    setTotalPrice(total);
   };
 
   const handleDayChange = (checkedValues) => {
     setSelectedDays(checkedValues);
+  };
+
+  const handleWallet = async (values) => {
+    try {
+      const response = await api.post(`/vnpay?amount=${values}`);
+      const paymentLink = response.data;
+      window.location.href = paymentLink;
+    } catch (error) {
+      toast.error("Không thể thanh toán!");
+    }
   };
 
   const handleSubmit = async () => {
@@ -70,17 +73,44 @@ function BookingFixed({ clubID }) {
     const bookingData = {
       year: selectedDate ? selectedDate.year() : 0,
       month: selectedDate ? selectedDate.month() + 1 : 0,
-      clubId: clubID,
+      clubId: club.clubId,
       promotionCode: promotionCode,
       dayOfWeeks: selectedDays,
       slotIds: selectedSlots,
     };
 
     try {
-      // const booking = await api.post("/booking/fixed", bookingData);
-      console.log(bookingData);
+      // Check slots
+      const checkbooking = await api.post("/booking/fixed/check", bookingData);
+      const formattedMessages = checkbooking.data.join("\n");
 
-      message.success("Đặt sân thành công!");
+      // Confirm with the user to proceed
+      Modal.confirm({
+        title: "Xác nhận đặt sân",
+        content: (
+          <div style={{ whiteSpace: "pre-line" }}>{formattedMessages}</div>
+        ),
+        onOk: async () => {
+          try {
+            // Calculate total price
+            const totalprice = await api.post(
+              "/booking/fixed/price",
+              bookingData
+            );
+            handleWallet(totalprice.data);
+
+            // Make the booking
+            const booking = await api.post("/booking/fixed", bookingData);
+            message.success("Đặt sân thành công!");
+          } catch (error) {
+            console.error("Error during booking:", error);
+            message.error("Đặt sân thất bại. Vui lòng thử lại.");
+          }
+        },
+        onCancel() {
+          message.info("Hủy đặt sân");
+        },
+      });
     } catch (error) {
       console.error("Error submitting booking:", error);
       message.error("Đặt sân thất bại. Vui lòng thử lại.");
@@ -129,7 +159,6 @@ function BookingFixed({ clubID }) {
               Thời gian đặt:{" "}
               {selectedDate ? selectedDate.format("MM/YYYY") : ""}
             </h1>
-            <h1>Giá tiền tạm tính trên một ngày: {totalPrice} VND</h1>
             <img
               src="https://firebasestorage.googleapis.com/v0/b/badminton-booking-platform.appspot.com/o/z5545153816126_834da2b1757f9fca8d39197a7ac64f93.jpg?alt=media&token=50c69782-7782-42c9-877d-c07a1e906abb"
               alt=""
