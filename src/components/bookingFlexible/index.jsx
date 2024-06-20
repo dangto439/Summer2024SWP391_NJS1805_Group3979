@@ -1,7 +1,7 @@
 import "./index.scss";
 import { Button, Form, Input, InputNumber } from "antd";
 
-const BookingFlexible = ({ clubID }) => {
+const BookingFlexible = ({ club }) => {
   const onChange = (value) => {
     console.log("changed", value);
   };

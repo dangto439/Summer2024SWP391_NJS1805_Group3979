@@ -12,7 +12,13 @@
     justify-content: space-between;
 
     .booking-daily-datepicker-container {
+      display: flex;
       margin-bottom: 20px;
+      justify-content: center;
+
+      .booking-daily-datepicker-format{
+        width: 60%;
+      }
     }
 
     .booking-daily-summary {

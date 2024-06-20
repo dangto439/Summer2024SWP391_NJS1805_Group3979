@@ -1,13 +1,13 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { Button, Col, Row, DatePicker, Table, message, Input } from "antd";
 import moment from "moment";
 import api from "../../config/axios";
 import { toast } from "react-toastify";
 import "./index.scss";
-import { useNavigate } from "react-router-dom";
 
-function BookingDaily({ clubID }) {
-  const [selectedDate, setSelectedDate] = useState(moment());
+function BookingDaily({ club }) {
+  const [selectedDate, setSelectedDate] = useState(null);
   const [dataSource, setDataSource] = useState([]);
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [totalHours, setTotalHours] = useState(0);
@@ -17,7 +17,7 @@ function BookingDaily({ clubID }) {
   useEffect(() => {
     const fetchCourtsData = async () => {
       try {
-        const courtsResponse = await api.get(`/courts/${clubID}`);
+        const courtsResponse = await api.get(`/courts/${club.clubId}`);
         const courts = courtsResponse.data;
 
         const slotsPromises = courts.map((court) =>
@@ -67,10 +67,11 @@ function BookingDaily({ clubID }) {
       }
     };
     fetchCourtsData();
-  }, [clubID, selectedSlots]);
+  }, [club.clubId, selectedSlots]);
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
+  const handleDateChange = (date, dateString) => {
+    setSelectedDate(dateString);
+    // console.log(dateString);
   };
 
   const handleSlotSelect = (slot) => {
@@ -113,19 +114,21 @@ function BookingDaily({ clubID }) {
 
     const bookingData = {
       bookingDetailRequests: selectedSlots.map((slot) => ({
+        playingDate: selectedDate,
         courtSlotId: slot.courtSlotId,
-        playingDate: selectedDate.format("YYYY-MM-DD"),
       })),
       promotionCode: promotionCode,
-      flexibleBookingId: 0,
     };
 
     try {
       // Thanh Toán
-      handleWallet(totalPrice);
+      // handleWallet(totalPrice);
       //Đặt sân
+      console.log(bookingData);
       const booking = await api.post("/booking/daily", bookingData);
-      message.success("Đặt sân thành công!");
+
+      //thanh toán
+      handleWallet(booking.data.totalPrice);
     } catch (error) {
       console.error("Error submitting booking:", error);
       message.error("Đặt sân thất bại. Vui lòng thử lại.");
@@ -151,14 +154,14 @@ function BookingDaily({ clubID }) {
         <Row>
           <Col span={24} className="booking-daily-datepicker-container">
             <DatePicker
-              value={selectedDate}
+              className="booking-daily-datepicker-format"
               onChange={handleDateChange}
               disabledDate={disabledDate}
             />
           </Col>
           <Col span={24} className="booking-daily-summary">
-            <h1>Sân cầu lông Cao Lỗ</h1>
-            <h1>Ngày: {selectedDate.format("DD/MM/YYYY")}</h1>
+            <h1>{club.clubName}</h1>
+            <h1>Ngày: {selectedDate}</h1>
             <h1>Tổng giờ: {totalHours} giờ</h1>
             <h1>Tổng Tiền: {totalPrice} VND</h1>
             <img

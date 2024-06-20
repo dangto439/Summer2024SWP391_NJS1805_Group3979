@@ -22,6 +22,8 @@ import Court from "../src/components/club";
 import Club from "../src/components/club";
 import Booking from "./pages/booking";
 import HistoryBooking from "./pages/history-booking";
+
+import PaymentSuccess from "./pages/paymentsuccess";
 import ClubDetail from "./pages/club-detail";
 
 function App() {
@@ -51,19 +53,11 @@ function App() {
       children: [
         {
           path: "/",
-          element: (
-            // <PrivateRoute>
-            <HomePage />
-            // </PrivateRoute>
-          ),
+          element: <HomePage />,
         },
         {
           path: "/introduction",
-          element: (
-            // <PrivateRoute>
-            <Intro />
-            // </PrivateRoute>
-          ),
+          element: <Intro />,
         },
         {
           path: "/contact",
@@ -88,7 +82,7 @@ function App() {
         //   ],
         // },
         {
-          path: "/booking",
+          path: "/booking/:clubId",
           element: <Booking />,
         },
         {
@@ -114,6 +108,10 @@ function App() {
             <ClubDetail />
             // </PrivateRoute>
           ),
+        },
+        {
+          path: "/payment-success",
+          element: <PaymentSuccess />,
         },
       ],
     },

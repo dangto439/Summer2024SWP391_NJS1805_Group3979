@@ -10,7 +10,7 @@ function ListClub() {
   const fetchListClubData = async () => {
     try {
       const response = await api.get("/clubs");
-      console.log(response.data);
+      // console.log(response.data);
       setListClub(response.data);
     } catch (error) {
       console.error(error);
@@ -19,6 +19,11 @@ function ListClub() {
   useEffect(() => {
     fetchListClubData();
   }, []);
+  const handleClick = (club) => {
+    // console.log(club);
+    navigate(`/booking/${club.clubId}`);
+    // navigate(`/booking/${club}`);
+  };
 
   const handleShowDetailClub = (club) => {
     console.log(club);
@@ -29,7 +34,8 @@ function ListClub() {
     <div className="list-club">
       {listClub.map((club) => (
         <>
-          <div key={club.key} className="list-club-card">
+
+          <div key={club.clubId} className="list-club-card">
             <div className="list-club-image">
               <Image src={club.urlImages} alt={club.clubName} />
             </div>
@@ -49,11 +55,12 @@ function ListClub() {
               <p className="list-club-description">{club.description}</p>
 
               <div className="buttons">
-                <Button className="booking-button">
-                  <Link to="/club-detail" />
+                <Button
+                  className="booking-button"
+                  onClick={() => handleClick(club)}
+                >
                   Đặt lịch
                 </Button>
-
                 <Button
                   onClick={() => handleShowDetailClub(club)}
                   className="details-button"
