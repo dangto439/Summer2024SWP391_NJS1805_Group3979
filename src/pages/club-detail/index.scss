@@ -1,4 +1,4 @@
-.court-detail {
+.club-detail {
     padding: 20px;
     font-family: Arial, sans-serif;
     
@@ -11,7 +11,7 @@
       font-size: 18px;
       text-align: left;
       margin-left: 22px;
-      margin-top: -22px;
+      margin-top: -20px;
       }
     
 
@@ -27,7 +27,7 @@
       background-color: #f1f1f3;
     }
   
-    .court-content {
+    .club-content {
       display: flex;
       justify-content: center;
       margin-bottom: 20px;
@@ -35,7 +35,7 @@
         text-align: left;
       }
   
-    .court-description {
+    .club-description {
       width: 40%;
       border: 1px solid #ccc;
       border-radius: 10px;
@@ -52,7 +52,7 @@
         }
       }
   
-    .court-image {
+    .club-image {
       width: 80%;
       border: 1px solid #ccc;
       border-radius: 10px;
@@ -67,13 +67,14 @@
       }
     }
 
-    .court-introduction{
+    .club-introduction{
       display: flex;
-      justify-content: flex-end;
+      justify-content: flex-start;
       height: 300px;
+      margin-left: 20px;
     }
   
-    .court-infomation {
+    .club-infomation {
       border: 1px solid #ccc;
       border-radius: 10px;
       padding: 20px;
@@ -93,12 +94,13 @@
     }
   }
 
-    .court-utilities{
+    .club-utilities{
       border: 1px solid #ccc;
       border-radius: 10px;
       padding: 20px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      width: 15%;
+      width: 16.3%;
+      display: block;
       
       margin-right: 20px;
       ul{
@@ -107,7 +109,7 @@
         li{
           font-size: 20px;
           .icon{
-            background-color: rgb(0, 255, 102);
+            background-color: rgb(37, 213, 108);
             border-radius: 10px;
             border: none;
             color: #ffffff;
@@ -117,6 +119,9 @@
           }
         }
       }
+    }
+    .fal, .far {
+      font-family: "Font Awesome 5 Pro";
     }
 }
   
