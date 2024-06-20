@@ -1,7 +1,6 @@
 import "./index.scss";
 import { Button, Image } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-
 import { useEffect, useState } from "react";
 import api from "../../config/axios";
 
@@ -26,10 +25,16 @@ function ListClub() {
     // navigate(`/booking/${club}`);
   };
 
+  const handleShowDetailClub = (club) => {
+    console.log(club);
+    navigate(`/club-detail/${club.clubId}`);
+  };
+
   return (
     <div className="list-club">
       {listClub.map((club) => (
         <>
+
           <div key={club.clubId} className="list-club-card">
             <div className="list-club-image">
               <Image src={club.urlImages} alt={club.clubName} />
@@ -37,7 +42,8 @@ function ListClub() {
             <div className="list-club-details">
               <h2>{club.clubName}</h2>
               <p>
-                <i className="list-club-address"></i> {club.clubAddress}
+                <i className="list-club-address"></i> {club.clubAddress},{" "}
+                {club.district}, {club.province}
               </p>
               <p>
                 <i className="list-club-clock"></i> {club.openTime} -{" "}
@@ -55,9 +61,10 @@ function ListClub() {
                 >
                   Đặt lịch
                 </Button>
-
-                <Button className="details-button">
-                  <Link to="/club-detail" />
+                <Button
+                  onClick={() => handleShowDetailClub(club)}
+                  className="details-button"
+                >
                   Chi tiết
                 </Button>
               </div>

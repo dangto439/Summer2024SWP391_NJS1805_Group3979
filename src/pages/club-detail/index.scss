@@ -1,0 +1,129 @@
+.club-detail {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h2{
+      font-size: 18px;
+      text-align: left;
+      margin-left: 22px;
+      margin-top: -20px;
+      }
+    
+
+
+    .text-wrap {
+      display: flex;
+      align-items: center;
+      margin-block: 20px;
+    }
+    .text-line {
+      height: 5px;
+      width: 100%;
+      background-color: #f1f1f3;
+    }
+  
+    .club-content {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+      p{
+        text-align: left;
+      }
+  
+    .club-description {
+      width: 40%;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 800px;
+        margin: 20px;
+        height: auto;
+        font-size: 20px;
+        ul{
+          li{
+            list-style: none;
+          }
+        }
+      }
+  
+    .club-image {
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        // max-width: 800px;
+        margin: 20px;
+       img {
+        width: 100%;
+        height: auto;
+        }
+      }
+    }
+
+    .club-introduction{
+      display: flex;
+      justify-content: flex-start;
+      height: 300px;
+      margin-left: 20px;
+    }
+  
+    .club-infomation {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 47%;
+      // height: 20%;
+      margin-right: 20px;
+      font-size: 20px;
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+  
+        li {
+          margin: 5px 0;
+        }
+    }
+  }
+
+    .club-utilities{
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 16.3%;
+      display: block;
+      
+      margin-right: 20px;
+      ul{
+        list-style: none;
+        margin-left: 1px;
+        li{
+          font-size: 20px;
+          .icon{
+            background-color: rgb(37, 213, 108);
+            border-radius: 10px;
+            border: none;
+            color: #ffffff;
+            margin-top: 10px;
+            padding-top: 0px;
+            
+          }
+        }
+      }
+    }
+    .fal, .far {
+      font-family: "Font Awesome 5 Pro";
+    }
+}
+  
+  
+  
