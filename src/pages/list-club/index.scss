@@ -1,9 +1,80 @@
 .list-club {
   display: flex;
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
   flex-direction: column;
-  width: 60%;
-  margin-left: 350px;
+  width: auto;
+  // margin-left: 350px;
+
+  h1{
+    font-size: 30px;
+    font-weight: 500px;
+    padding: 10px 10px;
+    margin-bottom: 0;
+    color: #1D8D1D;
+  }
+}
+
+.list-club-outstanding {
+  display: flex;
+}
+
+.text-wrap {
+  display: flex;
+  align-items: center;
+  margin-block: 20px;
+}
+.text-line {
+  height: 2px;
+  width: 100%;
+  background-color: #f1f1f3;
+}
+
+.list-club-outstanding-info {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-size: 20px;
+  width: 30%;
+  margin-right: 20px;
+}
+
+.list-club-outstanding-info-card{
+  display: flex;
+  // width: 10%;
+  flex-direction: row;
+  h2{
+    font-size: 18px;
+    text-align: left;
+    cursor: pointer;
+  }
+  p{
+    text-align: left;
+  }
+}
+
+.list-club-outstanding-image{
+  // width: 20%;
+  // object-fit: cover; 
+  padding-right: 8px;
+  img{
+    cursor: pointer;
+    width: 150px;
+      height: 120px;
+  }
+
+}
+
+.list-club-main-image{
+  width: 100%;
+  // height: 800px;
+  padding-left: 20px;
+  padding-right: 20px;
+  img{
+    width: 100%;
+      // height: 220px;
+  }
+  
 }
 
 .list-club-card {
@@ -11,56 +82,54 @@
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  // max-width: 800px;
   margin: 20px;
   display: flex;
   flex-direction: row;
   align-items: center;
   background-color: #eaf1f0c4;
+  width: 50%;
 
-  .list-club-image {
-    // width: 100%;
-    // height: 200px; // Set the height to a fixed value or use percentage for responsive design
-    // Ensures no overflow issues
-
+.list-club-image {
     img {
-      width: 200px;
+      width: 220px;
       height: 220px;
-      // object-fit: cover; // Ensures the image covers the entire div without distortion
+      object-fit: cover; // Ensures the image covers the entire div without distortion
       border-radius: 10px;
+      cursor: pointer;
     }
-  }
+}
 
-  .list-club-details {
+.list-club-details {
     margin-top: 20px;
     // text-align: center;
     // text-align: left;
 
-    h2 {
+  h2 {
       font-size: 20px;
       color: #007BFF;
       margin-bottom: 10px;
       text-align: left;
-      margin-left: 50px;
-    }
+      margin-left: 30px;
+      cursor: pointer;
+  }
 
-    p {
+  p {
       margin: 5px 0;
       margin-left: 10px;
       text-align: left;
-      i {
+    i {
         margin-right: 5px;
         color: #888;
        
       }
-    }
-
-    .list-club-description {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #555;
-    }
   }
+
+.list-club-description {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #555;
+  }
+}
 
 .buttons button {
     padding: 5px 20px;
@@ -69,9 +138,7 @@
     border-radius: 5px;
     cursor: pointer;
     // text-align: center;
-    gap: 0px;
-    
-    
+    gap: 0px;   
 }
 
 .booking-button {
@@ -87,5 +154,5 @@
     background-color: #3498db;
     color: #fff;
     margin-left: 5px;
-}
+  }
 }
