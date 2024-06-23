@@ -14,11 +14,14 @@ import {
   FormControl,
   InputLabel,
   FormHelperText,
+  Typography,
+  useTheme,
 } from "@mui/material";
 import { Upload, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import api from "../../config/axios";
 import uploadFile from "../../utils/upload";
+import { tokens } from "../../theme";
 
 const schema = yup.object().shape({
   clubName: yup.string().required("Tên Club là bắt buộc"),
@@ -970,6 +973,8 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
   const [fileList, setFileList] = useState([]);
   const [previewImage, setPreviewImage] = useState("");
   const [previewOpen, setPreviewOpen] = useState(false);
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
   useEffect(() => {
     if (mode === "update" && clubid) {
@@ -1043,10 +1048,31 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
   // };
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>
-        {mode === "create" ? "Tạo mới Club" : "Cập nhật Club"}
+    <Dialog
+      open={open}
+      onClose={onClose}
+      sx={{
+        "& .MuiDialog-paper": {
+          backgroundColor: colors.grey[900],
+          padding: "20px",
+          borderRadius: "20px",
+        },
+      }}
+    >
+      <DialogTitle
+        color={colors.greenAccent[500]}
+        margin="10px"
+        fontSize="25px"
+      >
+        {mode === "create" ? "Tạo Mới Club" : "Cập Nhật Club"}
       </DialogTitle>
+      <Typography
+        marginRight="60%"
+        color={colors.redAccent[500]}
+        fontSize="12px"
+      >
+        *Tất cả các trường đều bắt buộc
+      </Typography>
       <DialogContent>
         <form onSubmit={handleSubmit(handleFormSubmit)}>
           <FormControl fullWidth margin="normal" error={!!errors.clubName}>
@@ -1323,10 +1349,20 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
           </FormControl>
 
           <DialogActions>
-            <Button onClick={onClose} color="secondary">
+            <Button
+              onClick={onClose}
+              sx={{
+                color: colors.redAccent[500],
+              }}
+            >
               Hủy
             </Button>
-            <Button type="submit" color="primary">
+            <Button
+              type="submit"
+              sx={{
+                color: colors.greenAccent[500],
+              }}
+            >
               {mode === "create" ? "Tạo" : "Cập nhật"}
             </Button>
           </DialogActions>
