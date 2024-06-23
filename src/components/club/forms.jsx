@@ -23,7 +23,7 @@ const schema = yup.object().shape({
   clubName: yup.string().required("Tên Club là bắt buộc"),
   clubDescription: yup.string().required("Mô tả là bắt buộc"),
   clubHotLine: yup.string().required("Số hotline là bắt buộc"),
-  capacity: yup.number().required("Số lương sân là bắt buộc").min(1),
+  capacity: yup.number().required("Số lượng sân là bắt buộc").min(1),
   city: yup.string().required("Tỉnh / Thành phố là bắt buộc"),
   district: yup.string().required("Quận / Huyện là bắt buộc"),
   clubAddress: yup.string().required("Địa chỉ cụ thể là bắt buộc"),
@@ -32,18 +32,95 @@ const schema = yup.object().shape({
     .string()
     .required("Giờ đóng cửa là bắt buộc")
     .test(
-      "is-greater",
-      "Giờ đóng cửa bắt buộc phải sau giờ mở cửa",
+      "is-greater-than-opening",
+      "Giờ đóng cửa phải sau giờ mở cửa",
       function (value) {
         const { openingTime } = this.parent;
-        const convertToInt = (timeStr) =>
-          parseInt(timeStr.replace(":", ""), 10);
+        if (!openingTime || !value) return false;
+
+        const convertToInt = (timeStr) => {
+          const [hour, minute] = timeStr.split(":").map(Number);
+          return hour * 60 + minute;
+        };
+
         const openingTimeInt = convertToInt(openingTime);
         const closingTimeInt = convertToInt(value);
         return closingTimeInt > openingTimeInt;
       }
     ),
+  starTimePeakHours: yup
+    .string()
+    .required("Bắt đầu giờ cao điểm là bắt buộc")
+    .test(
+      "is-after-opening-time",
+      "Bắt đầu giờ cao điểm phải sau Giờ mở cửa và trước Giờ đóng cửa",
+      function (value) {
+        const { openingTime, closingTime } = this.parent;
+        if (!openingTime || !closingTime || !value) return false;
+
+        const convertToInt = (timeStr) => {
+          const [hour, minute] = timeStr.split(":").map(Number);
+          return hour * 60 + minute;
+        };
+
+        const openingTimeInt = convertToInt(openingTime);
+        const closingTimeInt = convertToInt(closingTime);
+        const startTimePeakHoursInt = convertToInt(value);
+        return (
+          startTimePeakHoursInt > openingTimeInt &&
+          startTimePeakHoursInt < closingTimeInt
+        );
+      }
+    ),
+  endTimePeakHours: yup
+    .string()
+    .required("Kết thúc giờ cao điểm là bắt buộc")
+    .test(
+      "is-after-start-time-peak-hours",
+      "Kết thúc giờ cao điểm phải sau Bắt đầu giờ cao điểm và trước Giờ đóng cửa",
+      function (value) {
+        const { starTimePeakHours, closingTime } = this.parent;
+        if (!starTimePeakHours || !closingTime || !value) return false;
+
+        const convertToInt = (timeStr) => {
+          const [hour, minute] = timeStr.split(":").map(Number);
+          return hour * 60 + minute;
+        };
+
+        const startTimePeakHoursInt = convertToInt(starTimePeakHours);
+        const closingTimeInt = convertToInt(closingTime);
+        const endTimePeakHoursInt = convertToInt(value);
+        return (
+          endTimePeakHoursInt > startTimePeakHoursInt &&
+          endTimePeakHoursInt < closingTimeInt
+        );
+      }
+    ),
+  courtPrice: yup.string().required("Giá của sân là bắt buộc"),
+  courtPricePeakHours: yup
+    .string()
+    .required("Giá của sân giờ cao điểm là bắt buộc"),
+
+  flexiblePercent: yup
+    .string()
+    .required("Giảm giá cho đặt lịch linh hoạt là bắt buộc")
+    .matches(/^\d+$/, "Giá trị phải là số nguyên dương")
+    .test("is-between-0-100", "Giá trị phải từ 0 đến 100", function (value) {
+      if (!value) return false;
+      const intValue = parseInt(value, 10);
+      return intValue >= 0 && intValue <= 100;
+    }),
+  fixedPercent: yup
+    .string()
+    .required("Giảm giá cho đặt lịch cố định là bắt buộc")
+    .matches(/^\d+$/, "Giá trị phải là số nguyên dương")
+    .test("is-between-0-100", "Giá trị phải từ 0 đến 100", function (value) {
+      if (!value) return false;
+      const intValue = parseInt(value, 10);
+      return intValue >= 0 && intValue <= 100;
+    }),
 });
+
 const data = {
   "Hà Nội": [
     "Ba Đình",
@@ -908,10 +985,19 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
   }, [selectedCity, setValue]);
 
   const handleFormSubmit = async (data) => {
+    const peakHourRequests = [
+      {
+        startTime: parseInt(data.starTimePeakHours, 10),
+        endTime: parseInt(data.endTimePeakHours, 10),
+        peakPrice: parseInt(data.courtPricePeakHours, 10),
+      },
+    ];
+
     const adjustedData = {
       ...data,
       openingTime: parseInt(data.openingTime, 10),
       closingTime: parseInt(data.closingTime, 10),
+      peakHourRequests: peakHourRequests,
       urlImages: fileList.map((file) =>
         file.response ? file.response.url : file.url
       ),
@@ -943,6 +1029,13 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
+
+  // const handleTimeChange = (event) => {
+  //   const inputTime = event.target.value;
+  //   const hour = inputTime.split(":")[0];
+  //   const adjustedTime = `${hour}:00`;
+  //   control.setValue("openingTime", adjustedTime);
+  // };
 
   return (
     <Dialog open={open} onClose={onClose}>
@@ -1013,9 +1106,28 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
               error={!!errors.openingTime}
               helperText={errors.openingTime?.message}
             />
+
+            {/* <TextField
+              label="Giờ mở cửa"
+              {...control.register("openingTime")}
+              fullWidth
+              margin="normal"
+              error={!!errors.openingTime}
+              helperText={errors.openingTime?.message}
+              type="time"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              InputProps={{
+                inputProps: {
+                  step: 3600,
+                },
+              }}
+              onChange={handleTimeChange}
+            /> */}
           </FormControl>
 
-          <FormControl fullWidth margin="normal" error={!!errors.closingTime}>
+          {/* <FormControl fullWidth margin="normal" error={!!errors.closingTime}>
             <TextField
               label="Giờ đóng cửa"
               {...control.register("closingTime")}
@@ -1024,6 +1136,128 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
               error={!!errors.closingTime}
               helperText={errors.closingTime?.message}
               type="time"
+            />
+          </FormControl>  */}
+
+          <FormControl fullWidth margin="normal" error={!!errors.closingTime}>
+            <Controller
+              name="closingTime"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Giờ đóng cửa"
+                  fullWidth
+                  margin="normal"
+                  type="time"
+                  error={!!errors.closingTime}
+                  helperText={errors.closingTime?.message}
+                />
+              )}
+            />
+          </FormControl>
+
+          <FormControl
+            fullWidth
+            margin="normal"
+            error={!!errors.starTimePeakHours}
+          >
+            <TextField
+              label="Bắt đầu giờ cao điểm"
+              {...control.register("starTimePeakHours")}
+              fullWidth
+              margin="normal"
+              error={!!errors.starTimePeakHours}
+              helperText={errors.starTimePeakHours?.message}
+              type="time"
+            />
+          </FormControl>
+
+          <FormControl
+            fullWidth
+            margin="normal"
+            error={!!errors.endTimePeakHours}
+          >
+            <TextField
+              label="Kết thúc giờ cao điểm"
+              {...control.register("endTimePeakHours")}
+              fullWidth
+              margin="normal"
+              error={!!errors.endTimePeakHours}
+              helperText={errors.endTimePeakHours?.message}
+              type="time"
+            />
+          </FormControl>
+
+          <FormControl fullWidth margin="normal" error={!!errors.courtPrice}>
+            <TextField
+              label="Giá sân"
+              {...control.register("courtPrice")}
+              fullWidth
+              margin="normal"
+              error={!!errors.courtPrice}
+              helperText={errors.courtPrice?.message}
+              onInput={(e) => {
+                e.target.value = Math.max(1, parseInt(e.target.value) || 1);
+              }}
+            />
+          </FormControl>
+
+          <FormControl
+            fullWidth
+            margin="normal"
+            error={!!errors.courtPricePeakHours}
+          >
+            <TextField
+              label="Giá sân giờ cao điểm"
+              {...control.register("courtPricePeakHours")}
+              fullWidth
+              margin="normal"
+              error={!!errors.courtPricePeakHours}
+              helperText={errors.courtPricePeakHours?.message}
+              onInput={(e) => {
+                e.target.value = Math.max(1, parseInt(e.target.value) || 1);
+              }}
+            />
+          </FormControl>
+
+          <FormControl
+            fullWidth
+            margin="normal"
+            error={!!errors.flexiblePercent}
+          >
+            <Controller
+              name="flexiblePercent"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Giảm giá cho đặt lịch linh hoạt (%)"
+                  fullWidth
+                  margin="normal"
+                  error={!!errors.flexiblePercent}
+                  helperText={errors.flexiblePercent?.message}
+                />
+              )}
+            />
+          </FormControl>
+
+          <FormControl fullWidth margin="normal" error={!!errors.fixedPercent}>
+            <Controller
+              name="fixedPercent"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Giảm giá cho đặt lịch cố định (%)"
+                  fullWidth
+                  margin="normal"
+                  error={!!errors.fixedPercent}
+                  helperText={errors.fixedPercent?.message}
+                />
+              )}
             />
           </FormControl>
 
@@ -1075,7 +1309,7 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
           <FormControl fullWidth margin="normal">
             <Upload
               // Cần thiết lập thêm liên kết firebase để lưu trữ hình ảnh xong dùng url đó lưu xuống DB
-              // action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+              action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
               listType="picture-card"
               fileList={fileList}
               onPreview={handlePreview}
