@@ -18,6 +18,7 @@ import {
 import { Upload, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import api from "../../config/axios";
+import uploadFile from "../../utils/upload";
 
 const schema = yup.object().shape({
   clubName: yup.string().required("Tên Club là bắt buộc"),
@@ -985,6 +986,12 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
   }, [selectedCity, setValue]);
 
   const handleFormSubmit = async (data) => {
+    const uploadPromises = fileList.map(async (file) => {
+      const downloadURL = await uploadFile(file.originFileObj);
+      return downloadURL;
+    });
+    const uploadedUrls = await Promise.all(uploadPromises);
+
     const peakHourRequests = [
       {
         startTime: parseInt(data.starTimePeakHours, 10),
@@ -998,9 +1005,7 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
       openingTime: parseInt(data.openingTime, 10),
       closingTime: parseInt(data.closingTime, 10),
       peakHourRequests: peakHourRequests,
-      urlImages: fileList.map((file) =>
-        file.response ? file.response.url : file.url
-      ),
+      urlImages: uploadedUrls,
     };
 
     try {
@@ -1308,8 +1313,6 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
 
           <FormControl fullWidth margin="normal">
             <Upload
-              // Cần thiết lập thêm liên kết firebase để lưu trữ hình ảnh xong dùng url đó lưu xuống DB
-              action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
               listType="picture-card"
               fileList={fileList}
               onPreview={handlePreview}
