@@ -14,14 +14,14 @@ import {
   FormControl,
   InputLabel,
   FormHelperText,
-  useTheme,
 } from "@mui/material";
+import { Upload, Image } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import api from "../../config/axios";
-import { tokens } from "../../theme";
 
 const schema = yup.object().shape({
   clubName: yup.string().required("Name is required"),
-  clubAddress: yup.string().required("Address is required"),
+  clubAddress: yup.string().required("Specific address is required"),
   clubDescription: yup.string().required("Description is required"),
   clubHotLine: yup.string().required("Hotline is required"),
   capacity: yup.number().required("Number of courts is required").min(1),
@@ -36,6 +36,8 @@ const schema = yup.object().shape({
       const closingTimeInt = convertToInt(value);
       return closingTimeInt > openingTimeInt;
     }),
+  city: yup.string().required("City/Province is required"),
+  district: yup.string().required("District is required"),
 });
 
 const Forms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
@@ -49,6 +51,9 @@ const Forms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
 
   const [province, setProvince] = useState("");
   const [districts, setDistricts] = useState([]);
+  const [fileList, setFileList] = useState([]);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   useEffect(() => {
     if (mode === "update" && clubid) {
@@ -66,7 +71,9 @@ const Forms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
       ...data,
       openingTime: parseInt(data.openingTime, 10),
       closingTime: parseInt(data.closingTime, 10),
-      urlImages: ["none image"],
+      urlImages: fileList.map((file) =>
+        file.response ? file.response.url : file.url
+      ),
     };
 
     try {
@@ -82,6 +89,20 @@ const Forms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
     }
   };
 
+  const handleChange = ({ fileList }) => setFileList(fileList);
+
+  const handlePreview = async (file) => {
+    setPreviewImage(file.url || file.thumbUrl);
+    setPreviewOpen(true);
+  };
+
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </div>
+  );
+
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>
@@ -91,32 +112,31 @@ const Forms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
         <form onSubmit={handleSubmit(handleFormSubmit)}>
           <FormControl fullWidth margin="normal" error={!!errors.clubName}>
             <TextField
-              label="Name"
+              label="Name "
               {...control.register("clubName")}
               error={!!errors.clubName}
               helperText={errors.clubName?.message}
             />
           </FormControl>
 
-          <FormControl fullWidth margin="normal">
+          <FormControl
+            fullWidth
+            margin="normal"
+            error={!!errors.clubDescription}
+          >
             <TextField
-              label="Description"
+              label="Description "
               {...control.register("clubDescription")}
-            />
-          </FormControl>
-
-          <FormControl fullWidth margin="normal" error={!!errors.clubAddress}>
-            <TextField
-              label="Address"
-              {...control.register("clubAddress")}
-              error={!!errors.clubAddress}
-              helperText={errors.clubAddress?.message}
+              multiline
+              rows={4}
+              error={!!errors.clubDescription}
+              helperText={errors.clubDescription?.message}
             />
           </FormControl>
 
           <FormControl fullWidth margin="normal" error={!!errors.clubHotLine}>
             <TextField
-              label="Hotline"
+              label="Hotline "
               {...control.register("clubHotLine")}
               error={!!errors.clubHotLine}
               helperText={errors.clubHotLine?.message}
@@ -124,7 +144,7 @@ const Forms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
           </FormControl>
 
           <FormControl fullWidth margin="normal" error={!!errors.capacity}>
-            <InputLabel>Số lượng sân</InputLabel>
+            <InputLabel>Số lượng sân </InputLabel>
             <Controller
               name="capacity"
               control={control}
@@ -143,7 +163,7 @@ const Forms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
           </FormControl>
 
           <FormControl fullWidth margin="normal" error={!!errors.openingTime}>
-            <InputLabel>Giờ mở cửa</InputLabel>
+            <InputLabel>Giờ mở cửa </InputLabel>
             <Controller
               name="openingTime"
               control={control}
@@ -162,7 +182,7 @@ const Forms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
           </FormControl>
 
           <FormControl fullWidth margin="normal" error={!!errors.closingTime}>
-            <InputLabel>Giờ đóng cửa</InputLabel>
+            <InputLabel>Giờ đóng cửa </InputLabel>
             <Controller
               name="closingTime"
               control={control}
@@ -179,6 +199,67 @@ const Forms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
             <FormHelperText>{errors.closingTime?.message}</FormHelperText>
           </FormControl>
 
+          <FormControl fullWidth margin="normal" error={!!errors.city}>
+            <InputLabel>City/Province </InputLabel>
+            <Controller
+              name="city"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  label="City/Province"
+                  onChange={handleProvinceChange}
+                >
+                  <MenuItem value="Hanoi">Hanoi</MenuItem>
+                  <MenuItem value="HCMC">Ho Chi Minh City</MenuItem>
+                  <MenuItem value="Danang">Danang</MenuItem>
+                </Select>
+              )}
+            />
+            <FormHelperText>{errors.city?.message}</FormHelperText>
+          </FormControl>
+
+          <FormControl fullWidth margin="normal" error={!!errors.district}>
+            <InputLabel>District </InputLabel>
+            <Controller
+              name="district"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <Select {...field} label="District">
+                  {districts.map((district, index) => (
+                    <MenuItem key={index} value={district}>
+                      {district}
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
+            />
+            <FormHelperText>{errors.district?.message}</FormHelperText>
+          </FormControl>
+
+          <FormControl fullWidth margin="normal" error={!!errors.clubAddress}>
+            <TextField
+              label="Specific address "
+              {...control.register("clubAddress")}
+              error={!!errors.clubAddress}
+              helperText={errors.clubAddress?.message}
+            />
+          </FormControl>
+
+          <FormControl fullWidth margin="normal">
+            <Upload
+              action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+              listType="picture-card"
+              fileList={fileList}
+              onPreview={handlePreview}
+              onChange={handleChange}
+            >
+              {fileList.length >= 8 ? null : uploadButton}
+            </Upload>
+          </FormControl>
+
           <DialogActions>
             <Button onClick={onClose} color="secondary">
               Hủy
@@ -189,6 +270,20 @@ const Forms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
           </DialogActions>
         </form>
       </DialogContent>
+
+      {previewImage && (
+        <Image
+          wrapperStyle={{
+            display: "none",
+          }}
+          preview={{
+            visible: previewOpen,
+            onVisibleChange: (visible) => setPreviewOpen(visible),
+            afterOpenChange: (visible) => !visible && setPreviewImage(""),
+          }}
+          src={previewImage}
+        />
+      )}
     </Dialog>
   );
 };
