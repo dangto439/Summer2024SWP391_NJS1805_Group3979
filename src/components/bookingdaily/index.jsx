@@ -14,64 +14,87 @@ function BookingDaily({ club }) {
   const [totalPrice, setTotalPrice] = useState(0);
   const [columns, setColumns] = useState([]);
   const [promotionCode, setPromotionCode] = useState("");
+
   useEffect(() => {
     const fetchCourtsData = async () => {
+      if (!selectedDate) return;
+
       try {
         const courtsResponse = await api.get(`/courts/${club.clubId}`);
         const courts = courtsResponse.data;
 
         const slotsPromises = courts.map((court) =>
-          api.get(`/court-slot/${court.courtId}`)
+          api.get(
+            `/court-slot/status?date=${selectedDate}&courtId=${court.courtId}`
+          )
         );
         const slotsResponses = await Promise.all(slotsPromises);
 
-        const slotsData = slotsResponses.flatMap((response) => response.data);
-
-        const formattedData = slotsData.reduce((result, slot) => {
-          const time = formatTime(slot.slotId);
-          if (!result[time]) {
-            result[time] = { time };
-          }
-          result[time][`court_${slot.courtResponse.courtId}`] = slot;
-          return result;
-        }, {});
-
-        setDataSource(Object.values(formattedData));
-
-        const generatedColumns = courts.map((court) => ({
-          title: court.courtName,
-          dataIndex: `court_${court.courtId}`,
-          key: court.courtId,
-          render: (slot) =>
-            slot ? (
-              <Button
-                key={slot.courtSlotId}
-                className={
-                  selectedSlots.some(
-                    (selectedSlot) =>
-                      selectedSlot.courtSlotId === slot.courtSlotId
-                  )
-                    ? "selected-slot"
-                    : ""
-                }
-                onClick={() => handleSlotSelect(slot)}
-              >
-                {formatTime(slot.slotId)}
-              </Button>
-            ) : null,
+        const slotsData = slotsResponses.map((response, index) => ({
+          courtId: courts[index].courtId,
+          courtName: courts[index].courtName,
+          slots: response.data,
         }));
+
+        const allSlotTimes = Array.from(
+          new Set(
+            slotsData.flatMap((court) => court.slots.map((slot) => slot.slotId))
+          )
+        ).sort((a, b) => a - b);
+
+        const formattedData = allSlotTimes.map((time) => {
+          const row = { time: formatTime(time) };
+          slotsData.forEach((court) => {
+            const slot = court.slots.find((slot) => slot.slotId === time);
+            row[`court_${court.courtId}`] = slot;
+          });
+          return row;
+        });
+
+        setDataSource(formattedData);
+
+        const generatedColumns = [
+          ...courts.map((court) => ({
+            title: court.courtName,
+            dataIndex: `court_${court.courtId}`,
+            key: court.courtId,
+            render: (slot) =>
+              slot ? (
+                <Button
+                  key={slot.courtSlotId}
+                  className={
+                    selectedSlots.some(
+                      (selectedSlot) =>
+                        selectedSlot.courtSlotId === slot.courtSlotId
+                    )
+                      ? "selected-slot"
+                      : slot.courtSlotStatus === "INACTIVE"
+                      ? "booked-slot"
+                      : ""
+                  }
+                  disabled={slot.courtSlotStatus === "INACTIVE"}
+                  onClick={() => handleSlotSelect(slot)}
+                >
+                  {formatTime(slot.slotId)}
+                </Button>
+              ) : null,
+          })),
+        ];
 
         setColumns(generatedColumns);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
+
     fetchCourtsData();
-  }, [club.clubId, selectedSlots]);
+  }, [club.clubId, selectedDate, selectedSlots]);
 
   const handleDateChange = (date, dateString) => {
     setSelectedDate(dateString);
-    // console.log(dateString);
+    setSelectedSlots([]);
+    setTotalHours(0);
+    setTotalPrice(0);
   };
 
   const handleSlotSelect = (slot) => {
@@ -121,13 +144,9 @@ function BookingDaily({ club }) {
     };
 
     try {
-      // Thanh Toán
-      // handleWallet(totalPrice);
-      //Đặt sân
       console.log(bookingData);
       const booking = await api.post("/booking/daily", bookingData);
 
-      //thanh toán
       handleWallet(booking.data.totalPrice);
     } catch (error) {
       console.error("Error submitting booking:", error);
