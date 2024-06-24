@@ -2,17 +2,12 @@ import "./index.scss";
 
 function Intro() {
   return (
-    <div className="container">
+    <div className="intro">
       <h1>Chào Mừng Đến Với DatSan3979</h1>
       <p>
         Nền tảng đặt lịch sân cầu lông hiện đại và tiện lợi nhất dành cho mọi
         tín đồ yêu thích bộ môn cầu lông.
       </p>
-      <img
-        src="https://thethaodonga.com/wp-content/uploads/2022/06/hinh-anh-cau-long-dep-2.png"
-        alt="Badminton Court"
-        className="main-image"
-      />
 
       <section className="about-us">
         <h2>Về Chúng Tôi</h2>
@@ -23,11 +18,6 @@ function Intro() {
           có thể tận hưởng những trận cầu thú vị mà không phải lo lắng về việc
           tìm sân.
         </p>
-        <img
-          src="https://cdn.shopvnb.com/uploads/images/tin_tuc/hinh-anh-vot-cau-long-1-1687828854.webp"
-          alt="About Us"
-          className="section-image"
-        />
       </section>
 
       <section className="features">
@@ -58,11 +48,6 @@ function Intro() {
             đãi và chương trình khuyến mãi hấp dẫn dành cho người dùng 3979.
           </li>
         </ul>
-        <img
-          src="https://png.pngtree.com/thumb_back/fw800/background/20210831/pngtree-badminton-grass-badminton-racket-on-green-background-image_772542.jpg"
-          alt="Features"
-          className="section-image"
-        />
       </section>
 
       <section className="why-choose">
@@ -83,14 +68,9 @@ function Intro() {
             quá trình đặt sân.
           </li>
         </ul>
-        <img
-          src="https://thethao365.com.vn/Data/upload/images/Product/Caulong/kich-thuoc-san-cau-long.jpg"
-          alt="Why Choose Us"
-          className="section-image"
-        />
       </section>
 
-      <section className="contact">
+      <section className="contact-intro">
         <h2>Liên Hệ</h2>
         <p>
           Nếu bạn có bất kỳ câu hỏi hoặc cần hỗ trợ, xin vui lòng liên hệ với
@@ -98,11 +78,6 @@ function Intro() {
           <a href="mailto:datsan79@gmail.com">datsan79@gmail.com</a> hoặc
           hotline: <a href="tel:09 35 245 xxx">09 35 245 xxx</a>.
         </p>
-        <img
-          src="https://sonsanepoxy.vn/wp-content/uploads/2023/07/lap-dat-he-thong-den-chieu-san-cau-long.jpg"
-          alt="Contact Us"
-          className="section-image"
-        />
       </section>
 
       <p className="thanks">

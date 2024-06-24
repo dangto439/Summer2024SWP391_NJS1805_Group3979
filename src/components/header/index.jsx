@@ -474,7 +474,7 @@ function Header() {
             className={`header__link ${tab == 3 && "active"}`}
           >
             <li>
-              <Link to="/">DANH SÁCH SÂN</Link>
+              <Link to="/list-club">DANH SÁCH SÂN</Link>
             </li>
           </button>
           <button
@@ -547,11 +547,7 @@ function Header() {
             </div>
           </>
         ) : (
-          <Dropdown.Button
-            menu={menuProps}
-            placement="bottom"
-            icon={<BarsOutlined />}
-          >
+          <Dropdown.Button menu={menuProps} icon={<BarsOutlined />}>
             {name}
           </Dropdown.Button>
         )}

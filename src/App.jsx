@@ -22,6 +22,12 @@ import Court from "../src/components/club";
 import Club from "../src/components/club";
 import Booking from "./pages/booking";
 import HistoryBooking from "./pages/history-booking";
+
+import PaymentSuccess from "./pages/paymentsuccess";
+import ClubDetail from "./pages/club-detail";
+import PaymentFail from "./pages/payment-fail";
+import ListClub from "./pages/list-club";
+
 function App() {
   const user = useSelector(selectUser);
   console.log(user);
@@ -49,19 +55,15 @@ function App() {
       children: [
         {
           path: "/",
-          element: (
-            // <PrivateRoute>
-            <HomePage />
-            // </PrivateRoute>
-          ),
+          element: <HomePage />,
         },
         {
           path: "/introduction",
-          element: (
-            // <PrivateRoute>
-            <Intro />
-            // </PrivateRoute>
-          ),
+          element: <Intro />,
+        },
+        {
+          path: "/list-club",
+          element: <ListClub />,
         },
         {
           path: "/contact",
@@ -86,7 +88,7 @@ function App() {
         //   ],
         // },
         {
-          path: "/booking",
+          path: "/booking/:clubId",
           element: <Booking />,
         },
         {
@@ -104,6 +106,22 @@ function App() {
             <HistoryBooking />
             // </PrivateRoute>
           ),
+        },
+        {
+          path: "/club-detail/:clubId",
+          element: (
+            // <PrivateRoute>
+            <ClubDetail />
+            // </PrivateRoute>
+          ),
+        },
+        {
+          path: "/payment-success",
+          element: <PaymentSuccess />,
+        },
+        {
+          path: "/payment-fail",
+          element: <PaymentFail />,
         },
       ],
     },
