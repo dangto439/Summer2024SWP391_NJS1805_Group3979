@@ -1,19 +1,21 @@
 .input-location {
   padding: 10px;
   margin: 10px;
-  width: 50%;
+  width: 60%;
   border-radius: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 0px solid #3474b3;
+  border: 0px solid #8c98a3;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    position: absolute;
-      z-index: 200;
+  position: absolute;
+  z-index: 100;
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
-
+  background-color: #00f54e3b;
+  margin-bottom: 200px;
+  
 
   .input-location-form{
     padding-top: 40px;
@@ -64,7 +66,7 @@
   // }
   .form-location {
     display: flex;
-    flex-direction: row  ;
+    flex-direction: row;
     align-items: center;
     padding: 0px;
     border: 1px ridge rgb(83, 181, 81);

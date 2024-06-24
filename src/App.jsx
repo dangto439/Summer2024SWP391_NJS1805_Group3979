@@ -26,6 +26,7 @@ import HistoryBooking from "./pages/history-booking";
 import PaymentSuccess from "./pages/paymentsuccess";
 import ClubDetail from "./pages/club-detail";
 import PaymentFail from "./pages/payment-fail";
+import ListClub from "./pages/list-club";
 
 function App() {
   const user = useSelector(selectUser);
@@ -59,6 +60,10 @@ function App() {
         {
           path: "/introduction",
           element: <Intro />,
+        },
+        {
+          path: "/list-club",
+          element: <ListClub />,
         },
         {
           path: "/contact",

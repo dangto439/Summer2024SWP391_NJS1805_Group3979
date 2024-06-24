@@ -12,14 +12,13 @@ import {
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../config/axios";
-import { useParams } from "react-router-dom";
-import { Button } from "antd";
+import { useNavigate, useParams } from "react-router-dom";
 
 function ClubDetail() {
   const { clubId } = useParams();
   const [club, setClub] = useState({});
   const [owner, setOwner] = useState([]);
-  // console.log(id);
+  const navigate = useNavigate();
 
   const getClubById = async () => {
     try {
@@ -32,11 +31,21 @@ function ClubDetail() {
       toast.error(error.response.data);
     }
   };
+
   useEffect(() => {
     getClubById();
   }, [clubId]);
+
+  const handleBooking = (club) => {
+    // console.log(club);
+    navigate(`/booking/${club.clubId}`);
+    // navigate(`/booking/${club}`);
+  };
   return (
     <div className="club-detail">
+      <div className="club-detail-main-image">
+        <img src="https://danviet.mediacdn.vn/296231569849192448/2022/4/28/tien-minh-16511235589661350080581.jpg" />
+      </div>
       <h1>{club.clubName}</h1>
       <div className="club-content">
         <div className="club-image">
@@ -53,40 +62,7 @@ function ClubDetail() {
           <div className="text-wrap">
             <div className="text-line"></div>
           </div>
-          <p>
-            {club.description}
-            {/* Sân Cầu Lông Trúc Long, Thủ Đức, HCM là sân mới, khai trương đầu năm
-            2024. Sân rộng rãi, nhiều sân
-          </p>
-          <p>Đạt tiêu chuẩn, Giải các SE.</p>
-          <p>Sân Cầu Lông TRÚC LONG hiện đang hoạt động với:</p>
-          <ul>
-            <li>Với kích thước 9 sân tiêu chuẩn.</li>
-            <li>Trần cao 12m, Chuẩn Quốc Tế</li>
-            <li>
-              Khu vệ sinh nằm bên ngoài, không ảnh hưởng sân cầu, có vệ tắm phục
-              vụ anh em sau khi đánh cầu.
-            </li>
-            <li>Hệ thống đèn sáng đạt tiêu chuẩn thi đấu với thoải mái.</li>
-            <li>Lối đi chuyển thường rộng, thoải mái.</li>
-          </ul>
-          <p>
-            Các bạn có thể liên hệ: 0865 412 899. Các bạn muốn cái lẻ hoặc sân
-            thường xuyên thì cũng vậy nhé!
-          </p>
-          <p>
-            Vị trí ngay gần Vinhome Grand Park, Quận 9 dễ tìm, gần các quận lân
-            cận Thủ Đức, Quận 2, Bình Thạnh, Bình Dương,...
-          </p>
-          <p>
-            Với mục tiêu mang lại sân chơi lành mạnh, phù hợp cho mọi lứa tuổi
-            nên riêng lẻ hoặc đội liên hệ ban cổ án em mạnh liệt với bộ môn Cầu
-            Lông.
-          </p>
-          <p>
-            Sân Cầu Lông đang hoàn thiện để cùng tập hợp toàn những dịch vụ và
-            mang đến cho khách hàng những trải nghiệm tốt nhất khi đến sân. */}
-          </p>
+          <p>{club.description}</p>
         </div>
       </div>
       <div className="club-introduction">
@@ -157,7 +133,14 @@ function ClubDetail() {
             </li>
           </ul>
         </div>
-        <Button className="booking-button">Đặt lịch</Button>
+        <div className="club-booking-button">
+          <button
+            onClick={() => handleBooking(club)}
+            className="booking-button"
+          >
+            <p>Đặt lịch ngay</p>
+          </button>
+        </div>
       </div>
     </div>
   );
