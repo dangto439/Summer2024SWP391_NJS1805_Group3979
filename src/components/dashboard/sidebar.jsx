@@ -102,6 +102,22 @@ const MySidebar = () => {
         "& .MuiDrawer-paper": {
           backgroundColor: colors.primary[400],
           borderRadius: "30px",
+          width: isCollapsed ? 80 : 290,
+          transition: "width 0.3s",
+        },
+        "& .ps-menuitem-root": {
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          width: "100%",
+          padding: "8px 16px",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          transition: "padding 0.3s",
+        },
+        "& .ps-menu-label": {
+          marginLeft: "10px",
         },
         "& .ps-menuitem-root .ps-menu-button:hover": {
           color: "#0C8900 !important",
@@ -115,13 +131,13 @@ const MySidebar = () => {
       <Drawer
         variant="persistent"
         sx={{
-          width: isCollapsed ? 80 : 240,
+          width: isCollapsed ? 80 : 290,
           flexShrink: 0,
           transition: "width 0.3s",
         }}
         PaperProps={{
           style: {
-            width: isCollapsed ? 80 : 240,
+            width: isCollapsed ? 80 : 290,
             overflowX: "hidden",
           },
         }}
@@ -150,11 +166,11 @@ const MySidebar = () => {
                   alignContent="center"
                   fontSize="25px"
                 >
-                  Club Owner
+                  Chủ Club
                 </Typography>
-                <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
+                {/* <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
-                </IconButton>
+                </IconButton> */}
               </Box>
             )}
           </MenuItem>
@@ -180,9 +196,6 @@ const MySidebar = () => {
                 >
                   {name}
                 </Typography>
-                <Typography color={colors.greenAccent[500]} fontSize="10px">
-                  FE DatSan79
-                </Typography>
               </Box>
             </Box>
           )}
@@ -190,7 +203,7 @@ const MySidebar = () => {
           {/* Menu Items */}
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
             <Item
-              title="Home"
+              title="Trang chủ"
               to="/"
               icon={<HomeOutlinedIcon />}
               selected={selected}
@@ -202,7 +215,7 @@ const MySidebar = () => {
               sx={{ m: "15px 0 0 20px" }}
               fontSize="15px"
             >
-              Management
+              Quản lý
             </Typography>
             <Item
               title="Club"
@@ -217,7 +230,7 @@ const MySidebar = () => {
               icon={<GroupOutlinedIcon />}
             >
               <Typography display="flex">
-                Staff
+                Nhân viên
                 {openStaffs ? <ExpandLessIcon /> : <ExpandMoreIcon />}
               </Typography>
             </MenuItem>
@@ -235,7 +248,7 @@ const MySidebar = () => {
                 ))}
                 <Box sx={{ pl: 4 }}>
                   <Item
-                    title="All Staff"
+                    title="Tất cả nhân viên"
                     to="staff/allstaff"
                     selected={selected}
                     setSelected={setSelected}
@@ -250,7 +263,7 @@ const MySidebar = () => {
               icon={<StarOutlineIcon />}
             >
               <Typography display="flex">
-                Court
+                Sân
                 {openCourts ? <ExpandLessIcon /> : <ExpandMoreIcon />}
               </Typography>
             </MenuItem>
@@ -281,7 +294,7 @@ const MySidebar = () => {
               icon={<InventoryOutlinedIcon />}
             >
               <Typography display="flex">
-                Booking
+                Đơn đặt sân
                 {openBooking ? <ExpandLessIcon /> : <ExpandMoreIcon />}
               </Typography>
             </MenuItem>
@@ -303,31 +316,31 @@ const MySidebar = () => {
               sx={{ m: "15px 0 0 20px" }}
               fontSize="15px"
             >
-              Pages
+              Trang
             </Typography>
             <Item
-              title="Profile"
+              title="Hồ sơ"
               to="profile"
               icon={<AccountBoxOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Calendar"
+              title="Lịch"
               to="calendar"
               icon={<CalendarTodayOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Bar Chart"
+              title="Biểu đồ cột"
               to="bar"
               icon={<BarChartOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Pie Chart"
+              title="Biểu đồ tròn"
               to="pie"
               icon={<PieChartOutlineOutlinedIcon />}
               selected={selected}
