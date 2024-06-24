@@ -25,6 +25,7 @@ import HistoryBooking from "./pages/history-booking";
 
 import PaymentSuccess from "./pages/paymentsuccess";
 import ClubDetail from "./pages/club-detail";
+import PaymentFail from "./pages/payment-fail";
 import ListClub from "./pages/list-club";
 
 function App() {
@@ -117,6 +118,10 @@ function App() {
         {
           path: "/payment-success",
           element: <PaymentSuccess />,
+        },
+        {
+          path: "/payment-fail",
+          element: <PaymentFail />,
         },
       ],
     },

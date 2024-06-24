@@ -16,7 +16,7 @@
       margin-bottom: 20px;
       justify-content: center;
 
-      .booking-daily-datepicker-format{
+      .booking-daily-datepicker-format {
         width: 60%;
       }
     }
@@ -72,6 +72,20 @@
             }
           }
         }
+      }
+    }
+
+    .booked-slot {
+      background-color: red !important;
+      color: white !important;
+      border-color: red !important;
+      cursor: not-allowed; 
+
+      &:hover,
+      &:focus {
+        background-color: red !important;
+        border-color: red !important;
+        color: white !important;
       }
     }
 
