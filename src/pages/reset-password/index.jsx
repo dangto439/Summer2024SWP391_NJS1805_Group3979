@@ -21,7 +21,7 @@ function ResetPassword() {
 
     try {
       await axios.put(
-        "http://157.245.153.47:8080/api/reset-password",
+        "http://134.209.34.114:8080/api/reset-password",
         { newPassword: values.password },
         config
       );
