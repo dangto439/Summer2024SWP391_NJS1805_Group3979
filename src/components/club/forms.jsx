@@ -994,7 +994,6 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
   const handleFormSubmit = async (data) => {
     const uploadPromises = fileList.map(async (file) => {
       const downloadURL = await uploadFile(file.originFileObj);
-      console.log(downloadURL);
       return downloadURL;
     });
     const uploadedUrls = await Promise.all(uploadPromises);
@@ -1002,26 +1001,49 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
     // const response = await uploadFile(data.urlImages.file.originFileObj);
     // const urlImages = response;
     // console.log(urlImages);
-    const rushHourRequest = [
-      {
-        startTime: parseInt(data.starTimePeakHours, 10),
-        endTime: parseInt(data.endTimePeakHours, 10),
-        rushPrice: parseInt(data.courtPricePeakHours, 10),
-      },
-    ];
+    const rushHourRequest = {
+      startTime: parseInt(data.starTimePeakHours, 10),
+      endTime: parseInt(data.endTimePeakHours, 10),
+      rushPrice: parseInt(data.courtPricePeakHours, 10),
+    };
 
     const adjustedData = {
-      ...data,
+      // ...data,
+      // openingTime: parseInt(data.openingTime, 10),
+      // closingTime: parseInt(data.closingTime, 10),
+      // urlImages: uploadedUrls,
+      clubName: data.clubName,
+      clubDescription: data.clubDescription,
+      clubAddress: data.clubAddress,
+      district: data.district,
+      province: data.province,
+      clubHotLine: data.clubHotLine,
+      capacity: data.capacity,
       openingTime: parseInt(data.openingTime, 10),
       closingTime: parseInt(data.closingTime, 10),
-      rushHourRequest: rushHourRequest,
       urlImages: uploadedUrls,
+    };
+
+    const courslotData = {
+      price: data.price,
+      rushHourRequest: rushHourRequest,
+    };
+
+    const discountRuleData = {
+      flexiblePercent: data.flexiblePercent,
+      fixedPercent: data.fixedPercent,
     };
 
     try {
       if (mode === "create") {
-        console.log(adjustedData);
-        await api.post("/club", adjustedData);
+        const reponse = await api.post("/club", adjustedData);
+
+        await api.post(`/court-slot/${reponse.data.clubId}`, courslotData); // tao court lost
+
+        await api.post(
+          `/discount-rule/${reponse.data.clubId}`,
+          discountRuleData
+        ); // tao discount rule
       } else if (mode === "update") {
         // cu phap cho submit cho update
       }

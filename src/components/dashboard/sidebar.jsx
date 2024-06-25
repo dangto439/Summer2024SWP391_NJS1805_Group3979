@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import { Menu, MenuItem } from "react-pro-sidebar";
+import { FcBusinessman, FcCalendar, FcHome } from "react-icons/fc";
+import { GiTennisCourt } from "react-icons/gi";
+
 import {
   Box,
   Drawer,
@@ -10,17 +13,13 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { tokens } from "../../theme";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutline";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
-import InventoryOutlinedIcon from "@mui/icons-material/InventoryOutlined";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
 import PlaceIcon from "@mui/icons-material/Place";
 import api from "../../config/axios";
 
@@ -205,7 +204,7 @@ const MySidebar = () => {
             <Item
               title="Trang chủ"
               to="/"
-              icon={<HomeOutlinedIcon />}
+              icon={<FcHome />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -227,7 +226,7 @@ const MySidebar = () => {
             <MenuItem
               onClick={handleStaffsClick}
               style={{ color: colors.grey[100] }}
-              icon={<GroupOutlinedIcon />}
+              icon={<FcBusinessman />}
             >
               <Typography display="flex">
                 Nhân viên
@@ -260,7 +259,7 @@ const MySidebar = () => {
             <MenuItem
               onClick={handleCourtClick}
               style={{ color: colors.grey[100] }}
-              icon={<StarOutlineIcon />}
+              icon={<GiTennisCourt />}
             >
               <Typography display="flex">
                 Sân
@@ -291,7 +290,7 @@ const MySidebar = () => {
             <MenuItem
               onClick={handleBookingClick}
               style={{ color: colors.grey[100] }}
-              icon={<InventoryOutlinedIcon />}
+              icon={<FcCalendar />}
             >
               <Typography display="flex">
                 Đơn đặt sân

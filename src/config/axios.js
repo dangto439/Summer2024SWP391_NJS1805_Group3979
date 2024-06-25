@@ -1,6 +1,6 @@
 
 import axios from "axios";
-const baseUrl = "http://157.245.153.47:8080/api";
+const baseUrl = "http://134.209.34.114:8080/api";
 
 const config = {
   baseUrl,
@@ -21,3 +21,4 @@ api.interceptors.request.use(handleBefore, handleError);
 
 
 export default api;
+
