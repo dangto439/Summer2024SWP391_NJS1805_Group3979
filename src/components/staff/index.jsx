@@ -30,7 +30,7 @@ const Staff = () => {
 
   const allColumns = [
     {
-      field: "id",
+      field: "staffId",
       headerName: "Mã",
       headerAlign: "left",
       align: "left",
@@ -158,7 +158,11 @@ const Staff = () => {
           },
         }}
       >
-        <DataGrid rows={rows} columns={columns} />
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          getRowId={(row) => row.staffId}
+        />
       </Box>
       <Forms
         open={isFormOpen}

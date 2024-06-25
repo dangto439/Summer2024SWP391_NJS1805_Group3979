@@ -100,7 +100,7 @@ const schema = yup.object().shape({
         );
       }
     ),
-  courtPrice: yup.string().required("Giá của sân là bắt buộc"),
+  price: yup.string().required("Giá của sân là bắt buộc"),
   courtPricePeakHours: yup
     .string()
     .required("Giá của sân giờ cao điểm là bắt buộc"),
@@ -990,18 +990,23 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
     }
   }, [selectedCity, setValue]);
 
+  //urlImages
   const handleFormSubmit = async (data) => {
     const uploadPromises = fileList.map(async (file) => {
       const downloadURL = await uploadFile(file.originFileObj);
+      console.log(downloadURL);
       return downloadURL;
     });
     const uploadedUrls = await Promise.all(uploadPromises);
-
-    const peakHourRequests = [
+    // console.log(data);
+    // const response = await uploadFile(data.urlImages.file.originFileObj);
+    // const urlImages = response;
+    // console.log(urlImages);
+    const rushHourRequest = [
       {
         startTime: parseInt(data.starTimePeakHours, 10),
         endTime: parseInt(data.endTimePeakHours, 10),
-        peakPrice: parseInt(data.courtPricePeakHours, 10),
+        rushPrice: parseInt(data.courtPricePeakHours, 10),
       },
     ];
 
@@ -1009,12 +1014,13 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
       ...data,
       openingTime: parseInt(data.openingTime, 10),
       closingTime: parseInt(data.closingTime, 10),
-      peakHourRequests: peakHourRequests,
+      rushHourRequest: rushHourRequest,
       urlImages: uploadedUrls,
     };
 
     try {
       if (mode === "create") {
+        console.log(adjustedData);
         await api.post("/club", adjustedData);
       } else if (mode === "update") {
         // cu phap cho submit cho update
@@ -1220,14 +1226,14 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
             />
           </FormControl>
 
-          <FormControl fullWidth margin="normal" error={!!errors.courtPrice}>
+          <FormControl fullWidth margin="normal" error={!!errors.price}>
             <TextField
               label="Giá sân"
-              {...control.register("courtPrice")}
+              {...control.register("price")}
               fullWidth
               margin="normal"
-              error={!!errors.courtPrice}
-              helperText={errors.courtPrice?.message}
+              error={!!errors.price}
+              helperText={errors.price?.message}
               onInput={(e) => {
                 e.target.value = Math.max(1, parseInt(e.target.value) || 1);
               }}
