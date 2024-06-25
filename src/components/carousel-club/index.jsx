@@ -10,7 +10,13 @@ import "./index.scss";
 // import "./styles.css";
 
 // import required modules
-import { Navigation, Pagination, Mousewheel, Keyboard } from "swiper/modules";
+import {
+  Navigation,
+  Pagination,
+  Mousewheel,
+  Keyboard,
+  Autoplay,
+} from "swiper/modules";
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import api from "../../config/axios";
@@ -43,12 +49,17 @@ export default function CarouselClub() {
   return (
     <>
       <Swiper
+        autoplay={{
+          delay: 4000,
+          disableOnInteraction: false,
+        }}
+        slidesPerView={2}
         cssMode={true}
         navigation={true}
         pagination={true}
         mousewheel={true}
         keyboard={true}
-        modules={[Navigation, Pagination, Mousewheel, Keyboard]}
+        modules={[Navigation, Pagination, Mousewheel, Keyboard, Autoplay]}
         className="mySwiper"
       >
         <div className="carousel-club">
@@ -89,12 +100,6 @@ export default function CarouselClub() {
                         onClick={() => handleBooking(club)}
                       >
                         Đặt lịch
-                      </Button>
-                      <Button
-                        onClick={() => handleShowDetailClub(club)}
-                        className="details-button"
-                      >
-                        Chi tiết
                       </Button>
                     </div>
                   </div>

@@ -22,7 +22,6 @@ import Court from "../src/components/club";
 import Club from "../src/components/club";
 import Booking from "./pages/booking";
 import HistoryBooking from "./pages/history-booking";
-
 import PaymentSuccess from "./pages/paymentsuccess";
 import ClubDetail from "./pages/club-detail";
 import PaymentFail from "./pages/payment-fail";
