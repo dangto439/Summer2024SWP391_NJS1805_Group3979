@@ -13,6 +13,7 @@ import {
   Routes,
   useLocation,
 } from "react-router-dom";
+import ListContest from "../../components/list-contest";
 
 import SearchIcon from "@mui/icons-material/Search";
 import { tokens } from "../../theme";
@@ -98,6 +99,11 @@ const Contest = () => {
           </Button>
         </Box>
       </Box>
+
+      <Routes>
+        <Route path="" element={<ListContest />} />
+        <Route path="danhsach" element={<ListContest />} />
+      </Routes>
     </Box>
   );
 };

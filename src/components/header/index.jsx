@@ -124,7 +124,7 @@ function Header() {
             }}
             className={`header__link ${tab == 4 && "active"}`}
           >
-            <Link to="/">Lịch thi đấu</Link>
+            <Link to="/contest">Lịch thi đấu</Link>
           </li>
 
           <li
