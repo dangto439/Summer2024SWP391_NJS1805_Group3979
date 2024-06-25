@@ -13,7 +13,7 @@
 //     object-fit: cover;
 //   }
     .swiper-slide-club {
-    width: 20%;
+    // width: 20%;
     }
 
   .carousel-club-card {
@@ -27,6 +27,7 @@
     flex-direction: row;
     align-items: center;
     background-color: #eaf1f0c4;
+    // width: 800px;
   
     .carousel-club-image {
       // width: 100%;
@@ -94,11 +95,5 @@
         background-color: #06e721;
       }
   }
-  
-  .details-button {
-      background-color: #3498db;
-      color: #fff;
-      margin-left: 5px;
-  }
-  }
+}
   

@@ -23,7 +23,7 @@ export default function Carousel({
         slidesPerView={numberOfSlide}
         spaceBetween={10}
         autoplay={{
-          delay: 2500,
+          delay: 5000,
           disableOnInteraction: false,
         }}
         pagination={true}
@@ -32,30 +32,24 @@ export default function Carousel({
       >
         <SwiperSlide>
           <img
-            src="https://www.shutterstock.com/image-photo/badminton-rackets-white-cream-shuttlecocks-600nw-2291468727.jpg"
-            alt=""
-          />
-        </SwiperSlide>
-
-        <SwiperSlide>
-          <img
-            src="https://cdn.shopvnb.com/uploads/images/tin_tuc/hinh-anh-vot-cau-long-2-1687828854.webp"
-            alt=""
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img
-            src="https://cdn.shopvnb.com/uploads/images/tin_tuc/top-5-cay-vot-cau-long-lining-duoi-2-trieu-cuc-cao-cap-dang-mua-nhat-vao-dau-nam-2021-1.webp"
-            alt=""
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img
-            src="https://bacgiang.gov.vn/documents/20181/14276331/1654065759193_2.jpg/52ce2036-0c64-4fb4-a8f0-4bb6feeb52b5?t=1654065759200"
+            src="https://elan-inventa.com/sites/default/files/styles/empty/public/produkti/Badminton%201.jpg?itok=GxLeZNas"
             alt=""
           />
         </SwiperSlide>
       </Swiper>
+      <div className="infomation">
+        <h1>Chào mừng đến với DatSan79</h1>
+        <p>
+          Bạn đang tìm kiếm một sân cầu lông chất lượng để thỏa mãn đam mê và
+          nâng cao kỹ năng? Hãy đến với{" "}
+          <span className="highlight">DatSan79</span>, nơi cung cấp những sân
+          cầu lông tốt nhất dành cho bạn, giúp bạn dễ dàng tìm và đặt sân cầu
+          lông tốt nhất gần bạn. Với cơ sở vật chất hiện đại và tiêu chuẩn quốc
+          tế, chúng tôi đảm bảo mang đến cho bạn trải nghiệm chơi cầu lông tuyệt
+          vời nhất.
+        </p>
+        <button>Đặt sân ngay</button>
+      </div>
     </div>
   );
 }
