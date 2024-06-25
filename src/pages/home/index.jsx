@@ -7,7 +7,7 @@ function HomePage() {
   return (
     <div>
       <Carousel autoplay />
-      <InputLocation />
+      {/* <InputLocation /> */}
       {/* <ListClub /> */}
       <CarouselClub />
     </div>

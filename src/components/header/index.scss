@@ -1,121 +1,195 @@
 .header{
-    background-color:#24bd16a1;
+    background-color:#16ab18a9;
     display: flex;
     justify-content: space-between;
-    padding: 10px 50px;
+    text-align: center;
+    padding: 10px 30px;
     position: fixed;
 
-    position: relative;
+    // position: relative;
     top: 0;
     right: 0;
     left: 0;
-    z-index: 10;
+    z-index: 500;
     
 
     &__logo{
-        margin-top: 15px;
+        margin-top: 0px;
+        width: auto;
+        img{
+            width: 40%;
+            border-radius: 50%;
+        }
         
     }
+    .search-bar {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ccc;
+        border-radius: 25px;
+        padding: 1px 10px;
+        padding-top: 5px;
+        width: 300px;
+        background-color: white;
+        margin-top: -12px;
+        margin-bottom: 4px;
+      }
+      
+      .search-input {
+        flex: 1;
+        border: none;
+        outline: none;
+        padding: 5px;
+        font-size: 16px;
+        border-radius: 25px;
+        color: #808080;
+      }
+      
+      .search-input::placeholder {
+        color: #808080;
+      }
+      
+      .search-icon {
+        color: #aaa;
+        font-size: 1.2em;
+      }
 
     &__button {
         display: flex;
         align-items: center;
         outline: 0; 
         gap: 20px;
-        padding-left: 20px;
-        Button{
-            background-color: rgb(29, 141, 29);
-            color: #fff;
-            border: none;
-            padding: 1px 32px;
-            font-size: 16px;
-            margin: 4px 2px;
+        .custome-login{
+        button {
+            padding: 17px 40px;
             border-radius: 50px;
-            
+            cursor: pointer;
+            border: 0;
+            box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-size: 12px;
+            transition: all 0.5s ease;
+            background-color: hsl(0, 100%, 50%);
+            color: white;
+          }
+          
+          button:hover {
+            letter-spacing: 3px;
+            background-color: hsl(0, 89%, 56%);
+            color: hsl(0, 0%, 100%);
+            box-shadow: rgb(228, 82, 38) 0px 7px 29px 0px;
+          }
+          
+          button:active {
+            letter-spacing: 3px;
+            background-color: hsl(0, 100%, 50%);
+            color: hsl(0, 0%, 100%);
+            box-shadow: rgb(255, 0, 0) 0px 0px 0px 0px;
+            transform: translateY(10px);
+            transition: 100ms;
+          }
         }
-        .custom:hover {
-            background-color: #45a049; /* Slightly darker green for hover effect */
+        .custome-register {
+            button {
+                padding: 17px 40px;
+                border-radius: 50px;
+                cursor: pointer;
+                border: 0;
+                box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+                letter-spacing: 1.5px;
+                text-transform: uppercase;
+                font-size: 12px;
+                transition: all 0.5s ease;
+                background-color: hsl(217, 100%, 50%);
+                color: white;
+              }
+            button:hover {
+                letter-spacing: 3px;
+                background-color: hsl(217, 100%, 50%);
+                color: hsl(0, 0%, 100%);
+                box-shadow: rgb(52, 55, 241) 0px 7px 29px 0px;
+              }
+              
+              button:active {
+                letter-spacing: 3px;
+                background-color: hsl(234, 96%, 48%);
+                color: hsl(0, 0%, 100%);
+                box-shadow: rgb(66, 81, 217) 0px 0px 0px 0px;
+                transform: translateY(10px);
+                transition: 100ms;
+              } /* Slightly darker green for hover effect */
           }  
     }
 
-    &__search{
-        position: absolute;
-        top: -100%;
-        left: 0;
-        right: 0;
-        background-color: white;
-        padding: 10px 400px;
-        display: flex;
-        transition: all 0.5s;
-        cursor: pointer;
-        input{
-            flex-grow: 1;
-            border: none;
-            outline: none;
-            font-size: 20px;
-        }
-        &.active{
-            top: 100%;
-        }
-    }
     &__nav{
+        text-align: center;
         ul{
             display: flex;
             gap: 30px;
             list-style: none;
             cursor: pointer;
-            margin-top: 20px;  
-            margin-bottom: 0px; 
+            margin-top: 30px;  
+            // margin-bottom: 0px; 
+            text-align: center;
+           
          
             a{
                 text-decoration: none;
                 color: rgb(255, 255, 255);
             }
             li{
-                font-size: 16px;
+                font-size: 22px;
                 color: #fff;
+                font-weight: bold;
             }         
         }
     }
     &__link{
         text-align: center;
         border-radius: 50px;
-        background-color: #75D56C;
+        // background-color:#24bd16a1;
         width: auto;
-        height: auto;
-        border: none;
+        // height: auto;
+        // border: none;
         margin-bottom: 15px;
         
               
         li{
-            margin-top: 10px;
-            margin-right: 10px;
-            margin-bottom: 10px;
-            // margin-left: 2px;
-            padding-left: 8px;
+            // margin-top: 10px;
+            // margin-right: 10px;
+            // margin-bottom: 10px;
+            // // margin-left: 2px;
+            // padding-left: 8px;
         }
     }
     &__link:hover{
         text-align: center;
-        border-radius: 50px;
-        background-color: rgb(29, 141, 29);
+        // border-radius: 50px;
+        // background-color: rgb(29, 141, 29);
+        text-decoration: underline;
+        text-decoration-color: white;
         width: auto;
-        height: auto;
-        border: none;
+        // height: auto;
+        // border: none;
         margin-bottom: 15px;
         color: #75D56C;
         cursor: pointer;
+        
         li{
-            margin-top: 10px;
-            margin-right: 10px;
-            margin-bottom: 10px;
-            // margin-left: 3px;
-            padding-left: 8px;
+            // margin-top: 10px;
+            // margin-right: 10px;
+            // margin-bottom: 10px;
+            // // margin-left: 3px;
+            // padding-left: 8px;
+           
         }
     }
     &__link.active{
-        background-color:rgb(29, 141, 29);
-        
+        // background-color:rgb(29, 141, 29);
+        // font-style: italic;
+        text-decoration: underline;
+        text-decoration-color: white;
     }
 }
 
