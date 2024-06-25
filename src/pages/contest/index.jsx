@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   Box,
   Breadcrumbs,
@@ -14,14 +15,44 @@ import {
   useLocation,
 } from "react-router-dom";
 import ListContest from "../../components/list-contest";
-
+import ScheduleContest from "../../components/scheduler-contest";
 import SearchIcon from "@mui/icons-material/Search";
 import { tokens } from "../../theme";
+import axios from "axios";
+
+import "@syncfusion/ej2-base/styles/material.css";
+import "@syncfusion/ej2-buttons/styles/material.css";
+import "@syncfusion/ej2-calendars/styles/material.css";
+import "@syncfusion/ej2-dropdowns/styles/material.css";
+import "@syncfusion/ej2-inputs/styles/material.css";
+import "@syncfusion/ej2-navigations/styles/material.css";
+import "@syncfusion/ej2-popups/styles/material.css";
+import "@syncfusion/ej2-react-schedule/styles/material.css";
+
+// Để sử dụng được sync, registerLicense là cái key mà ngta cấp
+import { registerLicense } from "@syncfusion/ej2-base";
+registerLicense(
+  "Ngo9BigBOggjHTQxAR8/V1NCaF5cXmpCeUx3QXxbf1x0ZFRHal9UTnVcUj0eQnxTdEFjX31bcXNWRWVZUUV0Wg=="
+);
 
 const Contest = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const location = useLocation();
+  const [contests, setContests] = useState([]);
+
+  useEffect(() => {
+    const fetchContests = async () => {
+      try {
+        //check xem cú pháp call api đúng khum
+        const response = await axios.get("/contests");
+        setContests(response.data);
+      } catch (error) {
+        console.error("Error get data: ", error);
+      }
+    };
+    fetchContests();
+  }, []);
 
   const Breadcrumb = () => {
     const pathnames = location.pathname.split("/").filter((x) => x);
@@ -101,8 +132,9 @@ const Contest = () => {
       </Box>
 
       <Routes>
-        <Route path="" element={<ListContest />} />
-        <Route path="danhsach" element={<ListContest />} />
+        <Route path="" element={<ListContest contests={contests} />} />
+        <Route path="danhsach" element={<ListContest contests={contests} />} />
+        <Route path="thang" element={<ScheduleContest contests={contests} />} />
       </Routes>
     </Box>
   );
