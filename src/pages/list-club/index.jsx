@@ -111,12 +111,6 @@ function ListClub() {
                 >
                   Đặt lịch
                 </Button>
-                <Button
-                  onClick={() => handleShowDetailClub(club)}
-                  className="details-button"
-                >
-                  Chi tiết
-                </Button>
               </div>
             </div>
           </div>

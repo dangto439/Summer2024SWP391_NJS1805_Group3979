@@ -43,9 +43,9 @@ function ClubDetail() {
   };
   return (
     <div className="club-detail">
-      <div className="club-detail-main-image">
+      {/* <div className="club-detail-main-image">
         <img src="https://danviet.mediacdn.vn/296231569849192448/2022/4/28/tien-minh-16511235589661350080581.jpg" />
-      </div>
+      </div> */}
       <h1>{club.clubName}</h1>
       <div className="club-content">
         <div className="club-image">
