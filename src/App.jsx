@@ -28,6 +28,7 @@ import Payment from "./pages/payment";
 import Contest from "./pages/contest";
 import ListContest from "../src/components/list-contest";
 import ScheduleContest from "./components/scheduler-contest";
+import Checkin from "./pages/check-in";
 
 function App() {
   const user = useSelector(selectUser);
@@ -91,6 +92,10 @@ function App() {
               element: <ScheduleContest />,
             },
           ],
+        },
+        {
+          path: "/checkin",
+          element: <Checkin />,
         },
         {
           path: "/booking/:clubId",
