@@ -7,7 +7,9 @@ import { toast } from "react-toastify";
 import "./index.scss";
 
 function BookingDaily({ club }) {
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(
+    moment().format("YYYY-MM-DD")
+  );
   const [dataSource, setDataSource] = useState([]);
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [totalHours, setTotalHours] = useState(0);
