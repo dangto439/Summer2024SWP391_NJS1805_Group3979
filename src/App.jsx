@@ -25,6 +25,9 @@ import HistoryBooking from "./pages/history-booking";
 import ClubDetail from "./pages/club-detail";
 import ListClub from "./pages/list-club";
 import Payment from "./pages/payment";
+import Contest from "./pages/contest";
+import ListContest from "../src/components/list-contest";
+import ScheduleContest from "./components/scheduler-contest";
 
 function App() {
   const user = useSelector(selectUser);
@@ -71,20 +74,24 @@ function App() {
             // </PrivateRoute>
           ),
         },
-        // {
-        //   path: "/contest/*",
-        //   element: (
-        //     // <PrivateRoute>
-        //     <Contest />
-        //     // </PrivateRoute>
-        //   ),
-        //   children: [
-        //     {
-        //       path: "danhsach",
-        //       element: <Contest />,
-        //     },
-        //   ],
-        // },
+        {
+          path: "/contest/*",
+          element: (
+            // <PrivateRoute>
+            <Contest />
+            // </PrivateRoute>
+          ),
+          children: [
+            {
+              path: "danhsach",
+              element: <ListContest />,
+            },
+            {
+              path: "thang",
+              element: <ScheduleContest />,
+            },
+          ],
+        },
         {
           path: "/booking/:clubId",
           element: <Booking />,
