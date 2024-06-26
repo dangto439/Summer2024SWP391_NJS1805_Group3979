@@ -1,0 +1,82 @@
+aside {
+  background-color: #343a40;
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  .sidebar-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+    background-color: #363333;
+    color: #ffffff;
+    font-size: 30px;
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+
+      .icon_header {
+        margin-right: 10px;
+        color: red;
+      }
+    }
+
+    .close_icon {
+      cursor: pointer;
+    }
+  }
+
+  .sidebar_list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    .sidebar_list_item {
+      a {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        color: #ffffff;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #be6c1a;
+        }
+
+        .icon {
+          margin-right: 10px;
+
+        }
+      }
+
+      &.active {
+        a {
+          background-color: #be6c1a;
+        }
+
+        .icon {
+          color: yellow;
+        }
+      }
+    }
+  }
+}
+
+.Dashboard {
+  color: blue;
+}
+
+.badmintonCourt{
+  color: rgb(55, 222, 55);
+}
+
+.people{
+  color: yellow;
+}
