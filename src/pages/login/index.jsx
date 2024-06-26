@@ -48,6 +48,7 @@ function Login() {
 
       if (role === "CUSTOMER") navigate("/");
       else if (role === "CLUB_OWNER") navigate("/dashboard");
+      else if (role === "ADMIN") navigate("/admin");
     } catch (error) {
       toast.error("Email hoặc mật khẩu sai!");
       console.log(error);
