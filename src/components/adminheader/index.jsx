@@ -8,7 +8,7 @@ import {
 
 function AdminHeader() {
   return (
-    <header className="header">
+    <header className="headeradmin">
       <div className="header-right">
         <BsFillBellFill className="icon bell" />
         <BsFillEnvelopeFill className="icon Envelope" />
