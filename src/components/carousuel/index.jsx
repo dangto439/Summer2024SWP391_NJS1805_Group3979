@@ -11,6 +11,7 @@ import "swiper/css/pagination";
 import { Autoplay, Pagination } from "swiper/modules";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Carousel({
   numberOfSlide,
@@ -48,7 +49,9 @@ export default function Carousel({
           tế, chúng tôi đảm bảo mang đến cho bạn trải nghiệm chơi cầu lông tuyệt
           vời nhất.
         </p>
-        <button>Đặt sân ngay</button>
+        <Link to="list-club">
+          <button>Đặt sân ngay</button>
+        </Link>
       </div>
     </div>
   );

@@ -1,5 +1,4 @@
 import "./index.scss";
-import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import RoomIcon from "@mui/icons-material/Room";
 import { useEffect, useState } from "react";
@@ -36,7 +35,7 @@ function ListClub() {
       <h1>SÂN CẦU LÔNG VIỆT NAM</h1>
       <div className="list-club-outstanding">
         <div className="list-club-main-image">
-          <img src="https://danviet.mediacdn.vn/296231569849192448/2022/4/28/tien-minh-16511235589661350080581.jpg" />
+          <img src="https://firebasestorage.googleapis.com/v0/b/badminton-booking-platform.appspot.com/o/16e57efc9d56c29d4ab7a651bd082efd.jpg?alt=media&token=2fd078ff-5d26-4bb3-9b34-583a626fd7b7" />
         </div>
 
         <div className="list-club-outstanding-info">
@@ -105,12 +104,12 @@ function ListClub() {
               <p className="list-club-description">{club.description}</p>
 
               <div className="buttons">
-                <Button
+                <button
                   className="booking-button"
                   onClick={() => handleBooking(club)}
                 >
                   Đặt lịch
-                </Button>
+                </button>
               </div>
             </div>
           </div>
