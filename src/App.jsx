@@ -25,10 +25,14 @@ import HistoryBooking from "./pages/history-booking";
 import ClubDetail from "./pages/club-detail";
 import ListClub from "./pages/list-club";
 import Payment from "./pages/payment";
+import LayoutAdmin from "./components/layoutadmin";
+import AdminDasboard from "./components/admin";
+import Contest from "./pages/contest";
+import ListContest from "../src/components/list-contest";
+import ScheduleContest from "./components/scheduler-contest";
 
 function App() {
   const user = useSelector(selectUser);
-  console.log(user);
 
   const AuthRoute = ({ children }) => {
     if (user == null || user.role != "ADMIN") {
@@ -71,20 +75,24 @@ function App() {
             // </PrivateRoute>
           ),
         },
-        // {
-        //   path: "/contest/*",
-        //   element: (
-        //     // <PrivateRoute>
-        //     <Contest />
-        //     // </PrivateRoute>
-        //   ),
-        //   children: [
-        //     {
-        //       path: "danhsach",
-        //       element: <Contest />,
-        //     },
-        //   ],
-        // },
+        {
+          path: "/contest/*",
+          element: (
+            // <PrivateRoute>
+            <Contest />
+            // </PrivateRoute>
+          ),
+          children: [
+            {
+              path: "danhsach",
+              element: <ListContest />,
+            },
+            {
+              path: "thang",
+              element: <ScheduleContest />,
+            },
+          ],
+        },
         {
           path: "/booking/:clubId",
           element: <Booking />,
@@ -135,6 +143,32 @@ function App() {
     {
       path: "/reset-password",
       element: <ResetPassword />,
+    },
+    {
+      path: "/admin",
+      element: <LayoutAdmin />,
+      children: [
+        {
+          path: "",
+          element: <AdminDasboard />,
+        },
+        {
+          path: "account",
+          element: <Staff />,
+        },
+        {
+          path: "club",
+          element: <Club />,
+        },
+        {
+          path: "setting",
+          element: <Staff />,
+        },
+        {
+          path: "profile",
+          element: <Profile />,
+        },
+      ],
     },
     {
       path: "/dashboard/*",

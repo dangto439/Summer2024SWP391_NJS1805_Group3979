@@ -15,7 +15,9 @@ import api from "../../config/axios";
 import { toast } from "react-toastify";
 
 function BookingFixed({ club }) {
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(
+    moment().format("YYYY-MM-DD")
+  );
   const [selectedDays, setSelectedDays] = useState([]);
   const [slots, setSlots] = useState([]);
   const [selectedSlots, setSelectedSlots] = useState([]);

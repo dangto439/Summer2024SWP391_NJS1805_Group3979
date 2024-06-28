@@ -106,7 +106,9 @@ function Header() {
           </li>
 
           <li className="header__link">
-            <Link to="/">Lịch thi đấu</Link>
+            <Link to="/contest">Lịch thi đấu</Link>
+          <li
+
           </li>
 
           {/* <li
