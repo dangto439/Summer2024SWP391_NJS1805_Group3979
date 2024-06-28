@@ -1,4 +1,4 @@
-.list-club {
+  .list-club {
   display: flex;
   // flex-wrap: wrap;
   flex-direction: column;
@@ -86,12 +86,15 @@
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin: 20px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-left: 50px;
   display: flex;
+  // justify-content:  ;
   flex-direction: row;
   align-items: center;
   background-color: #eaf1f0c4;
-  width: 50%;
+  width: 60%;
 
 .list-club-image {
     img {
@@ -240,4 +243,15 @@ button {
  button:hover::before {
   width: 100%;
  }
+}
+
+.list-club-search-form{
+  display: flex;
+  // flex-direction: row;
+ }
+
+.form-search{
+  display: flex;
+  gap: 10px;
+  justify-content: center;
 }

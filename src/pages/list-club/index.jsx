@@ -3,10 +3,29 @@ import { useNavigate } from "react-router-dom";
 import RoomIcon from "@mui/icons-material/Room";
 import { useEffect, useState } from "react";
 import api from "../../config/axios";
+import dataProvnices from "../../../province";
+import { Button, Form, Input, Select } from "antd";
 
 function ListClub() {
   const [listClub, setListClub] = useState([]);
   const navigate = useNavigate();
+  const [selectedCity, setSelectedCity] = useState("");
+  const [districts, setDistricts] = useState([]);
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+
+  const handleCityChange = (event) => {
+    const city = event;
+    console.log(city);
+    setSelectedCity(city);
+    setDistricts(dataProvnices[city] || []);
+    setSelectedDistrict("");
+  };
+
+  const handleDistrictChange = (event) => {
+    console.log(event);
+    setSelectedDistrict(event);
+  };
+
   const fetchListClubData = async () => {
     try {
       const response = await api.get("/clubs");
@@ -43,7 +62,6 @@ function ListClub() {
           <div className="text-wrap">
             <div className="text-line"></div>
           </div>
-
           {listClub.map((club) => (
             <>
               <div
@@ -74,6 +92,57 @@ function ListClub() {
             </>
           ))}
         </div>
+      </div>
+
+      <div className="list-club-search">
+        <Form className="form-search">
+          <div className="list-club-search-name">
+            <Form.Item>
+              <Input placeholder="Nhập tên sân cần tìm..." />
+            </Form.Item>
+          </div>
+
+          <div className="list-club-location-provinces">
+            <Form.Item className="form-item" label="Thành phố/Tỉnh">
+              <Select
+                style={{ width: 200 }}
+                id="city"
+                value={selectedCity}
+                onChange={handleCityChange}
+              >
+                <option value="">--Chọn Thành phố--</option>
+                {Object.keys(dataProvnices).map((city) => (
+                  <option key={city} value={city}>
+                    {city}
+                  </option>
+                ))}
+              </Select>
+            </Form.Item>
+          </div>
+
+          <div className="list-club-location-">
+            <Form.Item className="form-item" label="Quận/Huyện">
+              <Select
+                style={{ width: 200 }}
+                id="district"
+                value={selectedDistrict}
+                onChange={handleDistrictChange}
+                disabled={!selectedCity}
+              >
+                <option value="">--Chọn Quận/Huyện--</option>
+                {districts.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+              </Select>
+            </Form.Item>
+          </div>
+
+          <div className="form-search">
+            <Button>{/* <SearchOutlined /> */}button</Button>
+          </div>
+        </Form>
       </div>
 
       {listClub.map((club) => (
