@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, Typography, Divider, Pagination } from "@mui/material";
-import { Routes, Route, useLocation } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useLocation,
+  Link as RouterLink,
+} from "react-router-dom";
 import axios from "axios";
+import Tournament from "../tournament";
 
 const ListContest = () => {
   const [contests, setContests] = useState([]);
@@ -9,7 +15,7 @@ const ListContest = () => {
   const itemsPerPage = 2;
   const location = useLocation();
 
-  // dữ liệu tạm test
+  // Dữ liệu tạm test
   const listContestsNotStart = [
     {
       id: 1,
@@ -121,7 +127,7 @@ const ListContest = () => {
   //   fetchContests();
   // }, [location.pathname]);
 
-  // dữ liệu test
+  // Dữ liệu test
   const hotContests = [
     {
       imgSrc: "https://via.placeholder.com/50",
@@ -214,12 +220,19 @@ const ListContest = () => {
             {location.pathname === "/contest/sapdienra" && (
               <Box mt={2} display="flex" justifyContent="flex-start">
                 <Button
+                  component={RouterLink}
+                  to={`chitiet/${contest.id}`}
                   variant="contained"
                   sx={{ marginRight: "15px", backgroundColor: "#6992CE" }}
                 >
                   Chi tiết
                 </Button>
-                <Button variant="contained" sx={{ backgroundColor: "#B84848" }}>
+                <Button
+                  component={RouterLink}
+                  to="thamgia"
+                  variant="contained"
+                  sx={{ backgroundColor: "#B84848" }}
+                >
                   Tham gia
                 </Button>
               </Box>
@@ -228,6 +241,8 @@ const ListContest = () => {
             location.pathname === "/contest" ? (
               <Box mt={2} display="flex" justifyContent="center">
                 <Button
+                  component={RouterLink}
+                  to={`chitiet2/${contest.id}`}
                   variant="contained"
                   sx={{ marginRight: "15px", backgroundColor: "#6992CE" }}
                 >
@@ -269,10 +284,7 @@ const ListContest = () => {
   return (
     <Box display="flex" p={2}>
       <Box flex="2" mr={10}>
-        <Routes>
-          <Route path="" element={<Box mt={3}>{renderContests()}</Box>} />
-        </Routes>
-
+        <Box mt={3}>{renderContests()}</Box>
         <Box display="flex" justifyContent="center" mt={3}>
           <Pagination
             count={Math.ceil((contests?.length || 0) / itemsPerPage)}
@@ -296,6 +308,11 @@ const ListContest = () => {
           CUỘC THI ĐANG ĐƯỢC CHÚ Ý
         </Typography>
         {renderHotContests()}
+      </Box>
+      <Box>
+        <Routes>
+          <Route path="chitiet2/:id" element={<Tournament />} />
+        </Routes>
       </Box>
     </Box>
   );
