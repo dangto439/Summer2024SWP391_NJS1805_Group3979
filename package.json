@@ -44,6 +44,7 @@
         "@syncfusion/ej2-react-schedule": "^26.1.39",
         "antd": "^5.17.4",
         "axios": "^1.7.2",
+        "bootstrap": "^5.3.3",
         "cldr-data": "^36.0.2",
         "date-fns": "^3.6.0",
         "dayjs": "^1.11.11",
