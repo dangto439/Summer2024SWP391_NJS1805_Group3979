@@ -84,7 +84,11 @@ function App() {
           ),
           children: [
             {
-              path: "danhsach",
+              path: "dangdienra",
+              element: <ListContest />,
+            },
+            {
+              path: "sapdienra",
               element: <ListContest />,
             },
             {

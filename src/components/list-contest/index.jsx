@@ -121,6 +121,27 @@ const ListContest = () => {
   //   fetchContests();
   // }, [location.pathname]);
 
+  // dữ liệu test
+  const hotContests = [
+    {
+      imgSrc: "https://via.placeholder.com/50",
+      alt: "Tin tức 1",
+      content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    },
+    {
+      imgSrc: "https://via.placeholder.com/50",
+      alt: "Tin tức 2",
+      content:
+        "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    },
+    {
+      imgSrc: "https://via.placeholder.com/50",
+      alt: "Tin tức 3",
+      content:
+        "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    },
+  ];
+
   const months = [
     "Tháng 1",
     "Tháng 2",
@@ -170,10 +191,10 @@ const ListContest = () => {
             style={{ width: "300px", height: "200px", marginRight: "100px" }}
           />
           <Box>
-            <Typography variant="h5" color="primary">
+            <Typography variant="h5" color="primary" textAlign="left">
               {contest.name}
             </Typography>
-            <Typography variant="body1">
+            <Typography variant="body1" textAlign="left">
               <strong>Địa điểm:</strong> {contest.location}
               <br />
               <strong>Ngày bắt đầu:</strong> {contest.startdate}
@@ -191,7 +212,7 @@ const ListContest = () => {
               )}
             </Typography>
             {location.pathname === "/contest/sapdienra" && (
-              <Box mt={2}>
+              <Box mt={2} display="flex" justifyContent="flex-start">
                 <Button
                   variant="contained"
                   sx={{ marginRight: "15px", backgroundColor: "#6992CE" }}
@@ -203,8 +224,40 @@ const ListContest = () => {
                 </Button>
               </Box>
             )}
+            {location.pathname === "/contest/dangdienra" ||
+            location.pathname === "/contest" ? (
+              <Box mt={2} display="flex" justifyContent="center">
+                <Button
+                  variant="contained"
+                  sx={{ marginRight: "15px", backgroundColor: "#6992CE" }}
+                >
+                  Chi tiết
+                </Button>
+              </Box>
+            ) : null}
           </Box>
         </Box>
+      </Box>
+    ));
+  };
+
+  const renderHotContests = () => {
+    return hotContests.map((news, index) => (
+      <Box
+        key={index}
+        display="flex"
+        mb={2}
+        border="1px solid #ddd"
+        p={1}
+        borderRadius={1}
+      >
+        <img
+          src={news.imgSrc}
+          alt={news.alt}
+          style={{ marginRight: "10px" }}
+          height="100px"
+        />
+        <Typography variant="body1">{news.content}</Typography>
       </Box>
     ));
   };
@@ -214,17 +267,35 @@ const ListContest = () => {
   };
 
   return (
-    <Box p={3} ml={3}>
-      <Routes>
-        <Route path="" element={<Box mt={3}>{renderContests()}</Box>} />
-      </Routes>
+    <Box display="flex" p={2}>
+      <Box flex="2" mr={10}>
+        <Routes>
+          <Route path="" element={<Box mt={3}>{renderContests()}</Box>} />
+        </Routes>
 
-      <Box display="flex" justifyContent="center" mt={3}>
-        <Pagination
-          count={Math.ceil((contests?.length || 0) / itemsPerPage)}
-          page={currentPage}
-          onChange={handlePageChange}
-        />
+        <Box display="flex" justifyContent="center" mt={3}>
+          <Pagination
+            count={Math.ceil((contests?.length || 0) / itemsPerPage)}
+            page={currentPage}
+            onChange={handlePageChange}
+          />
+        </Box>
+      </Box>
+
+      <Box flex="1" position="sticky" maxHeight="100vh" overflow="auto">
+        <Typography
+          variant="h6"
+          color="primary"
+          sx={{
+            textAlign: "center",
+            borderBottom: "2px solid #78B9A9",
+            marginBottom: "15px",
+            paddingBottom: "10px",
+          }}
+        >
+          CUỘC THI ĐANG ĐƯỢC CHÚ Ý
+        </Typography>
+        {renderHotContests()}
       </Box>
     </Box>
   );
