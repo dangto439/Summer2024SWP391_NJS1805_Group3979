@@ -17,18 +17,27 @@ function Login() {
   const user = useSelector(selectUser);
   const navigate = useNavigate();
   const handleLoginGoogle = async () => {
-    await signInWithPopup(auth, new GoogleAuthProvider())
-      .then((result) => {
-        //const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = result.user.accessToken;
-        //console.log(credential);
-        console.log(token);
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        console.log(errorMessage);
-        toast.error("Đăng nhập thất bại!");
-      });
+    try {
+      const result = await signInWithPopup(auth, new GoogleAuthProvider());
+      const token = result.user.accessToken;
+
+      const response = await api.post("/login-google", { token });
+
+      const data = response.data;
+      const tokenFromApi = data.token;
+
+      localStorage.setItem("token", tokenFromApi);
+
+      dispatch(login(data));
+
+      toast.success("Đăng nhập thành công!");
+
+      navigate("/");
+    } catch (error) {
+      const errorMessage = error.message;
+      console.log(errorMessage);
+      toast.error("Đăng nhập thất bại!");
+    }
   };
 
   const handleLogin = async (values) => {

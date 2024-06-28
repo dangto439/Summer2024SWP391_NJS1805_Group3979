@@ -35,8 +35,11 @@ function App() {
   const user = useSelector(selectUser);
 
   const AuthRoute = ({ children }) => {
-    if (user == null || user.role != "ADMIN") {
-      toast.error("You are not Admin!");
+    if (user == null) {
+      toast.error("bạn cần đăng nhập tài khoản admin trước");
+      return <Navigate to="/login" />;
+    } else if (user.role != "ADMIN") {
+      toast.error("Bạn không phải là Admin!");
       return <Navigate to="/login" />;
     }
     return children;
@@ -44,7 +47,7 @@ function App() {
 
   const PrivateRoute = ({ children }) => {
     if (user == null) {
-      toast.error("Ban can dang nhap");
+      toast.error("Bạn cần đăng nhập");
       return <Navigate to="/login" />;
     }
     return children;
@@ -146,7 +149,11 @@ function App() {
     },
     {
       path: "/admin",
-      element: <LayoutAdmin />,
+      element: (
+        <AuthRoute>
+          <LayoutAdmin />
+        </AuthRoute>
+      ),
       children: [
         {
           path: "",
@@ -154,7 +161,7 @@ function App() {
         },
         {
           path: "account",
-          element: <Staff />,
+          element: <ManageAccount />,
         },
         {
           path: "club",
@@ -201,10 +208,10 @@ function App() {
           element: <Profile />,
         },
 
-        {
-          path: "manage-account",
-          element: <ManageAccount />,
-        },
+        // {
+        //   path: "manage-account",
+        //   element: <ManageAccount />,
+        // },
       ],
     },
   ]);

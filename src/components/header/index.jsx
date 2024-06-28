@@ -86,7 +86,10 @@ function Header() {
     <header className="header">
       <div className="header__logo">
         <Link to="/">
-          <img src="./src/logo.svg" alt="logo" />
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/badminton-booking-platform.appspot.com/o/logo.svg?alt=media&token=fd4d781a-2fb4-4012-9e42-8e87777f2c3d"
+            alt="logo"
+          />
         </Link>
       </div>
       <nav className="header__nav">

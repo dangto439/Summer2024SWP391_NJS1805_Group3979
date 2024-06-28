@@ -1,9 +1,10 @@
-.main-container {
-  padding: 20px;
-  background-color: #f0f2f5;
+.main-container-admin {
+  // padding: 20px;
+  // background-color: #f0f2f5;
 
   h3 {
     padding-bottom: 20px;
+    color: white;
   }
 
   .main_cards {
@@ -51,6 +52,11 @@
       flex-wrap: wrap;
       gap: 20px;
       width: 100%;
+      background-color: #34373f;
+
+      .recharts-text {
+        fill: white;
+      }
 
       .recharts-responsive-container {
         flex: 1;
@@ -70,3 +76,8 @@
 .purple {
   background-color: purple;
 }
+
+.red {
+  background-color: red;
+}
+

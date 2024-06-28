@@ -1,4 +1,7 @@
-import { BsFillArchiveFill } from "react-icons/bs";
+import { AiOutlineBuild, AiOutlineDollarCircle } from "react-icons/ai";
+import { MdSupervisorAccount } from "react-icons/md";
+import { GiTennisCourt } from "react-icons/gi";
+
 import {
   BarChart,
   Bar,
@@ -87,7 +90,7 @@ function AdminDasboard() {
     });
   };
   return (
-    <main className="main-container">
+    <main className="main-container-admin">
       <div className="main-ttile">
         <h3>Admin</h3>
       </div>
@@ -96,23 +99,30 @@ function AdminDasboard() {
         <div className="card blue">
           <div className="card_inner ">
             <h3>Người dùng</h3>
-            <BsFillArchiveFill className="card_icon" />
+            <MdSupervisorAccount className="card_icon" />
           </div>
           <h1>300</h1>
         </div>
         <div className="card orange">
           <div className="card_inner">
             <h3>Câu lạc bộ</h3>
-            <BsFillArchiveFill className="card_icon" />
+            <AiOutlineBuild className="card_icon" />
           </div>
           <h1>50</h1>
         </div>
         <div className="card purple">
           <div className="card_inner">
             <h3>Sân</h3>
-            <BsFillArchiveFill className="card_icon" />
+            <GiTennisCourt className="card_icon" />
           </div>
           <h1>340</h1>
+        </div>
+        <div className="card red">
+          <div className="card_inner ">
+            <h3>Doanh thu</h3>
+            <AiOutlineDollarCircle className="card_icon" />
+          </div>
+          <h1>5000 VND</h1>
         </div>
         <div className="charts">
           <ResponsiveContainer width="100%" height={500}>

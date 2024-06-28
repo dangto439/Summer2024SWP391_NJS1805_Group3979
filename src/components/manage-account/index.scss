@@ -1,0 +1,83 @@
+.manager_account {
+    background-color: #232528;
+
+    .manager_account_top {
+        display: flex;
+        justify-content: start;
+        padding: 20px;
+
+        .ant-select-selector {
+            background-color: rgb(255, 255, 255); 
+            border-color: #ffffff;
+
+            .ant-select-selection-placeholder {
+                color: #ccc;
+            }
+        }
+    }
+
+    .manager_account_table {
+        .ant-table {
+            background-color: #555;
+            color: #fff; 
+        }
+
+        .ant-table-thead > tr > th {
+            background-color: #444; 
+            color: white;
+        }
+
+        .ant-table-tbody > tr.ant-table-row:hover > td {
+            background-color: #666; // Darken table row hover background color
+        }
+
+        .ant-pagination {
+            .ant-pagination-item-link {
+                background: #888; // Darken pagination item background color
+                border-color: #888; // Darken pagination item border color
+
+                &:hover {
+                    background: #999; // Darken pagination item hover background color
+                }
+            }
+
+            .ant-pagination-item-active {
+                background-color: #ffa600; // Darken active pagination item background color
+                border-color: #ffa600; // Darken active pagination item border color
+
+                a {
+                    color: #fff; // Text color for active pagination item
+                }
+            }
+
+            .ant-pagination-item {
+                border-color: #444; // Darken pagination item border color
+
+                a {
+                    color: #ccc; // Lighter text color for pagination item
+                }
+
+                &:hover {
+                    border-color: #555; // Darken pagination item hover border color
+                    background-color: #ffa600;
+                    
+                }
+            }
+        }
+    }
+
+    .icon {
+        font-size: 30px;
+        color: #ccc; // Lighter icon color
+    }
+
+    .ant-btn-primary {
+        background-color: #1890ff; // Primary button background color
+        border-color: #1890ff; // Primary button border color
+
+        &:hover {
+            background-color: #40a9ff; // Darker primary button background color on hover
+            border-color: #40a9ff; // Darker primary button border color on hover
+        }
+    }
+}
