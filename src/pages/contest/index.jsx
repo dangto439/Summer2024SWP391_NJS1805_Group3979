@@ -39,20 +39,21 @@ const Contest = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const location = useLocation();
-  const [contests, setContests] = useState([]);
+  // const [contests, setContests] = useState([]);
 
-  useEffect(() => {
-    const fetchContests = async () => {
-      try {
-        //check xem cú pháp call api đúng khum
-        const response = await axios.get("/contests");
-        setContests(response.data);
-      } catch (error) {
-        console.error("Error get data: ", error);
-      }
-    };
-    fetchContests();
-  }, []);
+  //     Chuyển qua call api ở bên listcontest
+  // useEffect(() => {
+  //   const fetchContests = async () => {
+  //     try {
+  //       //check xem cú pháp call api đúng khum
+  //       const response = await axios.get("/contests");
+  //       setContests(response.data);
+  //     } catch (error) {
+  //       console.error("Error get data: ", error);
+  //     }
+  //   };
+  //   fetchContests();
+  // }, []);
 
   const Breadcrumb = () => {
     const pathnames = location.pathname.split("/").filter((x) => x);
@@ -80,7 +81,7 @@ const Contest = () => {
   };
 
   return (
-    <Box p={3} ml={3}>
+    <Box p={15} ml={10}>
       {Breadcrumb()}
 
       <Box
@@ -105,16 +106,28 @@ const Contest = () => {
         <Box display="flex">
           <Button
             component={RouterLink}
-            to="danhsach"
+            to="dangdienra"
             sx={{
               borderBottom:
-                location.pathname === "/contest/danhsach" ||
+                location.pathname === "/contest/dangdienra" ||
                 location.pathname === "/contest"
                   ? `2px solid ${colors.greenAccent[500]}`
                   : "none",
             }}
           >
-            Danh sách
+            Đang diễn ra
+          </Button>
+          <Button
+            component={RouterLink}
+            to="sapdienra"
+            sx={{
+              borderBottom:
+                location.pathname === "/contest/sapdienra"
+                  ? `2px solid ${colors.greenAccent[500]}`
+                  : "none",
+            }}
+          >
+            Sắp diễn ra
           </Button>
           <Button
             component={RouterLink}
@@ -132,9 +145,10 @@ const Contest = () => {
       </Box>
 
       <Routes>
-        <Route path="" element={<ListContest contests={contests} />} />
-        <Route path="danhsach" element={<ListContest contests={contests} />} />
-        <Route path="thang" element={<ScheduleContest contests={contests} />} />
+        <Route path="" element={<ListContest />} />
+        <Route path="dangdienra" element={<ListContest />} />
+        <Route path="sapdienra" element={<ListContest />} />
+        <Route path="thang" element={<ScheduleContest />} />
       </Routes>
     </Box>
   );
