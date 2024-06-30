@@ -5,6 +5,8 @@ import {
   HistoryOutlined,
   PoweroffOutlined,
   SearchOutlined,
+  WalletOutlined,
+  PlusOutlined,
 } from "@ant-design/icons";
 import "./index.scss";
 import { useEffect, useState } from "react";
@@ -152,9 +154,25 @@ function Header() {
             </div>
           </>
         ) : (
-          <Dropdown.Button menu={menuProps} icon={<BarsOutlined />}>
-            {name}
-          </Dropdown.Button>
+          <div className="header__options">
+            <div className="header__wallet">
+              <ul className="">
+                <li>
+                  <WalletOutlined /> Số dư ví:
+                </li>
+                <li>
+                  <Link to="/wallet" className="button-pay">
+                    <PlusOutlined /> Nạp tiền
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div className="header__menu">
+              <Dropdown.Button menu={menuProps} icon={<BarsOutlined />}>
+                {name}
+              </Dropdown.Button>
+            </div>
+          </div>
         )}
       </div>
     </header>
