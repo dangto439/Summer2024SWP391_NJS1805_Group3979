@@ -1,0 +1,16 @@
+.transaction-container {
+    .ant-table {
+        background-color: #34373f;
+        color: #fff; 
+    }
+
+    .ant-table-thead > tr > th {
+        background-color: #2b831f; 
+        color: white;
+    }
+
+    .ant-table-tbody > tr.ant-table-row:hover > td {
+        background-color: #666; 
+    }
+
+}

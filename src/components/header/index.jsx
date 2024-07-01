@@ -88,7 +88,9 @@ function Header() {
       <div className="header__logo">
         <Link to="/">
           <img
+
             src="https://firebasestorage.googleapis.com/v0/b/badminton-booking-platform.appspot.com/o/Screenshot%202024-06-27%20213810.png?alt=media&token=8aa9ac61-4427-4b4e-b778-6d0567aba4dc"
+
             alt="logo"
           />
         </Link>
