@@ -30,6 +30,7 @@ import AdminDasboard from "./components/admin";
 import Contest from "./pages/contest";
 import ListContest from "../src/components/list-contest";
 import ScheduleContest from "./components/scheduler-contest";
+import Wallet from "./pages/wallet";
 
 function App() {
   const user = useSelector(selectUser);
@@ -77,6 +78,10 @@ function App() {
             <Contact />
             // </PrivateRoute>
           ),
+        },
+        {
+          path: "/wallet",
+          element: <Wallet />,
         },
         {
           path: "/contest/*",

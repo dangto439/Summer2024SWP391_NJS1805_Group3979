@@ -1,8 +1,10 @@
 import "./index.scss";
-import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
-import CallIcon from "@mui/icons-material/Call";
-import RoomIcon from "@mui/icons-material/Room";
-import PersonIcon from "@mui/icons-material/Person";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+
+import RoomOutlinedIcon from "@mui/icons-material/RoomOutlined";
+import { GiTennisCourt } from "react-icons/gi";
+import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import {
   InfoCircleOutlined,
   PictureOutlined,
@@ -49,16 +51,14 @@ function ClubDetail() {
       <h1>{club.clubName}</h1>
       <div className="club-content">
         <div className="club-image">
-          <PictureOutlined />
-          <h2>HÌNH ẢNH</h2>
+          <PictureOutlined /> <h2>HÌNH ẢNH</h2>
           <div className="text-wrap">
             <div className="text-line"></div>
           </div>
-          <img src={club.urlImages} alt="Sân Cầu Lông Trúc Long" />
+          <img src={club.urlImages} alt={club.clubName} />
         </div>
         <div className="club-description">
-          <InfoCircleOutlined />
-          <h2>MÔ TẢ</h2>
+          <InfoCircleOutlined /> <h2>MÔ TẢ</h2>
           <div className="text-wrap">
             <div className="text-line"></div>
           </div>
@@ -75,29 +75,31 @@ function ClubDetail() {
           <ul>
             <li>
               <i className="fas fa-map-marker-alt"></i>
-              <RoomIcon fontSize="small" /> {club.clubAddress}, {club.district},{" "}
-              {club.province}
+              <RoomOutlinedIcon fontSize="small" /> {club.clubAddress},{" "}
+              {club.district}, {club.province}
             </li>
             <li>
               <i className="fas fa-clock">
-                <AccessTimeFilledIcon fontSize="small" />
+                <AccessTimeIcon fontSize="small" />
               </i>{" "}
               {club.openTime}g - {club.closeTime}g
             </li>
 
             <li>
-              <i className="nav-icon fal fa-shuttlecock"></i> Tổng{" "}
-              {owner.capacity} sân
+              <i className="nav-icon fal fa-shuttlecock">
+                <GiTennisCourt />
+              </i>{" "}
+              Tổng {owner.capacity} sân
             </li>
             <li>
               <i className="club-phone">
-                <PersonIcon fontSize="small" />
+                <PersonOutlineOutlinedIcon fontSize="small" />
               </i>{" "}
               {owner.nameOwner}
             </li>
             <li>
               <i className="fas fa-phone">
-                <CallIcon fontSize="small" />
+                <PhoneOutlinedIcon fontSize="small" />
               </i>{" "}
               {club.hotline}
             </li>
@@ -112,24 +114,19 @@ function ClubDetail() {
           </div>
           <ul>
             <li>
-              <CheckCircleOutlined className="icon" />
-              Wifi
+              <CheckCircleOutlined className="icon" /> Wifi
             </li>
             <li>
-              <CheckCircleOutlined className="icon" />
-              Chỗ gửi xe
+              <CheckCircleOutlined className="icon" /> Chỗ gửi xe
             </li>
             <li>
-              <CheckCircleOutlined className="icon" />
-              Nước uống
+              <CheckCircleOutlined className="icon" /> Nước uống
             </li>
             <li>
-              <CheckCircleOutlined className="icon" />
-              Ghế nghỉ ngơi
+              <CheckCircleOutlined className="icon" /> Ghế nghỉ ngơi
             </li>
             <li>
-              <CheckCircleOutlined className="icon" />
-              Tổ chức sự kiện giải đấu
+              <CheckCircleOutlined className="icon" /> Tổ chức sự kiện giải đấu
             </li>
           </ul>
         </div>
