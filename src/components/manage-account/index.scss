@@ -7,23 +7,37 @@
         padding: 20px;
 
         .ant-select-selector {
-            background-color: rgb(255, 255, 255); 
-            border-color: #ffffff;
+            background-color: rgb(89, 89, 244); 
+            border-color: rgb(127, 127, 252);
 
             .ant-select-selection-placeholder {
-                color: #ccc;
+                color: #ffffff;
             }
+
+            .ant-select-selection-item {
+                color: #ffffff;
+            }
+        }
+
+        .ant-input{
+            background-color: purple;
+            border-color: rgb(146, 40, 146);            
+            &::placeholder {
+                color: #ffffff; 
+                
+              }         
+              color: #ffffff;
         }
     }
 
     .manager_account_table {
         .ant-table {
-            background-color: #555;
+            background-color: #34373f;
             color: #fff; 
         }
 
         .ant-table-thead > tr > th {
-            background-color: #444; 
+            background-color: #2b831f; 
             color: white;
         }
 
@@ -62,6 +76,23 @@
                     background-color: #ffa600;
                     
                 }
+            }
+        }
+    }
+
+    .button_cancel_form {
+        display: flex;
+        justify-content: center;      
+        
+        Button {
+            width: 800px;
+
+            background-color: red;
+            border-color: rgb(238, 63, 63);
+
+            &:hover {
+                background-color:  rgb(243, 91, 91);
+                border-color:  rgb(224, 106, 106);
             }
         }
     }

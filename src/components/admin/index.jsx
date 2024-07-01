@@ -19,8 +19,19 @@ import {
   Customized,
 } from "recharts";
 import "./index.scss";
+import { useEffect, useState } from "react";
+import api from "../../config/axios";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/features/counterSlice";
+import ViewTransaction from "../viewtransaction/viewtransaction";
 
 function AdminDasboard() {
+  const user = useSelector(selectUser); // lấy account hiện tại từ redux;
+
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [accountNumber, setAccountNumber] = useState(0);
+  const [clubNumber, setClubNumber] = useState(0);
+
   const data = [
     {
       name: "Tháng  1",
@@ -89,6 +100,33 @@ function AdminDasboard() {
       );
     });
   };
+
+  const fetchData = async () => {
+    try {
+      const [
+        totalPriceResponse,
+        transactionResponse,
+        accountsResponse,
+        clubsResponse,
+      ] = await Promise.all([
+        api.get(`/wallet/${user.id}`),
+        api.get(`get-transactions/${user.id}`),
+        api.get(`/get-all-account`),
+        api.get(`/clubs`),
+      ]);
+
+      setTotalPrice(totalPriceResponse.data.balance);
+      console.log(transactionResponse.data);
+      setAccountNumber(accountsResponse.data.length - 1);
+      setClubNumber(clubsResponse.data.length);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <main className="main-container-admin">
       <div className="main-ttile">
@@ -101,14 +139,14 @@ function AdminDasboard() {
             <h3>Người dùng</h3>
             <MdSupervisorAccount className="card_icon" />
           </div>
-          <h1>300</h1>
+          <h1>{accountNumber}</h1>
         </div>
         <div className="card orange">
           <div className="card_inner">
             <h3>Câu lạc bộ</h3>
             <AiOutlineBuild className="card_icon" />
           </div>
-          <h1>50</h1>
+          <h1>{clubNumber}</h1>
         </div>
         <div className="card purple">
           <div className="card_inner">
@@ -119,10 +157,10 @@ function AdminDasboard() {
         </div>
         <div className="card red">
           <div className="card_inner ">
-            <h3>Doanh thu</h3>
+            <h3>Tổng tiền</h3>
             <AiOutlineDollarCircle className="card_icon" />
           </div>
-          <h1>5000 VND</h1>
+          <h1>{totalPrice} VND</h1>
         </div>
         <div className="charts">
           <ResponsiveContainer width="100%" height={500}>
@@ -206,6 +244,9 @@ function AdminDasboard() {
             </ComposedChart>
           </ResponsiveContainer>
         </div>
+      </div>
+      <div>
+        <ViewTransaction />
       </div>
     </main>
   );

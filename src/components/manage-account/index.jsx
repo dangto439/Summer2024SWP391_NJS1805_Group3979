@@ -1,4 +1,4 @@
-import { Button, Image, Popconfirm, Select, Table } from "antd";
+import { Button, Image, Popconfirm, Select, Table, Input } from "antd";
 import { useEffect, useState } from "react";
 import api from "../../config/axios";
 import { FcKey, FcLock } from "react-icons/fc";
@@ -7,13 +7,79 @@ import UpdateAccount from "../updateaccount";
 
 function ManageAccount() {
   const [dataSource, setDataSource] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(2);
   const [isUpdateVisible, setIsUpdateVisible] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const [searchName, setSearchName] = useState("");
+  const [selectedRole, setSelectedRole] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState(null);
 
-  const onChange = (value) => {
-    setPageSize(value);
+  useEffect(() => {
+    fetchAccounts();
+  }, []);
+
+  async function fetchAccounts() {
+    const response = await api.get("/get-all-account");
+    const filteredData = response.data.filter(
+      (account) => account.role !== "ADMIN"
+    );
+    setDataSource(filteredData);
+    setFilteredData(filteredData);
+  }
+
+  const handleTableChange = (pagination, filters) => {
+    setCurrentPage(pagination.current);
+    setPageSize(pagination.pageSize);
+    const { role, accountStatus } = filters;
+    setSelectedRole(role ? role[0] : null);
+    setSelectedStatus(accountStatus ? accountStatus[0] : null);
+    filterData(
+      searchName,
+      role ? role[0] : null,
+      accountStatus ? accountStatus[0] : null
+    );
+  };
+
+  const handleUpdateClick = (id) => {
+    setSelectedId(id);
+    setIsUpdateVisible(true);
+  };
+
+  const handleCancelForm = () => {
+    setIsUpdateVisible(false);
+  };
+
+  const handleDeleteAccount = async (email) => {
+    await api.put(`/block/${email}`);
+    fetchAccounts();
+  };
+
+  const handleSearch = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearchName(value);
+    filterData(value, selectedRole, selectedStatus);
+  };
+
+  const filterData = (name, role, status) => {
+    let filtered = dataSource;
+
+    if (name) {
+      filtered = filtered.filter((item) =>
+        item.name.toLowerCase().includes(name)
+      );
+    }
+
+    if (role) {
+      filtered = filtered.filter((item) => item.role === role);
+    }
+
+    if (status) {
+      filtered = filtered.filter((item) => item.accountStatus === status);
+    }
+
+    setFilteredData(filtered);
   };
 
   const columns = [
@@ -42,11 +108,22 @@ function ManageAccount() {
       title: "Chức vụ",
       dataIndex: "role",
       key: "role",
+      filters: [
+        { text: "CUSTOMER", value: "CUSTOMER" },
+        { text: "CLUB_OWNER", value: "CLUB_OWNER" },
+        { text: "CLUB_STAFF", value: "CLUB_STAFF" },
+      ],
+      onFilter: (value, record) => record.role === value,
     },
     {
       title: "Trạng thái",
       dataIndex: "accountStatus",
       key: "accountStatus",
+      filters: [
+        { text: "ACTIVE", value: "ACTIVE" },
+        { text: "INACTIVE", value: "INACTIVE" },
+      ],
+      onFilter: (value, record) => record.accountStatus === value,
     },
     {
       title: "Cập nhật",
@@ -80,35 +157,6 @@ function ManageAccount() {
     },
   ];
 
-  async function fetchAccounts() {
-    const response = await api.get("/get-all-account");
-    setDataSource(response.data);
-  }
-
-  useEffect(() => {
-    fetchAccounts();
-  }, []);
-
-  const handleDeleteAccount = async (email) => {
-    await api.put(`/block/${email}`);
-    fetchAccounts();
-  };
-
-  const handleTableChange = (pagination) => {
-    setCurrentPage(pagination.current);
-    setPageSize(pagination.pageSize);
-  };
-
-  const handleUpdateClick = (id) => {
-    console.log(id);
-    setSelectedId(id);
-    setIsUpdateVisible(true);
-  };
-
-  const hanldeCancleForm = () => {
-    setIsUpdateVisible(false);
-  };
-
   return (
     <div className="manager_account">
       <div className="manager_account_top">
@@ -116,7 +164,7 @@ function ManageAccount() {
           showSearch
           placeholder="2/trang"
           optionFilterProp="label"
-          onChange={onChange}
+          onChange={(value) => setPageSize(parseInt(value))}
           options={[
             { value: "2", label: "2/trang" },
             { value: "4", label: "4/trang" },
@@ -124,10 +172,15 @@ function ManageAccount() {
             { value: "30", label: "30/trang" },
           ]}
         />
+        <Input
+          placeholder="Tìm kiếm theo tên"
+          style={{ width: 200, marginLeft: 10 }}
+          onChange={handleSearch}
+        />
       </div>
       <div className="manager_account_table">
         <Table
-          dataSource={dataSource.slice(
+          dataSource={filteredData.slice(
             (currentPage - 1) * pageSize,
             currentPage * pageSize
           )}
@@ -135,18 +188,21 @@ function ManageAccount() {
           pagination={{
             current: currentPage,
             pageSize: pageSize,
-            total: dataSource.length,
+            total: filteredData.length,
             position: ["bottomCenter"],
           }}
           onChange={handleTableChange}
         />
       </div>
-      {isUpdateVisible && (
-        <Button type="primary" danger onClick={hanldeCancleForm}>
-          đóng
-        </Button>
-      )}
       {isUpdateVisible && <UpdateAccount id={selectedId} />}
+      <div className="button_cancel_form">
+        {isUpdateVisible && (
+          <Button type="primary" danger onClick={handleCancelForm}>
+            đóng
+          </Button>
+        )}
+      </div>
+      <br />
     </div>
   );
 }
