@@ -5,6 +5,8 @@ import {
   HistoryOutlined,
   PoweroffOutlined,
   SearchOutlined,
+  WalletOutlined,
+  PlusOutlined,
 } from "@ant-design/icons";
 import "./index.scss";
 import { useEffect, useState } from "react";
@@ -63,7 +65,6 @@ function Header() {
     items,
     onClick,
   };
-  const [tab, setTab] = useState([]);
 
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
@@ -86,63 +87,43 @@ function Header() {
     <header className="header">
       <div className="header__logo">
         <Link to="/">
-          <img src="./src/logo.svg" alt="logo" />
+          <img
+
+            src="https://firebasestorage.googleapis.com/v0/b/badminton-booking-platform.appspot.com/o/Screenshot%202024-06-27%20213810.png?alt=media&token=8aa9ac61-4427-4b4e-b778-6d0567aba4dc"
+
+            alt="logo"
+          />
         </Link>
       </div>
       <nav className="header__nav">
         <ul>
-          <li
-            onClick={() => {
-              setTab(1);
-            }}
-            className={`header__link ${tab == 1 && "active"}`}
-          >
+          <li className="header__link">
             <Link to="/">Trang chủ</Link>
           </li>
 
-          <li
-            onClick={() => {
-              setTab(2);
-            }}
-            className={`header__link ${tab == 2 && "active"}`}
-          >
+          <li className="header__link">
             <Link to="/introduction">Giới thiệu</Link>
           </li>
 
-          <li
-            onClick={() => {
-              setTab(3);
-            }}
-            className={`header__link ${tab == 3 && "active"}`}
-          >
+          <li className="header__link">
             <Link to="/list-club">Danh sách sân</Link>
           </li>
 
-          <li
-            onClick={() => {
-              setTab(4);
-            }}
-            className={`header__link ${tab == 4 && "active"}`}
-          >
+          <li className="header__link">
             <Link to="/contest">Lịch thi đấu</Link>
           </li>
 
-          <li
+          {/* <li
             onClick={() => {
               setTab(5);
             }}
             className={`header__link ${tab == 5 && "active"}`}
           >
             <Link to="/contact">Liên hệ</Link>
-          </li>
+          </li> */}
 
           {(role == "CLUB_OWNER" || role == "ADMIN") && user != null ? (
-            <li
-              onClick={() => {
-                setTab(6);
-              }}
-              className={`header__link ${tab == 7 && "active"}`}
-            >
+            <li className="header__link">
               <Link to="/dashboard">Quản lý</Link>
             </li>
           ) : (
@@ -175,21 +156,27 @@ function Header() {
             </div>
           </>
         ) : (
-          <Dropdown.Button menu={menuProps} icon={<BarsOutlined />}>
-            {name}
-          </Dropdown.Button>
+          <div className="header__options">
+            <div className="header__wallet">
+              <ul className="">
+                <li>
+                  <WalletOutlined /> Số dư ví:
+                </li>
+                <li>
+                  <Link to="/wallet" className="button-pay">
+                    <PlusOutlined /> Nạp tiền
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div className="header__menu">
+              <Dropdown.Button menu={menuProps} icon={<BarsOutlined />}>
+                {name}
+              </Dropdown.Button>
+            </div>
+          </div>
         )}
       </div>
-
-      {/* <div className={`header__search ${isShowSearch ? "active" : ""}`}>
-        <input type="text" placeholder="Tìm kiếm sân..." />
-        <CloseOutlined
-          onClick={() => {
-            setIsShowSearch(false);
-            setTab([]);
-          }}
-        />
-      </div> */}
     </header>
   );
 }

@@ -4,7 +4,42 @@
     // flex-direction: column;
     // width: 20%;
     // margin-left: 350px;
+    position: absolute;
   }
+  
+  .carousel-club-header {
+    text-align: center;
+    margin: 20px 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  
+    .carousel-club-title {
+      position: relative;
+      display: inline-block;
+      font-size: 20px;
+      color: #000;
+      margin-bottom: 0px;
+      font-weight: 600;
+  
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        width:400px; /* Độ dài của đường kẻ */
+        height: 2px; /* Độ dày của đường kẻ */
+        background-color: #000;
+      }
+  
+      &::before {
+        left: -450px; /* Khoảng cách từ tiêu đề đến đường kẻ bên trái */
+      }
+  
+      &::after {
+        right: -450px; /* Khoảng cách từ tiêu đề đến đường kẻ bên phải */
+      }
+    }
+  }
+  
 
 //   .swiper-slide img {
 //     display: block;
@@ -14,7 +49,9 @@
 //   }
     .swiper-slide-club {
     // width: 20%;
+    
     }
+
 
   .carousel-club-card {
     border: 1px solid #ccc;
@@ -35,7 +72,7 @@
       // Ensures no overflow issues
   
       img {
-        width: 200px;
+        width: 220px;
         height: 220px;
         // object-fit: cover; // Ensures the image covers the entire div without distortion
         border-radius: 10px;
@@ -75,25 +112,65 @@
       }
     }
   
-  .buttons button {
-      padding: 5px 20px;
-      // margin-right: 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      // text-align: center;
-      gap: 0px;
+  // .buttons button {
+  //     padding: 5px 20px;
+  //     // margin-right: 10px;
+  //     border: none;
+  //     border-radius: 5px;
+  //     cursor: pointer;
+  //     // text-align: center;
+  //     gap: 0px;
       
       
-  }
+  // }
   
-  .booking-button {
-      background-color: #e74c3c;
-      color: #fff;
-      margin-left: 380px;
-      .booking-button:hover{
-        background-color: #06e721;
-      }
-  }
+  // .booking-button {
+  //     background-color: #e74c3c;
+  //     color: #fff;
+  //     margin-left: 380px;
+  //     .booking-button:hover{
+  //       background-color: #06e721;
+  //     }
+  // }
+  button {
+    padding: 10px 30px;
+    border: unset;
+    border-radius: 8px;
+    color: #212121;
+    z-index: 1;
+    margin-left: 400px;
+    background: #49cd66;
+    position: relative;
+    font-weight: 500;
+    font-size: 17px;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+    transition: all 250ms;
+    overflow: hidden;
+    cursor: pointer;
+   }
+   
+   button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    border-radius: 8px;
+    background-color: #65C766;
+    z-index: -1;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+    transition: all 250ms
+   }
+   
+   button:hover {
+    color: #e8e8e8;
+   }
+   
+   button:hover::before {
+    width: 100%;
+   }
 }
   

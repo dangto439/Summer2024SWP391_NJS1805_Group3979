@@ -1,0 +1,34 @@
+.grid-container {
+    display: grid;
+    grid-template-areas:
+      "header"
+      "sidebar main";
+    grid-template-columns: 250px 1fr;
+    grid-template-rows: auto 1fr;
+    height: 100vh;
+    background-color: #232528;
+  
+    // header {
+    //   grid-area: header;
+    //   box-sizing: border-box;
+    //   width: calc(100% - 250px);
+    //   padding: 10px;
+      
+    // }
+  
+    aside {
+      grid-area: sidebar;
+    }
+  
+    main {
+      grid-area: main;
+      padding: 10px 20px 0px 20px; //tren phai duoi trai
+      background-color: #232528;
+      overflow-y: auto;
+    }
+  }
+  
+
+.red{
+  background-color: red;
+}

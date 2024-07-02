@@ -55,10 +55,17 @@
         height: auto;
         font-size: 20px;
         ul{
+          // font-size: 40px;
           li{
             list-style: none;
           }
         }
+        h2{
+          font-size: 18px;
+          text-align: left;
+          margin-left: 26px;
+          margin-top: -22px;
+          }
       }
   
     .club-image {
@@ -74,6 +81,7 @@
         width: 100%;
         height: auto;
         }
+        
       }
     }
 
@@ -97,11 +105,16 @@
       ul {
         list-style-type: none;
         padding: 0;
-  
         li {
           margin: 5px 0;
         }
-    }
+      }
+      h2{
+        font-size: 18px;
+        text-align: left;
+        margin-left: 26px;
+        margin-top: -22px;
+        } 
   }
 
     .club-utilities{

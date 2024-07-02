@@ -25,19 +25,24 @@ import HistoryBooking from "./pages/history-booking";
 import ClubDetail from "./pages/club-detail";
 import ListClub from "./pages/list-club";
 import Payment from "./pages/payment";
+import LayoutAdmin from "./components/layoutadmin";
+import AdminDasboard from "./components/admin";
 import Contest from "./pages/contest";
 import ListContest from "../src/components/list-contest";
 import ScheduleContest from "./components/scheduler-contest";
 import Checkin from "./pages/check-in";
 import Tournament from "../src/components/tournament";
+import Wallet from "./pages/wallet";
 
 function App() {
   const user = useSelector(selectUser);
-  console.log(user);
 
   const AuthRoute = ({ children }) => {
-    if (user == null || user.role != "ADMIN") {
-      toast.error("You are not Admin!");
+    if (user == null) {
+      toast.error("bạn cần đăng nhập tài khoản admin trước");
+      return <Navigate to="/login" />;
+    } else if (user.role != "ADMIN") {
+      toast.error("Bạn không phải là Admin!");
       return <Navigate to="/login" />;
     }
     return children;
@@ -45,7 +50,7 @@ function App() {
 
   const PrivateRoute = ({ children }) => {
     if (user == null) {
-      toast.error("Ban can dang nhap");
+      toast.error("Bạn cần đăng nhập");
       return <Navigate to="/login" />;
     }
     return children;
@@ -75,6 +80,10 @@ function App() {
             <Contact />
             // </PrivateRoute>
           ),
+        },
+        {
+          path: "/wallet",
+          element: <Wallet />,
         },
         {
           path: "/contest/*",
@@ -160,6 +169,36 @@ function App() {
       element: <ResetPassword />,
     },
     {
+      path: "/admin",
+      element: (
+        <AuthRoute>
+          <LayoutAdmin />
+        </AuthRoute>
+      ),
+      children: [
+        {
+          path: "",
+          element: <AdminDasboard />,
+        },
+        {
+          path: "account",
+          element: <ManageAccount />,
+        },
+        {
+          path: "club",
+          element: <Club />,
+        },
+        {
+          path: "setting",
+          element: <Staff />,
+        },
+        {
+          path: "profile",
+          element: <Profile />,
+        },
+      ],
+    },
+    {
       path: "/dashboard/*",
       element: <Dashboard />,
       children: [
@@ -190,10 +229,10 @@ function App() {
           element: <Profile />,
         },
 
-        {
-          path: "manage-account",
-          element: <ManageAccount />,
-        },
+        // {
+        //   path: "manage-account",
+        //   element: <ManageAccount />,
+        // },
       ],
     },
   ]);

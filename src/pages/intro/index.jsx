@@ -3,7 +3,7 @@ import "./index.scss";
 function Intro() {
   return (
     <div className="intro">
-      <h1>Chào Mừng Đến Với DatSan3979</h1>
+      <h1>Chào Mừng Đến Với DatSan79</h1>
       <p>
         Nền tảng đặt lịch sân cầu lông hiện đại và tiện lợi nhất dành cho mọi
         tín đồ yêu thích bộ môn cầu lông.
@@ -12,11 +12,11 @@ function Intro() {
       <section className="about-us">
         <h2>Về Chúng Tôi</h2>
         <p>
-          3979 được xây dựng với mục tiêu kết nối cộng đồng người chơi cầu lông
-          và các sân cầu lông chất lượng trên khắp cả nước. Với sự hỗ trợ của
-          công nghệ tiên tiến, chúng tôi cung cấp một giải pháp toàn diện để bạn
-          có thể tận hưởng những trận cầu thú vị mà không phải lo lắng về việc
-          tìm sân.
+          DatSan79 được xây dựng với mục tiêu kết nối cộng đồng người chơi cầu
+          lông và các sân cầu lông chất lượng trên khắp cả nước. Với sự hỗ trợ
+          của công nghệ tiên tiến, chúng tôi cung cấp một giải pháp toàn diện để
+          bạn có thể tận hưởng những trận cầu thú vị mà không phải lo lắng về
+          việc tìm sân.
         </p>
       </section>
 
@@ -45,13 +45,13 @@ function Intro() {
           </li>
           <li>
             <strong>Ưu Đãi và Khuyến Mãi:</strong> Thường xuyên cập nhật các ưu
-            đãi và chương trình khuyến mãi hấp dẫn dành cho người dùng 3979.
+            đãi và chương trình khuyến mãi hấp dẫn dành cho người dùng DatSan79.
           </li>
         </ul>
       </section>
 
       <section className="why-choose">
-        <h2>Tại Sao Chọn DatSan3979?</h2>
+        <h2>Tại Sao Chọn DatSan79?</h2>
         <ul>
           <li>
             <strong>Đa Dạng Lựa Chọn:</strong> Hàng trăm sân cầu lông trên khắp
@@ -81,7 +81,7 @@ function Intro() {
       </section>
 
       <p className="thanks">
-        Cảm ơn bạn đã tin tưởng và lựa chọn DatSan3979! Chúc bạn có những giây
+        Cảm ơn bạn đã tin tưởng và lựa chọn DatSan79! Chúc bạn có những giây
         phút vui vẻ và thú vị với môn thể thao yêu thích.
       </p>
     </div>

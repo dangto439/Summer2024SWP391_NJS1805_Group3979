@@ -7,7 +7,9 @@ import { toast } from "react-toastify";
 import "./index.scss";
 
 function BookingDaily({ club }) {
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(
+    moment().format("YYYY-MM-DD")
+  );
   const [dataSource, setDataSource] = useState([]);
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [totalHours, setTotalHours] = useState(0);
@@ -144,10 +146,12 @@ function BookingDaily({ club }) {
     };
 
     try {
-      console.log(bookingData);
+      //console.log(bookingData);
       const booking = await api.post("/booking/daily", bookingData);
 
-      handleWallet(booking.data.totalPrice);
+      handleWallet(booking.data.totalPrice); // tự tạo transaction pending (booking)
+
+      //cap nhat transaction (tc-> DEPOSIT/ CANCEL) //Put
     } catch (error) {
       console.error("Error submitting booking:", error);
       message.error("Đặt sân thất bại. Vui lòng thử lại.");

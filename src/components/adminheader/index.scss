@@ -1,0 +1,33 @@
+.headeradmin {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #34373f;
+    color: #fff;
+    position: relative;
+    height: 58.4px;
+  
+    .header-right {
+      display: flex;
+      align-items: center;
+      a{
+        .icon{
+          color: white;
+        }
+      }
+      .icon {
+        font-size: 20px;
+        cursor: pointer;
+        margin-left: 20px;
+      }
+    }
+    .bell {
+      color: yellow;
+    }
+    .Envelope{
+      color: rgb(11, 214, 38);
+    }
+
+  }
+  
