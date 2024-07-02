@@ -93,97 +93,98 @@ function ListClub() {
           ))}
         </div>
       </div>
-
-      <div className="list-club-search">
-        <Form className="form-search">
-          <div className="list-club-search-name">
-            <Form.Item>
-              <Input placeholder="Nhập tên sân cần tìm..." />
-            </Form.Item>
-          </div>
-
-          <div className="list-club-location-provinces">
-            <Form.Item className="form-item" label="Thành phố/Tỉnh">
-              <Select
-                style={{ width: 200 }}
-                id="city"
-                value={selectedCity}
-                onChange={handleCityChange}
-              >
-                <option value="">--Chọn Thành phố--</option>
-                {Object.keys(dataProvnices).map((city) => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-              </Select>
-            </Form.Item>
-          </div>
-
-          <div className="list-club-location-">
-            <Form.Item className="form-item" label="Quận/Huyện">
-              <Select
-                style={{ width: 200 }}
-                id="district"
-                value={selectedDistrict}
-                onChange={handleDistrictChange}
-                disabled={!selectedCity}
-              >
-                <option value="">--Chọn Quận/Huyện--</option>
-                {districts.map((district) => (
-                  <option key={district} value={district}>
-                    {district}
-                  </option>
-                ))}
-              </Select>
-            </Form.Item>
-          </div>
-
-          <div className="form-search">
-            <Button>{/* <SearchOutlined /> */}button</Button>
-          </div>
-        </Form>
-      </div>
-
-      {listClub.map((club) => (
-        <>
-          <div key={club.clubId} className="list-club-card">
-            <div className="list-club-image">
-              <img
-                onClick={() => handleShowDetailClub(club)}
-                src={club.urlImages}
-                alt={club.clubName}
-              />
+      <div className="list-club-all">
+        <div className="list-club-search">
+          <Form className="form-search">
+            <div className="list-club-search-name">
+              <Form.Item>
+                <Input placeholder="Nhập tên sân cần tìm..." />
+              </Form.Item>
             </div>
-            <div className="list-club-details">
-              <h2 onClick={() => handleShowDetailClub(club)}>
-                {club.clubName}
-              </h2>
-              <p>
-                <i className="list-club-address"></i> {club.clubAddress},{" "}
-                {club.district}, {club.province}
-              </p>
-              <p>
-                <i className="list-club-clock"></i> {club.openTime} -{" "}
-                {club.closeTime}
-              </p>
-              <p>
-                <i className="list-club-phone"></i> Hotline: {club.hotline}
-              </p>
-              <p className="list-club-description">{club.description}</p>
 
-              <div className="buttons">
-                <button
-                  className="booking-button"
-                  onClick={() => handleBooking(club)}
+            <div className="list-club-location-provinces">
+              <Form.Item className="form-item" label="Thành phố/Tỉnh">
+                <Select
+                  style={{ width: 200 }}
+                  id="city"
+                  value={selectedCity}
+                  onChange={handleCityChange}
                 >
-                  Đặt lịch
-                </button>
+                  <option value="">--Chọn Thành phố--</option>
+                  {Object.keys(dataProvnices).map((city) => (
+                    <option key={city} value={city}>
+                      {city}
+                    </option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </div>
+
+            <div className="list-club-location-">
+              <Form.Item className="form-item" label="Quận/Huyện">
+                <Select
+                  style={{ width: 200 }}
+                  id="district"
+                  value={selectedDistrict}
+                  onChange={handleDistrictChange}
+                  disabled={!selectedCity}
+                >
+                  <option value="">--Chọn Quận/Huyện--</option>
+                  {districts.map((district) => (
+                    <option key={district} value={district}>
+                      {district}
+                    </option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </div>
+
+            <div className="form-search">
+              <Button>{/* <SearchOutlined /> */}button</Button>
+            </div>
+          </Form>
+        </div>
+
+        {listClub.map((club) => (
+          <>
+            <div key={club.clubId} className="list-club-card">
+              <div className="list-club-image">
+                <img
+                  onClick={() => handleShowDetailClub(club)}
+                  src={club.urlImages}
+                  alt={club.clubName}
+                />
+              </div>
+              <div className="list-club-details">
+                <h2 onClick={() => handleShowDetailClub(club)}>
+                  {club.clubName}
+                </h2>
+                <p>
+                  <i className="list-club-address"></i> {club.clubAddress},{" "}
+                  {club.district}, {club.province}
+                </p>
+                <p>
+                  <i className="list-club-clock"></i> {club.openTime} -{" "}
+                  {club.closeTime}
+                </p>
+                <p>
+                  <i className="list-club-phone"></i> Hotline: {club.hotline}
+                </p>
+                <p className="list-club-description">{club.description}</p>
+
+                <div className="buttons">
+                  <button
+                    className="booking-button"
+                    onClick={() => handleBooking(club)}
+                  >
+                    Đặt lịch
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </>
-      ))}
+          </>
+        ))}
+      </div>
     </div>
   );
 }

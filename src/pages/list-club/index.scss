@@ -6,7 +6,7 @@
   // margin-left: 350px;
   // position: static;
   
-  position: static  ;
+  position: relative  ;
   
 
   h1{
@@ -16,6 +16,13 @@
     margin-bottom: 0;
     color: #1D8D1D;
   }
+}
+
+.list-club-all{
+  top: 90%;
+  left: 10%;
+  position: absolute;
+  z-index: 200;
 }
 
 .list-club-outstanding {
@@ -245,6 +252,10 @@ button {
  }
 }
 
+.list-club-search{
+  
+}
+
 .list-club-search-form{
   display: flex;
   // flex-direction: row;
@@ -253,5 +264,5 @@ button {
 .form-search{
   display: flex;
   gap: 10px;
-  justify-content: center;
+  // justify-content: center;
 }
