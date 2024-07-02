@@ -6,28 +6,6 @@ import { UploadOutlined } from "@ant-design/icons";
 import uploadFile from "../../utils/upload";
 
 const UpdateAccount = ({ id }) => {
-  // const props = {
-  //   name: "file",
-  //   beforeUpload: async (file) => {
-  //     const url = await uploadFile(file);
-  //     setFormData((prevFormData) => ({
-  //       ...prevFormData,
-  //       avatar: url,
-  //     }));
-  //     return false;
-  //   },
-  //   onChange(info) {
-  //     if (info.file.status !== "uploading") {
-  //       //console.log(info.file, info.fileList);
-  //     }
-  //     if (info.file.status === "done") {
-  //       message.success(`${info.file.name} tải ảnh lên thành công!`);
-  //     } else if (info.file.status === "error") {
-  //       message.error(`${info.file.name} tải ảnh lên thất bại!`);
-  //     }
-  //   },
-  // };
-
   const props = {
     name: "file",
     action: async (file) => {
@@ -49,7 +27,7 @@ const UpdateAccount = ({ id }) => {
   };
 
   const [formData, setFormData] = useState({
-    account_status: "",
+    accountStatus: "",
     avatar: "",
     email: "",
     gender: "",
@@ -58,6 +36,23 @@ const UpdateAccount = ({ id }) => {
     password: "",
     role: "",
   });
+
+  const handleUpdateAccount = async (values) => {
+    const updatedValues = {
+      ...values,
+      accountId: values.id,
+    };
+    delete updatedValues.id;
+    try {
+      const response = await api.put(
+        `/update-account-admin?password=${formData.password}`,
+        updatedValues
+      );
+      message.success("Cập nhật thành công");
+    } catch (error) {
+      message.error("Cập nhật thất bại", error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -69,7 +64,8 @@ const UpdateAccount = ({ id }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    // console.log(formData);
+    handleUpdateAccount(formData);
   };
 
   async function fetchAccounts() {
@@ -177,10 +173,10 @@ const UpdateAccount = ({ id }) => {
             </select>
           </div>
           <div className="form-group">
-            <label htmlFor="account_status">Trạng thái</label>
+            <label htmlFor="accountStatus">Trạng thái</label>
             <select
-              id="account_status"
-              name="account_status"
+              id="accountStatus"
+              name="accountStatus"
               value={formData.account_status}
               onChange={handleChange}
             >

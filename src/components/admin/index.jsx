@@ -31,6 +31,7 @@ function AdminDasboard() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [accountNumber, setAccountNumber] = useState(0);
   const [clubNumber, setClubNumber] = useState(0);
+  const [courtNumber, setCourtNumber] = useState(0);
 
   const data = [
     {
@@ -108,17 +109,21 @@ function AdminDasboard() {
         transactionResponse,
         accountsResponse,
         clubsResponse,
+        CoursResponse,
       ] = await Promise.all([
         api.get(`/wallet/${user.id}`),
         api.get(`get-transactions/${user.id}`),
         api.get(`/get-all-account`),
         api.get(`/clubs`),
+        api.get(`/get-all-court`),
       ]);
 
       setTotalPrice(totalPriceResponse.data.balance);
-      console.log(transactionResponse.data);
+      //console.log(transactionResponse.data);
       setAccountNumber(accountsResponse.data.length - 1);
       setClubNumber(clubsResponse.data.length);
+      setCourtNumber(CoursResponse.data.length);
+      // console.log(transactionResponse.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -153,7 +158,7 @@ function AdminDasboard() {
             <h3>Sân</h3>
             <GiTennisCourt className="card_icon" />
           </div>
-          <h1>340</h1>
+          <h1>{courtNumber}</h1>
         </div>
         <div className="card red">
           <div className="card_inner ">

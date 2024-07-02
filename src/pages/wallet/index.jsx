@@ -1,6 +1,8 @@
 import { useState } from "react";
 import "./index.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
+import api from "../../config/axios";
+import { toast } from "react-toastify";
 
 function Wallet() {
   const [amount, setAmount] = useState("");
@@ -12,7 +14,21 @@ function Wallet() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission
-    console.log("Amount:", amount);
+    // console.log("Amount:", amount);
+    handleWalletVnpay(amount); //tạo transaction pending
+
+    //cập nhật transaction sang
+  };
+
+  //mo trang thanh toan Vnpay
+  const handleWalletVnpay = async (values) => {
+    try {
+      const response = await api.post(`/vnpay?amount=${values}`);
+      const paymentLink = response.data;
+      window.location.href = paymentLink;
+    } catch (error) {
+      toast.error("Không thể thanh toán!");
+    }
   };
 
   return (

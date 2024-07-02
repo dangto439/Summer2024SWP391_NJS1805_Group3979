@@ -20,6 +20,7 @@ function Header() {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const navigate = useNavigate();
+  const [price, setPrice] = useState(0);
 
   const handleLogOut = () => {
     dispatch(logout());
@@ -70,11 +71,16 @@ function Header() {
   const [role, setRole] = useState("");
   const fetchProfileData = async () => {
     try {
-      const response = await api.get("/profile");
+      const [response, responseprice] = await Promise.all([
+        api.get("/profile"),
+        api.get(`/wallet/${user.id}`),
+      ]);
+      //const response = await api.get("/profile");
       const profileData = response.data;
       setRole(profileData.role);
-      console.log(role);
+      // console.log(role);
       setName(profileData.name);
+      setPrice(responseprice.data.balance);
     } catch (error) {
       console.error("Error fetching profile data:", error);
     }
@@ -88,9 +94,7 @@ function Header() {
       <div className="header__logo">
         <Link to="/">
           <img
-
             src="https://firebasestorage.googleapis.com/v0/b/badminton-booking-platform.appspot.com/o/Screenshot%202024-06-27%20213810.png?alt=media&token=8aa9ac61-4427-4b4e-b778-6d0567aba4dc"
-
             alt="logo"
           />
         </Link>
@@ -160,7 +164,7 @@ function Header() {
             <div className="header__wallet">
               <ul className="">
                 <li>
-                  <WalletOutlined /> Số dư ví:
+                  <WalletOutlined /> Số dư ví: {price}
                 </li>
                 <li>
                   <Link to="/wallet" className="button-pay">
