@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./index.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import api from "../../config/axios";
 import { toast } from "react-toastify";
+import ViewTransaction from "../../components/viewtransaction/viewtransaction";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/features/counterSlice";
 
 function Wallet() {
+  const user = useSelector(selectUser);
+
   const [amount, setAmount] = useState("");
+  const [data, setData] = useState([]);
 
   const handleInputChange = (e) => {
     setAmount(e.target.value);
@@ -31,6 +37,16 @@ function Wallet() {
     }
   };
 
+  //load data
+  const fetchData = async () => {
+    const response = await api.get(`get-transactions/${user.id}`);
+    setData(response.data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <div className="wallet">
       <div className="wallet-payment">
@@ -54,40 +70,7 @@ function Wallet() {
 
       <div className="wallet-history">
         <h1>Lịch sử nạp tiền</h1>
-        <table className="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Số tiền</th>
-              <th scope="col">Ngày</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry the Bird</td>
-              <td>@twitter</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-            </tr>
-          </tbody>
-        </table>
+        <ViewTransaction data={data} />
       </div>
     </div>
   );
