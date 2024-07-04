@@ -31,6 +31,7 @@ import Contest from "./pages/contest";
 import ListContest from "../src/components/list-contest";
 import ScheduleContest from "./components/scheduler-contest";
 import Wallet from "./pages/wallet";
+import ClubOwnerDasboard from "./components/clubowner";
 
 function App() {
   const user = useSelector(selectUser);
@@ -186,6 +187,10 @@ function App() {
       path: "/dashboard/*",
       element: <Dashboard />,
       children: [
+        {
+          path: "",
+          element: <ClubOwnerDasboard />,
+        },
         {
           path: "club",
           element: <Club />,

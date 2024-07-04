@@ -8,11 +8,54 @@ import NotificationsOutlineIcon from "@mui/icons-material/NotificationsOutlined"
 import SettingsOutlineIcon from "@mui/icons-material/SettingsOutlined";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
+import { Dropdown } from "antd";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/features/counterSlice";
+import { UserOutlined, PoweroffOutlined } from "@ant-design/icons";
 
 function Topbar() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const items = [
+    {
+      label: "Hồ sơ",
+      key: "1",
+      icon: <UserOutlined />,
+    },
+
+    {
+      label: "Đăng xuất",
+      key: "2",
+      icon: <PoweroffOutlined />,
+      danger: true,
+    },
+  ];
+  const handleLogOut = () => {
+    dispatch(logout());
+    toast.success("Đăng xuất thành công!");
+    navigate("/");
+  };
+  const onClick = ({ key }) => {
+    switch (key) {
+      case "1":
+        navigate("/profile");
+        break;
+      case "2":
+        handleLogOut();
+        break;
+      default:
+        break;
+    }
+  };
+  const menuProps = {
+    items,
+    onClick,
+  };
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
       {/* Search bar */}
@@ -46,7 +89,12 @@ function Topbar() {
         </IconButton>
 
         <IconButton>
-          <PersonOutlineIcon />
+          <Dropdown
+            menu={menuProps}
+            // icon={}
+          >
+            <PersonOutlineIcon />
+          </Dropdown>
         </IconButton>
       </Box>
     </Box>

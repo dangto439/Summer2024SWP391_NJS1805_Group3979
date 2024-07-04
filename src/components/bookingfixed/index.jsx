@@ -13,7 +13,6 @@ import {
 } from "antd";
 import api from "../../config/axios";
 import { toast } from "react-toastify";
-
 function BookingFixed({ club }) {
   const [selectedDate, setSelectedDate] = useState(moment());
   const [selectedDays, setSelectedDays] = useState([]);

@@ -17,7 +17,6 @@ import {
   Line,
   LineChart,
   Customized,
-  AreaChart,
 } from "recharts";
 import "./index.scss";
 import { useEffect, useState } from "react";
@@ -25,39 +24,19 @@ import api from "../../config/axios";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/features/counterSlice";
 import ViewTransaction from "../viewtransaction/viewtransaction";
-import { DatePicker } from "antd";
-import moment from "moment/moment";
 
-function AdminDasboard() {
+function ClubOwnerDasboard() {
   const user = useSelector(selectUser); // lấy account hiện tại từ redux;
-  const [isCheck, setCheck] = useState(false);
-  const [year, setYear] = useState(moment().year());
-  const [month, setMonth] = useState(0);
 
   const [totalPrice, setTotalPrice] = useState(0);
-  const [accountNumber, setAccountNumber] = useState(0);
+  const [bookingNumber, setBookingNumber] = useState(0);
   const [clubNumber, setClubNumber] = useState(0);
   const [courtNumber, setCourtNumber] = useState(0);
-  const [simpleAreaChart, SetSimpleAreaChart] = useState([]);
-  const [simpleBarChart, SetSimpleBarChart] = useState([]);
-  const [transaction, setTransaction] = useState([]);
-
-  const onChangeYear = (date, dateString) => {
-    setMonth(0);
-    setYear(dateString);
-  };
-
-  const onChangeMonth = (date, dateString) => {
-    // console.log(date.$M + 1);
-    // console.log(date.$y);
-    setMonth(date.$M + 1);
-    setYear(date.$y);
-  };
 
   const data = [
     {
       name: "Tháng  1",
-      pricein: 4000, //branch
+      pricein: 4000,
       priceout: 2400,
       amt: 2400,
     },
@@ -99,62 +78,51 @@ function AdminDasboard() {
     },
   ];
 
+  const CustomizedRectangle = (props) => {
+    const { formattedGraphicalItems } = props;
+    // get first and second series in chart
+    const firstSeries = formattedGraphicalItems[0];
+    const secondSeries = formattedGraphicalItems[1];
+
+    // render custom content using points from the graph
+    return firstSeries?.props?.points.map((firstSeriesPoint, index) => {
+      const secondSeriesPoint = secondSeries?.props?.points[index];
+      const yDifference = firstSeriesPoint.y - secondSeriesPoint.y;
+
+      return (
+        <Rectangle
+          key={firstSeriesPoint.payload.name}
+          width={10}
+          height={yDifference}
+          x={secondSeriesPoint.x - 5}
+          y={secondSeriesPoint.y}
+          fill={yDifference > 0 ? "red" : yDifference < 0 ? "green" : "none"}
+        />
+      );
+    });
+  };
+
   const fetchData = async () => {
     try {
       const [
         totalPriceResponse,
         transactionResponse,
-        accountsResponse,
+        bookingResponse,
         clubsResponse,
         CoursResponse,
-        simpleAreaChartResponseByYear,
-        simpleAreaChartResponseByYearandMonth,
-        simpleBarChartResponseByYear,
       ] = await Promise.all([
         api.get(`/wallet/${user.id}`),
         api.get(`get-transactions/${user.id}`),
-        api.get(`/get-all-account`),
-        api.get(`/clubs`),
-        api.get(`/get-all-court`),
-        api.get(`/dashboard-admin-area-chart/${year}`),
-        api.get(`/dashboard-admin-area-chart/${year}/${month}`),
-        api.get(`/dashboard-admin-bar-chart/${year}`),
+
+        api.get(`/get-all-account`), //cần chỉnh
+        api.get(`/current-clubs`), //lấy số lượng sân hiện tại của account
+        api.get(`/courts/amount`),
       ]);
 
       setTotalPrice(totalPriceResponse.data.balance);
-      setAccountNumber(accountsResponse.data.length - 1);
+      setBookingNumber(bookingResponse.data.length);
       setClubNumber(clubsResponse.data.length);
-      setCourtNumber(CoursResponse.data.length);
-      setTransaction(transactionResponse.data);
-      if (transactionResponse.data.length > 0) {
-        setCheck(true);
-      } else {
-        setCheck(false);
-      }
-
-      if (month == 0) {
-        const transformedData = simpleAreaChartResponseByYear.data.map(
-          (item) => ({
-            name: `Tháng ${item.month}`,
-            tienvao: item.sumamount,
-          })
-        );
-        SetSimpleAreaChart(transformedData);
-      } else {
-        const transformedData = simpleAreaChartResponseByYearandMonth.data.map(
-          (item) => ({
-            name: `Tuần ${item.month}`,
-            tienvao: item.sumamount,
-          })
-        );
-        SetSimpleAreaChart(transformedData);
-      }
-
-      const transformedData = simpleBarChartResponseByYear.data.map((item) => ({
-        name: `Tháng ${item.month}`,
-        soluongdondatsan: item.sumamount,
-      }));
-      SetSimpleBarChart(transformedData);
+      setCourtNumber(CoursResponse.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -162,21 +130,14 @@ function AdminDasboard() {
 
   useEffect(() => {
     fetchData();
-  }, [year, month]);
+  }, []);
   return (
-    <main className="main-container-admin">
+    <main className="main-container-clubowner">
       <div className="main-ttile">
-        <h3>Admin</h3>
+        <h3>Dashboard</h3>
       </div>
 
       <div className="main_cards">
-        <div className="card blue">
-          <div className="card_inner ">
-            <h3>Người dùng</h3>
-            <MdSupervisorAccount className="card_icon" />
-          </div>
-          <h1>{accountNumber}</h1>
-        </div>
         <div className="card orange">
           <div className="card_inner">
             <h3>Câu lạc bộ</h3>
@@ -191,6 +152,13 @@ function AdminDasboard() {
           </div>
           <h1>{courtNumber}</h1>
         </div>
+        <div className="card blue">
+          <div className="card_inner ">
+            <h3>Số lượng booking</h3>
+            <MdSupervisorAccount className="card_icon" />
+          </div>
+          <h1>{bookingNumber}</h1>
+        </div>
         <div className="card red">
           <div className="card_inner ">
             <h3>Tổng tiền</h3>
@@ -198,42 +166,36 @@ function AdminDasboard() {
           </div>
           <h1>{totalPrice} VND</h1>
         </div>
-        <div>
-          <DatePicker onChange={onChangeYear} picker="year" />
-          <DatePicker onChange={onChangeMonth} picker="month" />
-        </div>
         <div className="charts">
           <ResponsiveContainer width="100%" height={500}>
-            <AreaChart
+            <LineChart
               width={500}
-              height={400}
-              data={simpleAreaChart}
+              height={300}
+              data={data}
               margin={{
-                top: 10,
+                top: 5,
                 right: 30,
-                left: 30,
-                bottom: 0,
+                left: 20,
+                bottom: 5,
               }}
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip />
-              <Area
-                type="monotone"
-                dataKey="tienvao"
-                stroke="#ff0000"
-                fill="#ff0000"
-              />
-            </AreaChart>
+              <Legend />
+              <Line type="monotone" dataKey="priceout" stroke="#8884d8" />
+              <Line type="monotone" dataKey="pricein" stroke="#82ca9d" />
+              <Customized component={CustomizedRectangle} />
+            </LineChart>
           </ResponsiveContainer>
         </div>
         <div className="charts">
-          <ResponsiveContainer width="100%" height={600}>
+          <ResponsiveContainer width="100%" height={500}>
             <BarChart
               width={500}
               height={300}
-              data={simpleBarChart}
+              data={data}
               margin={{
                 top: 5,
                 right: 30,
@@ -247,13 +209,18 @@ function AdminDasboard() {
               <Tooltip />
               <Legend />
               <Bar
-                dataKey="soluongdondatsan"
+                dataKey="priceout"
+                fill="#8884d8"
+                activeBar={<Rectangle fill="pink" stroke="blue" />}
+              />
+              <Bar
+                dataKey="pricein"
                 fill="#82ca9d"
                 activeBar={<Rectangle fill="gold" stroke="purple" />}
               />
             </BarChart>
           </ResponsiveContainer>
-          <ResponsiveContainer width="100%" height={600}>
+          <ResponsiveContainer width="100%" height={500}>
             <ComposedChart
               width={500}
               height={400}
@@ -282,9 +249,11 @@ function AdminDasboard() {
           </ResponsiveContainer>
         </div>
       </div>
-      <div>{isCheck ? <ViewTransaction data={transaction} /> : null}</div>
+      <div>
+        <ViewTransaction />
+      </div>
     </main>
   );
 }
 
-export default AdminDasboard;
+export default ClubOwnerDasboard;

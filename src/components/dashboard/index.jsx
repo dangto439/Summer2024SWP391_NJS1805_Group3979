@@ -9,6 +9,7 @@ import Club from "../club/index";
 import Court from "../court/index";
 import api from "../../config/axios";
 import { useEffect, useState } from "react";
+import ClubOwnerDasboard from "../clubowner";
 
 function Dashboard() {
   const [theme, colorMode] = useMode();
@@ -36,6 +37,7 @@ function Dashboard() {
           <Box component="main" className="content" flexGrow={1}>
             <Topbar />
             <Routes>
+              <Route path="" element={<ClubOwnerDasboard />} />
               <Route path="club" element={<Club />} />
               {clubs.map((club) => (
                 <Route
