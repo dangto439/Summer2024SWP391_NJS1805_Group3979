@@ -7,15 +7,14 @@
     background-color:#12ad14;
     color: #ffffff;
     position: relative;
-    bottom: 100;
+    z-index: 1000;
     .footer-category-wrap {
       display: flex;
       justify-content: space-between;
       // gap: 24px;
-      position: absolute;
+      position: relative;
       bottom: 100%;
       width: 100%;
-      z-index: 100;
       
     }
     .footer-category {

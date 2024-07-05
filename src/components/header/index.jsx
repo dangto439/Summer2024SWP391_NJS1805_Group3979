@@ -6,7 +6,6 @@ import {
   PoweroffOutlined,
   SearchOutlined,
   WalletOutlined,
-  PlusOutlined,
 } from "@ant-design/icons";
 import "./index.scss";
 import { useEffect, useState } from "react";
@@ -158,13 +157,15 @@ function Header() {
             <div className="header__wallet">
               <ul className="">
                 <li>
-                  <WalletOutlined /> Số dư ví:
+                  <Link to="/wallet">
+                    <WalletOutlined /> Số dư ví: đ
+                  </Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link to="/wallet" className="button-pay">
                     <PlusOutlined />
                   </Link>
-                </li>
+                </li> */}
               </ul>
             </div>
             <div className="header__menu">
