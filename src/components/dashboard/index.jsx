@@ -51,7 +51,7 @@ function Dashboard() {
                 <Route
                   key={club.clubId}
                   path={`court/${club.clubId}`}
-                  element={<Court />}
+                  element={<Court clubId={club.clubId} />}
                 />
               ))}
               {/* <Route path="booking/clubid1" element={<Booking />} /> */}

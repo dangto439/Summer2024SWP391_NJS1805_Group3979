@@ -1,7 +1,10 @@
+import { useState } from "react";
 import "./index.scss";
-import { Button, Form, Input, InputNumber } from "antd";
+import { Button, Col, Form, Input, InputNumber, Row } from "antd";
+import moment from "moment";
 
 const BookingFlexible = ({ club }) => {
+  const [selectedDate, setSelectedDate] = useState(moment().month());
   const onChange = (value) => {
     console.log("changed", value);
   };
@@ -15,9 +18,16 @@ const BookingFlexible = ({ club }) => {
   };
 
   return (
-    <div className="booking-form-container">
-      <div className="booking-form-wrapper">
-        <h1>Đặt lịch linh hoạt</h1>
+    <Row className="booking-flexible">
+      <Col span={7}>
+        <Row className="booking-flexible__header">
+          <Col>
+            <h1>Đặt lịch linh hoạt</h1>
+            <h1>Tháng: {selectedDate}</h1>
+          </Col>
+        </Row>
+      </Col>
+      <Col span={17} className="booking-flexible__form-wrapper">
         <Form
           name="basic"
           initialValues={{
@@ -32,6 +42,7 @@ const BookingFlexible = ({ club }) => {
           wrapperCol={{
             span: 24,
           }}
+          className="booking-flexible__form"
         >
           <Form.Item
             label="Nhập thời gian bạn muốn chọn"
@@ -50,14 +61,14 @@ const BookingFlexible = ({ club }) => {
             <Input />
           </Form.Item>
 
-          <Form.Item>
+          <Form.Item className="booking-flexible__submit-button">
             <Button type="primary" htmlType="submit">
               Submit
             </Button>
           </Form.Item>
         </Form>
-      </div>
-    </div>
+      </Col>
+    </Row>
   );
 };
 

@@ -121,15 +121,15 @@ function BookingDaily({ club }) {
     setTotalPrice(price);
   };
 
-  const handleWallet = async (values) => {
-    try {
-      const response = await api.post(`/vnpay?amount=${values}`);
-      const paymentLink = response.data;
-      window.location.href = paymentLink;
-    } catch (error) {
-      toast.error("Không thể thanh toán!");
-    }
-  };
+  // const handleWallet = async (values) => {
+  //   try {
+  //     const response = await api.post(`/vnpay?amount=${values}`);
+  //     const paymentLink = response.data;
+  //     window.location.href = paymentLink;
+  //   } catch (error) {
+  //     toast.error("Không thể thanh toán!");
+  //   }
+  // };
 
   const handleSubmit = async () => {
     if (selectedSlots.length === 0) {
@@ -149,7 +149,7 @@ function BookingDaily({ club }) {
       //console.log(bookingData);
       const booking = await api.post("/booking/daily", bookingData);
 
-      handleWallet(booking.data.totalPrice); // tự tạo transaction pending (booking)
+      //handleWallet(booking.data.totalPrice); // tự tạo transaction pending (booking)
 
       //cap nhat transaction (tc-> DEPOSIT/ CANCEL) //Put
     } catch (error) {

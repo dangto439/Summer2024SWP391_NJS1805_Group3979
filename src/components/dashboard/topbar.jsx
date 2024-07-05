@@ -80,13 +80,13 @@ function Topbar() {
           )}
         </IconButton>
 
-        <IconButton>
+        {/* <IconButton>
           <NotificationsOutlineIcon />
         </IconButton>
 
         <IconButton>
           <SettingsOutlineIcon />
-        </IconButton>
+        </IconButton> */}
 
         <IconButton>
           <Dropdown

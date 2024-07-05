@@ -40,6 +40,7 @@ function AdminDasboard() {
   const [courtNumber, setCourtNumber] = useState(0);
   const [simpleAreaChart, SetSimpleAreaChart] = useState([]);
   const [simpleBarChart, SetSimpleBarChart] = useState([]);
+  const [simpleTinyChart, SetSimpleTinyChart] = useState([]);
   const [transaction, setTransaction] = useState([]);
 
   const onChangeYear = (date, dateString) => {
@@ -48,56 +49,9 @@ function AdminDasboard() {
   };
 
   const onChangeMonth = (date, dateString) => {
-    // console.log(date.$M + 1);
-    // console.log(date.$y);
     setMonth(date.$M + 1);
     setYear(date.$y);
   };
-
-  const data = [
-    {
-      name: "Tháng  1",
-      pricein: 4000, //branch
-      priceout: 2400,
-      amt: 2400,
-    },
-    {
-      name: "Tháng  2",
-      pricein: 3000,
-      priceout: 1398,
-      amt: 2210,
-    },
-    {
-      name: "Tháng  3",
-      pricein: 2000,
-      priceout: 9800,
-      amt: 2290,
-    },
-    {
-      name: "Tháng  4",
-      pricein: 2780,
-      priceout: 3908,
-      amt: 2000,
-    },
-    {
-      name: "Tháng  5",
-      pricein: 1890,
-      priceout: 4800,
-      amt: 2181,
-    },
-    {
-      name: "Tháng  6",
-      pricein: 2390,
-      priceout: 3800,
-      amt: 2500,
-    },
-    {
-      name: "Tháng  7",
-      pricein: 3490,
-      priceout: 4300,
-      amt: 2100,
-    },
-  ];
 
   const fetchData = async () => {
     try {
@@ -110,6 +64,7 @@ function AdminDasboard() {
         simpleAreaChartResponseByYear,
         simpleAreaChartResponseByYearandMonth,
         simpleBarChartResponseByYear,
+        simpleTinyChartResponseByYear,
       ] = await Promise.all([
         api.get(`/wallet/${user.id}`),
         api.get(`get-transactions/${user.id}`),
@@ -119,6 +74,7 @@ function AdminDasboard() {
         api.get(`/dashboard-admin-area-chart/${year}`),
         api.get(`/dashboard-admin-area-chart/${year}/${month}`),
         api.get(`/dashboard-admin-bar-chart/${year}`),
+        api.get(`/dashboard-admin-tiny-chart/${year}`),
       ]);
 
       setTotalPrice(totalPriceResponse.data.balance);
@@ -150,11 +106,21 @@ function AdminDasboard() {
         SetSimpleAreaChart(transformedData);
       }
 
-      const transformedData = simpleBarChartResponseByYear.data.map((item) => ({
-        name: `Tháng ${item.month}`,
-        soluongdondatsan: item.sumamount,
-      }));
-      SetSimpleBarChart(transformedData);
+      const transformedData1 = simpleBarChartResponseByYear.data.map(
+        (item) => ({
+          name: `Tháng ${item.month}`,
+          soluongdondatsan: item.sumamount,
+        })
+      );
+      SetSimpleBarChart(transformedData1);
+
+      const transformedData2 = simpleTinyChartResponseByYear.data.map(
+        (item) => ({
+          name: `Tháng ${item.month}`,
+          soluongaccount: item.sumamount,
+        })
+      );
+      SetSimpleTinyChart(transformedData2);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -253,7 +219,7 @@ function AdminDasboard() {
               />
             </BarChart>
           </ResponsiveContainer>
-          <ResponsiveContainer width="100%" height={600}>
+          {/* <ResponsiveContainer width="100%" height={600}>
             <ComposedChart
               width={500}
               height={400}
@@ -279,6 +245,30 @@ function AdminDasboard() {
               <Bar dataKey="priceout" barSize={20} fill="#413ea0" />
               <Line type="monotone" dataKey="pricein" stroke="#ff7300" />
             </ComposedChart>
+          </ResponsiveContainer> */}
+          <ResponsiveContainer width="100%" height={600}>
+            <BarChart
+              width={500}
+              height={300}
+              data={simpleTinyChart}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar
+                dataKey="soluongaccount"
+                fill="#82ca9d"
+                activeBar={<Rectangle fill="gold" stroke="purple" />}
+              />
+            </BarChart>
           </ResponsiveContainer>
         </div>
       </div>

@@ -6,7 +6,8 @@ import Header from "../dashboard/Header.jsx";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import DeleteButton from "../global/deletebutton/index.jsx";
 import Forms from "./forms.jsx";
-const Club = () => {
+import api from "../../config/axios.js";
+const Club = ({ clubId }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState([]);
@@ -35,7 +36,7 @@ const Club = () => {
 
   const columns = [
     {
-      field: "courtid",
+      field: "courtId",
       headerName: "Mã Sân",
       headerAlign: "left",
       align: "left",
@@ -85,7 +86,9 @@ const Club = () => {
   const fetchCourts = async () => {
     try {
       // nội dung fetch
-      setRows(rows);
+      const response = await api.get(`/courts/${clubId}`);
+      // console.log(response.data);
+      setRows(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -93,7 +96,7 @@ const Club = () => {
 
   useEffect(() => {
     fetchCourts();
-  }, []);
+  }, [clubId]);
 
   return (
     <Box m="20px" className="team-container">

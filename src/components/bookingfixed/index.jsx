@@ -49,15 +49,15 @@ function BookingFixed({ club }) {
     setSelectedDays(checkedValues);
   };
 
-  const handleWallet = async (values) => {
-    try {
-      const response = await api.post(`/vnpay?amount=${values}`);
-      const paymentLink = response.data;
-      window.location.href = paymentLink;
-    } catch (error) {
-      toast.error("Không thể thanh toán!");
-    }
-  };
+  // const handleWallet = async (values) => {
+  //   try {
+  //     const response = await api.post(`/vnpay?amount=${values}`);
+  //     const paymentLink = response.data;
+  //     window.location.href = paymentLink;
+  //   } catch (error) {
+  //     toast.error("Không thể thanh toán!");
+  //   }
+  // };
 
   const handleSubmit = async () => {
     if (!selectedDate) {
@@ -96,8 +96,8 @@ function BookingFixed({ club }) {
               "/booking/fixed/price",
               bookingData
             );
-            console.log(totalprice.data);
-            handleWallet(totalprice.data);
+            // console.log(totalprice.data);
+            // handleWallet(totalprice.data);
 
             // Make the booking
             const booking = await api.post("/booking/fixed", bookingData);

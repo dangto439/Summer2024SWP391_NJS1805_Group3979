@@ -13,11 +13,11 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { tokens } from "../../theme";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutline";
+// import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
+// import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
+// import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutline";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
+// import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import PlaceIcon from "@mui/icons-material/Place";
@@ -165,7 +165,7 @@ const MySidebar = () => {
                   alignContent="center"
                   fontSize="25px"
                 >
-                  Chủ Club
+                  Chủ câu lạc bộ
                 </Typography>
                 {/* <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
@@ -217,7 +217,7 @@ const MySidebar = () => {
               Quản lý
             </Typography>
             <Item
-              title="Club"
+              title="Câu lạc bộ"
               to="club"
               icon={<PlaceIcon />}
               selected={selected}
@@ -299,17 +299,27 @@ const MySidebar = () => {
             </MenuItem>
             <Collapse in={openBooking} timeout="auto" unmountOnExit>
               <Box component="div" disablePadding>
-                <Box sx={{ pl: 4 }}>
+                {/* <Box sx={{ pl: 4 }}>
                   <Item
                     title="ClubID1"
                     to="booking/clubid1"
                     selected={selected}
                     setSelected={setSelected}
                   />
-                </Box>
+                </Box> */}
+                {clubs.map((club) => (
+                  <Box key={club.clubId} sx={{ pl: 4 }}>
+                    <Item
+                      title={club.clubName}
+                      to={`court/${club.clubId}`}
+                      selected={selected}
+                      setSelected={setSelected}
+                    />
+                  </Box>
+                ))}
               </Box>
             </Collapse>
-            <Typography
+            {/* <Typography
               variant="h8"
               color={colors.grey[300]}
               sx={{ m: "15px 0 0 20px" }}
@@ -344,7 +354,7 @@ const MySidebar = () => {
               icon={<PieChartOutlineOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
           </Box>
         </Menu>
       </Drawer>

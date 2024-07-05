@@ -957,6 +957,11 @@ const data = {
   ],
 };
 
+const formatPrice = (value) => {
+  const number = parseInt(value.replace(/\D/g, ""), 10);
+  return isNaN(number) ? "" : new Intl.NumberFormat("de-DE").format(number);
+};
+
 const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
   const {
     control,
@@ -1249,16 +1254,24 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
           </FormControl>
 
           <FormControl fullWidth margin="normal" error={!!errors.price}>
-            <TextField
-              label="Giá sân"
-              {...control.register("price")}
-              fullWidth
-              margin="normal"
-              error={!!errors.price}
-              helperText={errors.price?.message}
-              onInput={(e) => {
-                e.target.value = Math.max(1, parseInt(e.target.value) || 1);
-              }}
+            <Controller
+              name="price"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Giá sân"
+                  fullWidth
+                  margin="normal"
+                  error={!!errors.price}
+                  helperText={errors.price?.message}
+                  onInput={(e) => {
+                    const formattedValue = formatPrice(e.target.value);
+                    e.target.value = formattedValue;
+                    field.onChange(e);
+                  }}
+                />
+              )}
             />
           </FormControl>
 
@@ -1267,16 +1280,24 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
             margin="normal"
             error={!!errors.courtPricePeakHours}
           >
-            <TextField
-              label="Giá sân giờ cao điểm"
-              {...control.register("courtPricePeakHours")}
-              fullWidth
-              margin="normal"
-              error={!!errors.courtPricePeakHours}
-              helperText={errors.courtPricePeakHours?.message}
-              onInput={(e) => {
-                e.target.value = Math.max(1, parseInt(e.target.value) || 1);
-              }}
+            <Controller
+              name="courtPricePeakHours"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Giá sân giờ cao điểm"
+                  fullWidth
+                  margin="normal"
+                  error={!!errors.courtPricePeakHours}
+                  helperText={errors.courtPricePeakHours?.message}
+                  onInput={(e) => {
+                    const formattedValue = formatPrice(e.target.value);
+                    e.target.value = formattedValue;
+                    field.onChange(e);
+                  }}
+                />
+              )}
             />
           </FormControl>
 
