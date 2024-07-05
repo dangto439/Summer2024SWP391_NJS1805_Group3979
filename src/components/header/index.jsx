@@ -65,7 +65,6 @@ function Header() {
     onClick,
   };
 
-  const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const fetchProfileData = async () => {
     try {
@@ -73,7 +72,6 @@ function Header() {
       const profileData = response.data;
       setRole(profileData.role);
       console.log(role);
-      setName(profileData.name);
     } catch (error) {
       console.error("Error fetching profile data:", error);
     }
@@ -82,6 +80,7 @@ function Header() {
   useEffect(() => {
     fetchProfileData();
   }, []);
+
   return (
     <header className="header">
       <div className="header__logo">
@@ -161,16 +160,15 @@ function Header() {
                     <WalletOutlined /> Số dư ví: đ
                   </Link>
                 </li>
-                {/* <li>
-                  <Link to="/wallet" className="button-pay">
-                    <PlusOutlined />
-                  </Link>
-                </li> */}
               </ul>
             </div>
             <div className="header__menu">
-              <Dropdown.Button menu={menuProps} icon={<BarsOutlined />}>
-                {name}
+              <Dropdown.Button
+                size="large"
+                menu={menuProps}
+                icon={<BarsOutlined />}
+              >
+                {user.name}
               </Dropdown.Button>
             </div>
           </div>
