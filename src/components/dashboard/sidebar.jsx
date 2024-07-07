@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { Menu, MenuItem } from "react-pro-sidebar";
-import { FcBusinessman, FcCalendar, FcHome } from "react-icons/fc";
+import {
+  FcBusinessman,
+  FcCalendar,
+  FcHome,
+  FcParallelTasks,
+  FcTodoList,
+} from "react-icons/fc";
 import { GiTennisCourt } from "react-icons/gi";
 
 import {
@@ -52,6 +58,7 @@ const MySidebar = () => {
   const [openStaffs, setOpenStaffs] = useState(false);
   const [openCourts, setOpenClubs] = useState(false);
   const [openBooking, setOpenBooking] = useState(false);
+  const [openPromotion, setOpenPromotion] = useState(false);
   const [clubs, setClubs] = useState([]);
 
   useEffect(() => {
@@ -68,6 +75,10 @@ const MySidebar = () => {
 
   const handleBookingClick = () => {
     setOpenBooking(!openBooking);
+  };
+
+  const handlePromotionClick = () => {
+    setOpenPromotion(!openPromotion);
   };
 
   const fetchProfileData = async () => {
@@ -311,7 +322,7 @@ const MySidebar = () => {
                   <Box key={club.clubId} sx={{ pl: 4 }}>
                     <Item
                       title={club.clubName}
-                      to={`court/${club.clubId}`}
+                      to={`bookingmanager/${club.clubId}`}
                       selected={selected}
                       setSelected={setSelected}
                     />
@@ -319,42 +330,44 @@ const MySidebar = () => {
                 ))}
               </Box>
             </Collapse>
-            {/* <Typography
-              variant="h8"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 0 20px" }}
-              fontSize="15px"
-            >
-              Trang
-            </Typography>
-            <Item
-              title="Hồ sơ"
-              to="profile"
-              icon={<AccountBoxOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Lịch"
-              to="calendar"
-              icon={<CalendarTodayOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Biểu đồ cột"
-              to="bar"
-              icon={<BarChartOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Biểu đồ tròn"
-              to="pie"
-              icon={<PieChartOutlineOutlinedIcon />}
+            {/* <Item
+              title="Mã khuyến mãi"
+              to={`promotionmanager`}
+              icon={<FcTodoList />}
               selected={selected}
               setSelected={setSelected}
             /> */}
+            <MenuItem
+              onClick={handlePromotionClick}
+              style={{ color: colors.grey[100] }}
+              icon={<FcTodoList />}
+            >
+              <Typography display="flex">
+                Mã khuyến mãi
+                {openPromotion ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              </Typography>
+            </MenuItem>
+            <Collapse in={openPromotion} timeout="auto" unmountOnExit>
+              <Box component="div" disablePadding>
+                {clubs.map((club) => (
+                  <Box key={club.clubId} sx={{ pl: 4 }}>
+                    <Item
+                      title={club.clubName}
+                      to={`promotionmanager/${club.clubId}`}
+                      selected={selected}
+                      setSelected={setSelected}
+                    />
+                  </Box>
+                ))}
+              </Box>
+            </Collapse>
+            <Item
+              title="Giải đấu"
+              to="pie"
+              icon={<FcParallelTasks />}
+              selected={selected}
+              setSelected={setSelected}
+            />
           </Box>
         </Menu>
       </Drawer>

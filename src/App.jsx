@@ -32,6 +32,8 @@ import ListContest from "../src/components/list-contest";
 import ScheduleContest from "./components/scheduler-contest";
 import Wallet from "./pages/wallet";
 import ClubOwnerDasboard from "./components/clubowner";
+import BookingManager from "./components/booking-manager-clubowner";
+import PromotionManager from "./components/promotion-manager";
 
 function App() {
   const user = useSelector(selectUser);
@@ -196,7 +198,7 @@ function App() {
           element: <Club />,
         },
         {
-          path: "staff/clubid1",
+          path: "staff/:clubId",
           element: <Staff />,
         },
         {
@@ -205,7 +207,7 @@ function App() {
         },
 
         {
-          path: "court/clubid1",
+          path: "court/:clubId",
           element: <Court />,
         },
         // {
@@ -214,8 +216,12 @@ function App() {
         // },
 
         {
-          path: "profile",
-          element: <Profile />,
+          path: "bookingmanager/:clubId",
+          element: <BookingManager />,
+        },
+        {
+          path: "promotionmanager/:clubId",
+          element: <PromotionManager />,
         },
 
         // {
