@@ -33,6 +33,7 @@ import ScheduleContest from "./components/scheduler-contest";
 import Checkin from "./pages/check-in";
 import Tournament from "../src/components/tournament";
 import Wallet from "./pages/wallet";
+import Policy from "./pages/policy";
 
 function App() {
   const user = useSelector(selectUser);
@@ -72,6 +73,10 @@ function App() {
         {
           path: "/list-club",
           element: <ListClub />,
+        },
+        {
+          path: "/policy",
+          element: <Policy />,
         },
         {
           path: "/contact",
