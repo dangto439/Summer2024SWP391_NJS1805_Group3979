@@ -33,6 +33,7 @@ import ScheduleContest from "./components/scheduler-contest";
 import Checkin from "./pages/check-in";
 import Tournament from "../src/components/tournament";
 import Wallet from "./pages/wallet";
+import Policy from "./pages/policy";
 import ClubOwnerDasboard from "./components/clubowner";
 import BookingManager from "./components/booking-manager-clubowner";
 import PromotionManager from "./components/promotion-manager";
@@ -76,6 +77,10 @@ function App() {
         {
           path: "/list-club",
           element: <ListClub />,
+        },
+        {
+          path: "/policy",
+          element: <Policy />,
         },
         {
           path: "/contact",

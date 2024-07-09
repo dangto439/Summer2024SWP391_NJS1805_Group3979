@@ -5,8 +5,8 @@
   width: 100%;
   // margin-left: 350px;
   // position: static;
-  overflow: hidden;
-  position: relative  ;
+  // overflow: hidden;
+  position: relative ;
   
 
   h1{
@@ -19,8 +19,8 @@
 }
 
 .list-club-all{
-  position: relative;
-
+  position: absolute;
+  top: 80%;
   width: 60%;
   margin: 0 200px;
 }

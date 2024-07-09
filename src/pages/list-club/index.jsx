@@ -84,7 +84,7 @@ function ListClub() {
       <h1>SÂN CẦU LÔNG VIỆT NAM</h1>
       <div className="list-club-outstanding">
         <div className="list-club-main-image">
-          <img src="https://firebasestorage.googleapis.com/v0/b/badminton-booking-platform.appspot.com/o/16e57efc9d56c29d4ab7a651bd082efd.jpg?alt=media&token=2fd078ff-5d26-4bb3-9b34-583a626fd7b7" />
+          <img src="https://i.pinimg.com/564x/78/98/e3/7898e3d931d316ec5eb502f0909c6d55.jpg" />
         </div>
 
         <div className="list-club-outstanding-info">
