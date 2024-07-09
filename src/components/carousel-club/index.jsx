@@ -17,7 +17,6 @@ import {
   Keyboard,
   Autoplay,
 } from "swiper/modules";
-import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import api from "../../config/axios";
 
@@ -26,7 +25,7 @@ export default function CarouselClub() {
   const navigate = useNavigate();
   const fetchListClubData = async () => {
     try {
-      const response = await api.get("/clubs");
+      const response = await api.get("/clubs/10");
       // console.log(response.data);
       setListClub(response.data);
     } catch (error) {
