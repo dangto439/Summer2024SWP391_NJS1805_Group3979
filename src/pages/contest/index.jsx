@@ -19,6 +19,7 @@ import ScheduleContest from "../../components/scheduler-contest";
 import SearchIcon from "@mui/icons-material/Search";
 import { tokens } from "../../theme";
 import axios from "axios";
+import Tournament from "../../components/tournament";
 
 import "@syncfusion/ej2-base/styles/material.css";
 import "@syncfusion/ej2-buttons/styles/material.css";
@@ -39,49 +40,50 @@ const Contest = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const location = useLocation();
-  const [contests, setContests] = useState([]);
+  // const [contests, setContests] = useState([]);
 
-  useEffect(() => {
-    const fetchContests = async () => {
-      try {
-        //check xem cú pháp call api đúng khum
-        const response = await axios.get("/contests");
-        setContests(response.data);
-      } catch (error) {
-        console.error("Error get data: ", error);
-      }
-    };
-    fetchContests();
-  }, []);
+  //     Chuyển qua call api ở bên listcontest
+  // useEffect(() => {
+  //   const fetchContests = async () => {
+  //     try {
+  //       //check xem cú pháp call api đúng khum
+  //       const response = await axios.get("/contests");
+  //       setContests(response.data);
+  //     } catch (error) {
+  //       console.error("Error get data: ", error);
+  //     }
+  //   };
+  //   fetchContests();
+  // }, []);
 
-  const Breadcrumb = () => {
-    const pathnames = location.pathname.split("/").filter((x) => x);
-    return (
-      <Breadcrumbs aria-label="breadcrumb" sx={{ mb: "20px", mt: "20px" }}>
-        <Link component={RouterLink} to="/" color="inherit">
-          Home
-        </Link>
-        {pathnames.map((value, index) => {
-          const to = `/${pathnames.slice(0, index + 1).join("/")}`;
-          return (
-            <Link
-              key={to}
-              component={RouterLink}
-              to={to}
-              color="inherit"
-              sx={{ textTransform: "capitalize" }}
-            >
-              {value}
-            </Link>
-          );
-        })}
-      </Breadcrumbs>
-    );
-  };
+  // const Breadcrumb = () => {
+  //   const pathnames = location.pathname.split("/").filter((x) => x);
+  //   return (
+  //     <Breadcrumbs aria-label="breadcrumb" sx={{ mb: "20px", mt: "20px" }}>
+  //       <Link component={RouterLink} to="/" color="inherit">
+  //         Home
+  //       </Link>
+  //       {pathnames.map((value, index) => {
+  //         const to = `/${pathnames.slice(0, index + 1).join("/")}`;
+  //         return (
+  //           <Link
+  //             key={to}
+  //             component={RouterLink}
+  //             to={to}
+  //             color="inherit"
+  //             sx={{ textTransform: "capitalize" }}
+  //           >
+  //             {value}
+  //           </Link>
+  //         );
+  //       })}
+  //     </Breadcrumbs>
+  //   );
+  // };
 
   return (
-    <Box p={3} ml={3}>
-      {Breadcrumb()}
+    <Box p={15} ml={10}>
+      {/* {Breadcrumb()} */}
 
       <Box
         display="flex"
@@ -105,16 +107,28 @@ const Contest = () => {
         <Box display="flex">
           <Button
             component={RouterLink}
-            to="danhsach"
+            to="dangdienra"
             sx={{
               borderBottom:
-                location.pathname === "/contest/danhsach" ||
+                location.pathname === "/contest/dangdienra" ||
                 location.pathname === "/contest"
                   ? `2px solid ${colors.greenAccent[500]}`
                   : "none",
             }}
           >
-            Danh sách
+            Đang diễn ra
+          </Button>
+          <Button
+            component={RouterLink}
+            to="sapdienra"
+            sx={{
+              borderBottom:
+                location.pathname === "/contest/sapdienra"
+                  ? `2px solid ${colors.greenAccent[500]}`
+                  : "none",
+            }}
+          >
+            Sắp diễn ra
           </Button>
           <Button
             component={RouterLink}
@@ -132,9 +146,14 @@ const Contest = () => {
       </Box>
 
       <Routes>
-        <Route path="" element={<ListContest contests={contests} />} />
-        <Route path="danhsach" element={<ListContest contests={contests} />} />
-        <Route path="thang" element={<ScheduleContest contests={contests} />} />
+        <Route path="" element={<ListContest />} />
+        <Route path="dangdienra/*" element={<ListContest />}>
+          {/* <Route path="chitiet2" element={<Tournament />} /> */}
+        </Route>
+        <Route path="chitiet2/:id" element={<Tournament />} />
+
+        <Route path="sapdienra" element={<ListContest />} />
+        <Route path="thang" element={<ScheduleContest />} />
       </Routes>
     </Box>
   );

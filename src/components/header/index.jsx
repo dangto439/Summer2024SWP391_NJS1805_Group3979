@@ -6,7 +6,6 @@ import {
   PoweroffOutlined,
   SearchOutlined,
   WalletOutlined,
-  PlusOutlined,
 } from "@ant-design/icons";
 import "./index.scss";
 import { useEffect, useState } from "react";
@@ -67,7 +66,6 @@ function Header() {
     onClick,
   };
 
-  const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const fetchProfileData = async () => {
     try {
@@ -78,7 +76,6 @@ function Header() {
       //const response = await api.get("/profile");
       const profileData = response.data;
       setRole(profileData.role);
-      // console.log(role);
       setName(profileData.name);
       setPrice(responseprice.data.balance);
     } catch (error) {
@@ -89,6 +86,7 @@ function Header() {
   useEffect(() => {
     fetchProfileData();
   }, []);
+
   return (
     <header className="header">
       <div className="header__logo">
@@ -164,18 +162,19 @@ function Header() {
             <div className="header__wallet">
               <ul className="">
                 <li>
-                  <WalletOutlined /> Số dư ví: {price}
-                </li>
-                <li>
-                  <Link to="/wallet" className="button-pay">
-                    <PlusOutlined /> Nạp tiền
+                  <Link to="/wallet">
+                    <WalletOutlined /> Số dư ví: đ
                   </Link>
                 </li>
               </ul>
             </div>
             <div className="header__menu">
-              <Dropdown.Button menu={menuProps} icon={<BarsOutlined />}>
-                {name}
+              <Dropdown.Button
+                size="large"
+                menu={menuProps}
+                icon={<BarsOutlined />}
+              >
+                {user.name}
               </Dropdown.Button>
             </div>
           </div>

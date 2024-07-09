@@ -30,6 +30,8 @@ import AdminDasboard from "./components/admin";
 import Contest from "./pages/contest";
 import ListContest from "../src/components/list-contest";
 import ScheduleContest from "./components/scheduler-contest";
+import Checkin from "./pages/check-in";
+import Tournament from "../src/components/tournament";
 import Wallet from "./pages/wallet";
 import ClubOwnerDasboard from "./components/clubowner";
 import BookingManager from "./components/booking-manager-clubowner";
@@ -96,7 +98,17 @@ function App() {
           ),
           children: [
             {
-              path: "danhsach",
+              path: "dangdienra",
+              element: <ListContest />,
+              children: [
+                {
+                  path: "chitiet2/:id",
+                  element: <Tournament />,
+                },
+              ],
+            },
+            {
+              path: "sapdienra",
               element: <ListContest />,
             },
             {
@@ -104,6 +116,10 @@ function App() {
               element: <ScheduleContest />,
             },
           ],
+        },
+        {
+          path: "/checkin",
+          element: <Checkin />,
         },
         {
           path: "/booking/:clubId",
