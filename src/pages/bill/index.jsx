@@ -1,7 +1,7 @@
 import "./index.scss";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/features/counterSlice";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import api from "../../config/axios";
 import { useState, useEffect } from "react";
 import moment from "moment";
@@ -10,6 +10,7 @@ import { message } from "antd";
 function Bill() {
   const user = useSelector(selectUser);
   const location = useLocation();
+  const navigate = useNavigate();
   const { type, booking, club } = location.state;
   const [result, setResult] = useState([]);
   const [customerWallet, setCustomerWallet] = useState([]);
@@ -18,11 +19,8 @@ function Bill() {
     moment().format("DD-MM-YYYY")
   );
 
-  // console.log(booking);
-  // console.log(club);
-
-  // Handle booking based on type when component mounts
   useEffect(() => {
+    fetchWallet();
     switch (type) {
       case "FLEXIBLE":
         handleBookingFlexible();
@@ -36,29 +34,31 @@ function Bill() {
       default:
         break;
     }
-  }, [type]); // Run useEffect whenever `type` changes
+  }, [type]);
 
-  const fetchCustomerWallet = async () => {
-    const response = await api.get(`wallet/${user.id}`);
-    setCustomerWallet(response.data);
-  };
+  const fetchWallet = async () => {
+    try {
+      const [customerResponse, clubOwnerResponse] = await Promise.all([
+        api.get(`wallet/${user.id}`),
+        api.get(`wallet-owner/${club}`),
+      ]);
 
-  const fetchClubOwnerWallet = async () => {
-    const response = await api.get(`wallet-owner/${club}`);
-    setClubOwnerWallet(response.data);
+      setCustomerWallet(customerResponse.data);
+      setClubOwnerWallet(clubOwnerResponse.data);
+    } catch (error) {
+      message.error("Failed to fetch wallet information");
+    }
   };
 
   const handleBookingFlexible = async () => {
     const response = await api.post(`booking/flexible`, booking);
     setResult(response.data);
-    console.log(response.data);
-    // Handle response or update state as needed
   };
 
   const handleBookingFixed = async () => {
     const response = await api.post(`booking/fixed`, booking);
     setResult(response.data);
-    console.log(response.data);
+    console.log(response.data.bookingDetailResponseList);
     // Handle response or update state as needed
   };
 
@@ -75,8 +75,6 @@ function Bill() {
   };
 
   const handleSubmit = async () => {
-    fetchCustomerWallet();
-    fetchClubOwnerWallet();
     try {
       const bookingtransfer = {
         senderWalletId: customerWallet.walletId,
@@ -84,7 +82,9 @@ function Bill() {
         amount: result.totalPrice,
         bookingId: result.bookingId,
       };
-      await handleCreateTransactionAndWallet(bookingtransfer); //thanh toán đặt sân và tạo transaction cho customer
+      await handleCreateTransactionAndWallet(bookingtransfer);
+
+      navigate("/history-booking");
       message.success("Đặt sân thành công!");
     } catch (error) {
       message.error(error.response.data);
@@ -129,26 +129,60 @@ function Bill() {
             </div>
           )}
         </div>
-        {/* <div className="bill-section">
-          <table className="booking-details">
-            <thead>
-              <tr>
-                <th>Sân đặt</th>
-                <th>Thời gian</th>
-                <th>Ngày</th>
-                <th>Giá</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Sân 2</td>
-                <td>12:00</td>
-                <td>2024-07-23</td>
-                <td>85000</td>
-              </tr>
-            </tbody>
-          </table>
-        </div> */}
+        <div className="bill-section">
+          {type === "FIXED" && (
+            <div className="bill-section">
+              <table className="booking-details" style={{ width: "920px" }}>
+                <thead>
+                  <tr>
+                    <th>Câu lạc bộ</th>
+                    <th>Tên sân</th>
+                    <th>Ngày chơi</th>
+                    <th>Giá</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {result.bookingDetailResponseList &&
+                    result.bookingDetailResponseList.map((detail) => (
+                      <tr key={detail.bookingDetailId}>
+                        <td>{result.clubName}</td>
+                        <td>{detail.courtName}</td>
+                        <td>{detail.playingDate}</td>
+                        <td>{detail.price}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+        <div className="bill-section">
+          {type === "DAILY" && (
+            <div className="bill-section">
+              <table className="booking-details" style={{ width: "920px" }}>
+                <thead>
+                  <tr>
+                    <th>Câu lạc bộ</th>
+                    <th>Tên sân</th>
+                    <th>Ngày chơi</th>
+                    <th>Giá</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {result.bookingDetailResponseList &&
+                    result.bookingDetailResponseList.map((detail) => (
+                      <tr key={detail.bookingDetailId}>
+                        <td>{result.clubName}</td>
+                        <td>{detail.courtName}</td>
+                        <td>{detail.playingDate}</td>
+                        <td>{detail.price}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
         <div className="bill-section">
           <label>Giá tạm tính:</label>
           <div className="bill-value">{result.temporaryPrice}</div>
@@ -163,7 +197,6 @@ function Bill() {
         </div>
       </div>
       <div className="bill-footer">
-        {/* Updated button functionality */}
         <button onClick={handleSubmit}>Đặt sân</button>
       </div>
     </div>

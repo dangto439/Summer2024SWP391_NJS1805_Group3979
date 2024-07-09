@@ -18,7 +18,7 @@ const BookingFlexible = ({ club }) => {
       clubId: club.clubId,
       amountTime: values.amountTime,
     };
-    // const response = await api.post(`booking/flexible`, bookingflexible);
+
     navigate("/bill", {
       state: {
         type: "FLEXIBLE",

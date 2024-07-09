@@ -12,19 +12,16 @@ import {
   message,
 } from "antd";
 import api from "../../config/axios";
-import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
-import { selectUser } from "../../redux/features/counterSlice";
+import { useNavigate } from "react-router-dom";
+
 function BookingFixed({ club }) {
-  const user = useSelector(selectUser);
   const [selectedDate, setSelectedDate] = useState(moment());
   const [selectedDays, setSelectedDays] = useState([]);
   const [slots, setSlots] = useState([]);
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [promotionCode, setPromotionCode] = useState("");
   const [options, setOptions] = useState([]);
-  const [customerWallet, setCustomerWallet] = useState([]);
-  const [clubOwnerWallet, setClubOwnerWallet] = useState([]);
+  const navigate = useNavigate();
   const [courtId, setCourtId] = useState([]);
 
   const onChange = (date, dateString) => {
@@ -37,16 +34,6 @@ function BookingFixed({ club }) {
 
   const disabledDate = (current) => {
     return current && current < moment().endOf("day");
-  };
-
-  const fetchCustomerWallet = async () => {
-    const response = await api.get(`wallet/${user.id}`); // lấy số tiền ví của account hiện tại
-    setCustomerWallet(response.data);
-  };
-
-  const fetchClubOwnerWallet = async () => {
-    const response = await api.get(`wallet-owner/${club.clubId}`);
-    setClubOwnerWallet(response.data);
   };
 
   const fetchCourt = async () => {
@@ -73,8 +60,6 @@ function BookingFixed({ club }) {
   };
 
   useEffect(() => {
-    fetchCustomerWallet();
-    fetchClubOwnerWallet();
     fetchCourt();
     fetchSlots();
   }, []);
@@ -99,9 +84,18 @@ function BookingFixed({ club }) {
   //   }
   // };
 
+  //bắt lỗi nếu người dùng không chọn gì hết
   const handleSubmit = async () => {
     if (!selectedDate) {
       message.warning("Vui lòng chọn thời gian.");
+      return;
+    }
+    if (courtId.length === 0) {
+      message.warning("Vui lòng chọn ít nhất một sân.");
+      return;
+    }
+    if (selectedDays.length === 0) {
+      message.warning("Vui lòng chọn ít nhất một thứ.");
       return;
     }
     if (selectedSlots.length === 0) {
@@ -126,42 +120,20 @@ function BookingFixed({ club }) {
 
       // Confirm with the user to proceed
       Modal.confirm({
-        title: "Xác nhận đặt sân",
+        title: "Xác nhận thông tin",
         content: (
           <div style={{ whiteSpace: "pre-line" }}>{formattedMessages}</div>
         ),
         onOk: async () => {
           try {
-            // Make the booking
-            const booking = await api.post("/booking/fixed", bookingData);
-
-            // Calculate total price
-            const totalprice = await api.post(
-              "/booking/fixed/price",
-              bookingData
-            );
-            const bookingtransfer = {
-              senderWalletId: customerWallet.walletId,
-              receiverWalletId: clubOwnerWallet.walletId,
-              amount: totalprice.data,
-              bookingId: booking.data.bookingId,
-            };
-
-            console.log(bookingtransfer);
-            // thanh toán và tạo transaction
-            const result = await api.post(
-              "/wallet/transfer-booking",
-              bookingtransfer
-            );
-            //thanh toán
-            //api transfer booking
-            // b1. senderWalletId = api `/walletId/user.id`
-            // b2. receiverWalletId = api `/wallet-owner/${club.clubId}`
-            // b3. amount = totalprice
-            // b4. bookingId = booking.data.bookingId
-
-            //kiểm tra số dư nếu đủ thì thanh toán luôn, nếu không đủ thì nạp tiền
-            message.success("Đặt sân thành công!");
+            //chuyển qua bill để thực hiện tiếp quá trình
+            navigate("/bill", {
+              state: {
+                type: "FIXED",
+                booking: bookingData,
+                club: club.clubId,
+              },
+            });
           } catch (error) {
             message.error(error.response.data);
           }
@@ -223,11 +195,7 @@ function BookingFixed({ club }) {
           disabledDate={disabledDate}
           picker="month"
         />
-        <Checkbox.Group
-          options={options}
-          defaultValue={["Pear"]}
-          onChange={onChangeSelectCourt}
-        />
+        <Checkbox.Group options={options} onChange={onChangeSelectCourt} />
         {/* <Select
           options={options}
           defaultValue={0}
