@@ -1,0 +1,84 @@
+.main-container-clubowner {
+    // padding: 20px;
+    // background-color: #f0f2f5;
+  
+    h3 {
+      padding-bottom: 20px;
+      color: white;
+    }
+  
+    .main_cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 20px;
+      justify-content: space-between; 
+  
+      .card {
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(255, 0, 0, 0.1);
+        padding: 20px;
+        text-align: center;
+        flex-basis: calc(25% - 20px); 
+        flex-grow: 1; 
+  
+        .card_inner {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 10px;
+  
+          h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #ffffff;
+          }
+  
+          .card_icon {
+            font-size: 24px;
+            color: #ffffff;
+          }
+        }
+  
+        h1 {
+          font-size: 36px;
+          margin: 0;
+          color: #ffffff;
+        }
+      }
+  
+      .charts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        width: 100%;
+        background-color: #34373f;
+  
+        .recharts-text {
+          fill: white;
+        }
+  
+        .recharts-responsive-container {
+          flex: 1;
+        }
+      }
+    }
+  }
+  
+  .card.blue {
+    background-color: rgb(89, 89, 244);
+  }
+  
+  .card.orange {
+    background-color: orange;
+  }
+  
+  .card.purple {
+    background-color: purple;
+  }
+  
+  .card.red {
+    background-color: red;
+  }
+  
+  

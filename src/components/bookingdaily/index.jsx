@@ -1,10 +1,20 @@
-/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
-import { Button, Col, Row, DatePicker, Table, message, Input } from "antd";
+import {
+  Button,
+  Col,
+  Row,
+  DatePicker,
+  Table,
+  message,
+  Input,
+  Select,
+} from "antd";
 import moment from "moment";
 import api from "../../config/axios";
 import { toast } from "react-toastify";
 import "./index.scss";
+import { Option } from "antd/es/mentions";
+import { useNavigate } from "react-router-dom";
 
 function BookingDaily({ club }) {
   const [selectedDate, setSelectedDate] = useState(
@@ -16,6 +26,11 @@ function BookingDaily({ club }) {
   const [totalPrice, setTotalPrice] = useState(0);
   const [columns, setColumns] = useState([]);
   const [promotionCode, setPromotionCode] = useState("");
+  const [flexibleBooking, setFlexibleBooking] = useState([]);
+  const [selectedFlexibleId, setSelectedFlexibleId] = useState(0);
+  const navigate = useNavigate();
+
+  const [check, setCheck] = useState(false);
 
   useEffect(() => {
     const fetchCourtsData = async () => {
@@ -90,6 +105,7 @@ function BookingDaily({ club }) {
     };
 
     fetchCourtsData();
+    fetchflexible();
   }, [club.clubId, selectedDate, selectedSlots]);
 
   const handleDateChange = (date, dateString) => {
@@ -121,13 +137,15 @@ function BookingDaily({ club }) {
     setTotalPrice(price);
   };
 
-  const handleWallet = async (values) => {
-    try {
-      const response = await api.post(`/vnpay?amount=${values}`);
-      const paymentLink = response.data;
-      window.location.href = paymentLink;
-    } catch (error) {
-      toast.error("Không thể thanh toán!");
+  const fetchflexible = async () => {
+    const response = await api.get(`booking/flexible`);
+    if (response.data.length > 0) {
+      const filteredData = response.data.filter(
+        (value) => value.clubId === club.clubId
+      );
+
+      setFlexibleBooking(filteredData);
+      setCheck(true);
     }
   };
 
@@ -143,15 +161,17 @@ function BookingDaily({ club }) {
         courtSlotId: slot.courtSlotId,
       })),
       promotionCode: promotionCode,
+      flexibleId: selectedFlexibleId,
     };
 
     try {
-      //console.log(bookingData);
-      const booking = await api.post("/booking/daily", bookingData);
-
-      handleWallet(booking.data.totalPrice); // tự tạo transaction pending (booking)
-
-      //cap nhat transaction (tc-> DEPOSIT/ CANCEL) //Put
+      navigate("/bill", {
+        state: {
+          type: "DAILY",
+          booking: bookingData,
+          club: club.clubId,
+        },
+      });
     } catch (error) {
       console.error("Error submitting booking:", error);
       message.error("Đặt sân thất bại. Vui lòng thử lại.");
@@ -169,6 +189,10 @@ function BookingDaily({ club }) {
 
   const handleInputChange = (e) => {
     setPromotionCode(e.target.value);
+  };
+
+  const handleSelectChange = (value) => {
+    setSelectedFlexibleId(value);
   };
 
   return (
@@ -191,6 +215,22 @@ function BookingDaily({ club }) {
               src="https://firebasestorage.googleapis.com/v0/b/badminton-booking-platform.appspot.com/o/z5545153816126_834da2b1757f9fca8d39197a7ac64f93.jpg?alt=media&token=50c69782-7782-42c9-877d-c07a1e906abb"
               alt=""
             />
+            {check && (
+              <Select
+                className="booking-daily-select"
+                onChange={handleSelectChange}
+                defaultValue={0}
+                style={{ width: "100%" }}
+              >
+                <Option value={0}>Đặt bằng tiền</Option>
+                {flexibleBooking.map((booking) => (
+                  <Option key={booking.bookingId} value={booking.bookingId}>
+                    Đặt lịch linh hoạt
+                  </Option>
+                ))}
+              </Select>
+            )}
+
             <Input
               placeholder="Nhập mã khuyến mãi"
               variant="borderless"

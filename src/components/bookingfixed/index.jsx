@@ -12,7 +12,7 @@ import {
   message,
 } from "antd";
 import api from "../../config/axios";
-import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function BookingFixed({ club }) {
   const [selectedDate, setSelectedDate] = useState(moment());
@@ -20,13 +20,38 @@ function BookingFixed({ club }) {
   const [slots, setSlots] = useState([]);
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [promotionCode, setPromotionCode] = useState("");
+  const [options, setOptions] = useState([]);
+  const navigate = useNavigate();
+  const [courtId, setCourtId] = useState([]);
 
   const onChange = (date, dateString) => {
     setSelectedDate(date);
   };
 
+  const onChangeSelectCourt = (checkedValues) => {
+    setCourtId(checkedValues);
+  };
+
   const disabledDate = (current) => {
     return current && current < moment().endOf("day");
+  };
+
+  const fetchCourt = async () => {
+    const response = await api.get(`/courts/${club.clubId}`); // lấy court hiện tại của club
+    const courts = response.data;
+    const options = courts.map((court) => ({
+      label: court.courtName,
+      value: court.courtId,
+    }));
+    const defaultOption = {
+      label: "sân bất kì",
+      value: 0,
+    };
+
+    const finalOptions = [defaultOption, ...options];
+
+    // Set options
+    setOptions(finalOptions);
   };
 
   const fetchSlots = async () => {
@@ -35,6 +60,7 @@ function BookingFixed({ club }) {
   };
 
   useEffect(() => {
+    fetchCourt();
     fetchSlots();
   }, []);
 
@@ -49,20 +75,27 @@ function BookingFixed({ club }) {
   const handleDayChange = (checkedValues) => {
     setSelectedDays(checkedValues);
   };
+  //   try {
+  //     const response = await api.post(`/vnpay?amount=${values}`);
+  //     const paymentLink = response.data;
+  //     window.location.href = paymentLink;
+  //   } catch (error) {
+  //     toast.error("Không thể thanh toán!");
+  //   }
+  // };
 
-  const handleWallet = async (values) => {
-    try {
-      const response = await api.post(`/vnpay?amount=${values}`);
-      const paymentLink = response.data;
-      window.location.href = paymentLink;
-    } catch (error) {
-      toast.error("Không thể thanh toán!");
-    }
-  };
-
+  //bắt lỗi nếu người dùng không chọn gì hết
   const handleSubmit = async () => {
     if (!selectedDate) {
       message.warning("Vui lòng chọn thời gian.");
+      return;
+    }
+    if (courtId.length === 0) {
+      message.warning("Vui lòng chọn ít nhất một sân.");
+      return;
+    }
+    if (selectedDays.length === 0) {
+      message.warning("Vui lòng chọn ít nhất một thứ.");
       return;
     }
     if (selectedSlots.length === 0) {
@@ -77,6 +110,7 @@ function BookingFixed({ club }) {
       promotionCode: promotionCode,
       dayOfWeeks: selectedDays,
       slotIds: selectedSlots,
+      courtIds: courtId,
     };
 
     try {
@@ -86,26 +120,22 @@ function BookingFixed({ club }) {
 
       // Confirm with the user to proceed
       Modal.confirm({
-        title: "Xác nhận đặt sân",
+        title: "Xác nhận thông tin",
         content: (
           <div style={{ whiteSpace: "pre-line" }}>{formattedMessages}</div>
         ),
         onOk: async () => {
           try {
-            // Calculate total price
-            const totalprice = await api.post(
-              "/booking/fixed/price",
-              bookingData
-            );
-            console.log(totalprice.data);
-            handleWallet(totalprice.data);
-
-            // Make the booking
-            const booking = await api.post("/booking/fixed", bookingData);
-            message.success("Đặt sân thành công!");
+            //chuyển qua bill để thực hiện tiếp quá trình
+            navigate("/bill", {
+              state: {
+                type: "FIXED",
+                booking: bookingData,
+                club: club.clubId,
+              },
+            });
           } catch (error) {
-            console.error("Error during booking:", error);
-            message.error("Đặt sân thất bại. Vui lòng thử lại.");
+            message.error(error.response.data);
           }
         },
         onCancel() {
@@ -128,24 +158,6 @@ function BookingFixed({ club }) {
     { label: "Thứ bảy", value: 7 },
   ];
 
-  const columns = [
-    {
-      title: "Time",
-      dataIndex: "slotId",
-      key: "slotId",
-      render: (text, record) => (
-        <div
-          className={`slot-item ${
-            selectedSlots.includes(record.slotId) ? "selected-slot" : ""
-          }`}
-          onClick={() => handleSlotSelect(record.slotId)}
-        >
-          {`${record.slotId}:00`}
-        </div>
-      ),
-    },
-  ];
-
   const handleInputChange = (e) => {
     setPromotionCode(e.target.value);
   };
@@ -155,7 +167,7 @@ function BookingFixed({ club }) {
       <Col span={7} className="booking-sidebar-fixed">
         <Row>
           <Col span={24} className="booking-summary-fixed">
-            <h1>Sân cầu lông Cao Lỗ</h1>
+            <h1>{club.clubName}</h1>
             <h1>
               Thời gian đặt:{" "}
               {selectedDate ? selectedDate.format("MM/YYYY") : ""}
@@ -183,6 +195,13 @@ function BookingFixed({ club }) {
           disabledDate={disabledDate}
           picker="month"
         />
+        <Checkbox.Group options={options} onChange={onChangeSelectCourt} />
+        {/* <Select
+          options={options}
+          defaultValue={0}
+          onChange={onChangeSelectCourt}
+          style={{ width: 200 }}
+        /> */}
         <Checkbox.Group
           onChange={handleDayChange}
           options={dayOptions}

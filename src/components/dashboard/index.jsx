@@ -4,11 +4,14 @@ import Topbar from "./topbar";
 import Sidebar from "./sidebar";
 import Staff from "../staff/index";
 import { Route, Routes } from "react-router-dom";
-import Profile from "../profile";
+// import Profile from "../profile";
 import Club from "../club/index";
 import Court from "../court/index";
 import api from "../../config/axios";
 import { useEffect, useState } from "react";
+import ClubOwnerDasboard from "../clubowner";
+import BookingManager from "../booking-manager-clubowner";
+import PromotionManager from "../promotion-manager";
 
 function Dashboard() {
   const [theme, colorMode] = useMode();
@@ -36,25 +39,44 @@ function Dashboard() {
           <Box component="main" className="content" flexGrow={1}>
             <Topbar />
             <Routes>
+              <Route path="" element={<ClubOwnerDasboard />} />
               <Route path="club" element={<Club />} />
               {clubs.map((club) => (
                 <Route
                   key={club.clubId}
                   path={`staff/${club.clubId}`}
-                  element={<Staff />}
+                  element={<Staff clubId={club.clubId} />}
                 />
               ))}
-              <Route path="staff/allstaff" element={<Staff />} />
+              <Route
+                path="staff/allstaff"
+                element={<Staff clubId={"allstaff"} />}
+              />
               {clubs.map((club) => (
                 <Route
                   key={club.clubId}
                   path={`court/${club.clubId}`}
-                  element={<Court />}
+                  element={<Court clubId={club.clubId} />}
                 />
               ))}
               {/* <Route path="booking/clubid1" element={<Booking />} /> */}
+              {clubs.map((club) => (
+                <Route
+                  key={club.clubId}
+                  path={`bookingmanager/${club.clubId}`}
+                  element={<BookingManager clubId={club.clubId} />}
+                />
+              ))}
 
-              <Route path="profile" element={<Profile />} />
+              {clubs.map((club) => (
+                <Route
+                  key={club.clubId}
+                  path={`promotionmanager/${club.clubId}`}
+                  element={<PromotionManager clubId={club.clubId} />}
+                />
+              ))}
+
+              {/* <Route path="profile" element={<Profile />} /> */}
             </Routes>
           </Box>
         </Box>

@@ -1,63 +1,84 @@
+import { Box, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Box, IconButton, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme.js";
 import Header from "../dashboard/Header.jsx";
-import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import DeleteButton from "../global/deletebutton/index.jsx";
-// import Forms from "./forms.jsx";
 import api from "../../config/axios.js";
-const Club = ({ clubId }) => {
+
+const BookingManager = ({ clubId }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState([]);
-  // const [isFormOpen, setFormOpen] = useState(false);
-  // const [mode, setMode] = useState("");
-  // const [selectedCourtId, setSelectedCourtId] = useState("");
-
-  // const handleUpdate = (id) => {
-  //   setMode("update");
-  //   setSelectedCourtId(id);
-  //   setFormOpen(true);
-  // };
-
-  const handleCreate = async () => {
-    // setMode("create");
-    // setSelectedCourtId(null);
-    // setFormOpen(true);
-    await api.post(`/court/${clubId}`);
-    fetchCourts();
-  };
-  // const handleFormClose = () => {
-  //   setFormOpen(false);
-  // };
-
-  // const handleFormSubmit = () => {
-  //   handleFormClose();
-  // };
 
   const columns = [
     {
-      field: "courtId",
-      headerName: "Mã Sân",
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "courtName",
-      headerName: "Tên Sân",
+      field: "bookingId",
+      headerName: "Mã booking",
       flex: 1,
-      cellClassName: "name-column--cell",
       headerAlign: "center",
       align: "center",
     },
     {
-      field: "courtStatus",
-      headerName: "Trạng thái",
-      type: "number",
+      field: "bookingDate",
+      headerName: "Ngày đặt sân",
+      flex: 1,
       headerAlign: "center",
       align: "center",
     },
+    {
+      field: "temporaryPrice",
+      headerName: "Giá booking tạm tính",
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "discountPrice",
+      headerName: "Giá giảm",
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "totalPrice",
+      headerName: "Giá tổng",
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "bookingType",
+      headerName: "Type",
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "delete",
+      headerName: "Xóa",
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
+      renderCell: (params) => (
+        <DeleteButton id={params.id} rows={rows} setRows={setRows} />
+      ),
+    },
+    // {
+    //   field: "courtName",
+    //   headerName: "Tên Sân",
+    //   flex: 1,
+    //   cellClassName: "name-column--cell",
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
+    // {
+    //   field: "courtStatus",
+    //   headerName: "Trạng thái",
+    //   type: "number",
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
     // {
     //   field: "update",
     //   headerName: "Cập Nhật",
@@ -73,22 +94,23 @@ const Club = ({ clubId }) => {
     //     </IconButton>
     //   ),
     // },
-    {
-      field: "delete",
-      headerName: "Xóa",
-      flex: 1,
-      headerAlign: "center",
-      align: "center",
-      renderCell: (params) => (
-        <DeleteButton id={params.id} rows={rows} setRows={setRows} />
-      ),
-    },
+    // {
+    //   field: "delete",
+    //   headerName: "Xóa",
+    //   flex: 1,
+    //   headerAlign: "center",
+    //   align: "center",
+    //   renderCell: (params) => (
+    //     <DeleteButton id={params.id} rows={rows} setRows={setRows} />
+    //   ),
+    // },
   ];
 
   const fetchCourts = async () => {
     try {
       // nội dung fetch
-      const response = await api.get(`/courts/${clubId}`);
+      const response = await api.get(`/bookings/${clubId}`);
+      console.log(response.data);
       // console.log(response.data);
       setRows(response.data);
     } catch (error) {
@@ -102,12 +124,7 @@ const Club = ({ clubId }) => {
 
   return (
     <Box m="20px" className="team-container">
-      <Header
-        title="Quản lý sân"
-        subtitle=""
-        buttonText="Tạo sân mới"
-        onButtonClick={handleCreate}
-      />
+      <Header title="Quản lý đơn đặt sân" subtitle="" />
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -149,15 +166,15 @@ const Club = ({ clubId }) => {
       </Box>
 
       {/* <Forms
-        open={isFormOpen}
-        onClose={handleFormClose}
-        onSubmit={handleFormSubmit}
-        fetFunction={fetchCourts}
-        mode={mode}
-        id={selectedCourtId}
-      /> */}
+          open={isFormOpen}
+          onClose={handleFormClose}
+          onSubmit={handleFormSubmit}
+          fetFunction={fetchCourts}
+          mode={mode}
+          id={selectedCourtId}
+        /> */}
     </Box>
   );
 };
 
-export default Club;
+export default BookingManager;
