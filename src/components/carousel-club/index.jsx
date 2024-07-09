@@ -165,7 +165,7 @@ export default function CarouselClub() {
                       {club.description}
                     </p>
 
-                    <div className="buttons">
+                    <div className="carousel-buttons">
                       <button
                         className="booking-button"
                         onClick={() => handleBooking(club)}

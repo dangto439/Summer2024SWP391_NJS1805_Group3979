@@ -4,51 +4,81 @@ import RoomIcon from "@mui/icons-material/Room";
 import { useEffect, useState } from "react";
 import api from "../../config/axios";
 import dataProvnices from "../../../province";
-import { Button, Form, Input, Select } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import { Button, Form, Input, Select, Pagination } from "antd";
 
 function ListClub() {
   const [listClub, setListClub] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5); // Number of clubs per page
   const navigate = useNavigate();
   const [selectedCity, setSelectedCity] = useState("");
   const [districts, setDistricts] = useState([]);
   const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [input, setInput] = useState("");
+  const [data, setData] = useState([]);
 
+  const optionsCities = Object.keys(dataProvnices).map((city) => {
+    return {
+      label: city,
+      value: city,
+    };
+  });
+  const optionsDistrict = districts.map((district) => {
+    return { label: district, value: district };
+  });
   const handleCityChange = (event) => {
     const city = event;
-    console.log(city);
     setSelectedCity(city);
     setDistricts(dataProvnices[city] || []);
     setSelectedDistrict("");
   };
 
   const handleDistrictChange = (event) => {
-    console.log(event);
     setSelectedDistrict(event);
   };
 
   const fetchListClubData = async () => {
     try {
       const response = await api.get("/clubs");
-      // console.log(response.data);
       setListClub(response.data);
+      setData(response.data);
     } catch (error) {
       console.error(error);
     }
   };
+
   useEffect(() => {
     fetchListClubData();
   }, []);
+
   const handleBooking = (club) => {
-    // console.log(club);
     navigate(`/booking/${club.clubId}`);
-    // navigate(`/booking/${club}`);
   };
 
   const handleShowDetailClub = (club) => {
-    console.log(club);
     navigate(`/club-detail/${club.clubId}`);
   };
 
+  const handlePageChange = (page, pageSize) => {
+    setCurrentPage(page);
+    setPageSize(pageSize);
+  };
+  const paginatedClubs = data.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
+  const handleOnSubmit = (value) => {
+    console.log(value);
+    console.log(listClub);
+    setData(
+      listClub
+        .filter((item) => !value.search || item.clubName.includes(value.search))
+        .filter((item) => !value.district || item.district === value.district)
+        .filter((item) => !value.city || item.province === value.city)
+    );
+  };
   return (
     <div className="list-club">
       <h1>SÂN CẦU LÔNG VIỆT NAM</h1>
@@ -81,7 +111,7 @@ function ListClub() {
                   </h2>
                   <p>
                     <i className="list-club-outstanding-address"></i>
-                    <RoomIcon fontSize="small" /> {club.clubAddress},{""}
+                    <RoomIcon fontSize="small" /> {club.clubAddress},{" "}
                     {club.district}, {club.province}
                   </p>
                 </div>
@@ -94,96 +124,95 @@ function ListClub() {
         </div>
       </div>
 
-      <div className="list-club-search">
-        <Form className="form-search">
-          <div className="list-club-search-name">
-            <Form.Item>
-              <Input placeholder="Nhập tên sân cần tìm..." />
+      <div className="list-club-all">
+        <div className="list-club-search">
+          <Form className="form-search" onFinish={handleOnSubmit}>
+            <Form.Item name="search">
+              <div className="list-club-search-name">
+                <Input
+                  placeholder="Nhập tên sân cần tìm..."
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                />
+              </div>
             </Form.Item>
-          </div>
 
-          <div className="list-club-location-provinces">
-            <Form.Item className="form-item" label="Thành phố/Tỉnh">
+            <Form.Item className="form-item" label="Thành phố/Tỉnh" name="city">
               <Select
                 style={{ width: 200 }}
-                id="city"
-                value={selectedCity}
+                className="list-club-location-provinces"
                 onChange={handleCityChange}
-              >
-                <option value="">--Chọn Thành phố--</option>
-                {Object.keys(dataProvnices).map((city) => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-              </Select>
+                options={optionsCities}
+                placeholder="Chọn Thành phố/Tỉnh"
+              />
             </Form.Item>
-          </div>
 
-          <div className="list-club-location-">
-            <Form.Item className="form-item" label="Quận/Huyện">
+            <Form.Item className="form-item" label="Quận/Huyện" name="district">
               <Select
+                className="list-club-location-"
                 style={{ width: 200 }}
-                id="district"
-                value={selectedDistrict}
                 onChange={handleDistrictChange}
                 disabled={!selectedCity}
-              >
-                <option value="">--Chọn Quận/Huyện--</option>
-                {districts.map((district) => (
-                  <option key={district} value={district}>
-                    {district}
-                  </option>
-                ))}
-              </Select>
-            </Form.Item>
-          </div>
-
-          <div className="form-search">
-            <Button>{/* <SearchOutlined /> */}button</Button>
-          </div>
-        </Form>
-      </div>
-
-      {listClub.map((club) => (
-        <>
-          <div key={club.clubId} className="list-club-card">
-            <div className="list-club-image">
-              <img
-                onClick={() => handleShowDetailClub(club)}
-                src={club.urlImages}
-                alt={club.clubName}
+                options={optionsDistrict}
+                placeholder="Chọn Quận/Huyện"
               />
-            </div>
-            <div className="list-club-details">
-              <h2 onClick={() => handleShowDetailClub(club)}>
-                {club.clubName}
-              </h2>
-              <p>
-                <i className="list-club-address"></i> {club.clubAddress},{" "}
-                {club.district}, {club.province}
-              </p>
-              <p>
-                <i className="list-club-clock"></i> {club.openTime} -{" "}
-                {club.closeTime}
-              </p>
-              <p>
-                <i className="list-club-phone"></i> Hotline: {club.hotline}
-              </p>
-              <p className="list-club-description">{club.description}</p>
+            </Form.Item>
+            <Form.Item>
+              <div className="form-search">
+                <Button htmlType="submit">
+                  <SearchOutlined />
+                </Button>
+              </div>
+            </Form.Item>
+          </Form>
+        </div>
 
-              <div className="buttons">
-                <button
-                  className="booking-button"
-                  onClick={() => handleBooking(club)}
-                >
-                  Đặt lịch
-                </button>
+        {paginatedClubs.map((club) => (
+          <>
+            <div key={club.clubId} className="list-club-card">
+              <div className="list-club-image">
+                <img
+                  onClick={() => handleShowDetailClub(club)}
+                  src={club.urlImages}
+                  alt={club.clubName}
+                />
+              </div>
+              <div className="list-club-details">
+                <h2 onClick={() => handleShowDetailClub(club)}>
+                  {club.clubName}
+                </h2>
+                <p>
+                  <i className="list-club-address"></i> {club.clubAddress},{" "}
+                  {club.district}, {club.province}
+                </p>
+                <p>
+                  <i className="list-club-clock"></i> {club.openTime} -{" "}
+                  {club.closeTime}
+                </p>
+                <p>
+                  <i className="list-club-phone"></i> Hotline: {club.hotline}
+                </p>
+                <p className="list-club-description">{club.description}</p>
+                <div className="buttons">
+                  <button
+                    className="booking-button"
+                    onClick={() => handleBooking(club)}
+                  >
+                    Đặt lịch
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </>
-      ))}
+          </>
+        ))}
+        <Pagination
+          className="pagination-club"
+          current={currentPage}
+          pageSize={pageSize}
+          total={data.length}
+          onChange={handlePageChange}
+        />
+      </div>
     </div>
   );
 }
