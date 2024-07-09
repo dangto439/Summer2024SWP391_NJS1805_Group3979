@@ -19,7 +19,7 @@ function Header() {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const navigate = useNavigate();
-  const [price, setPrice] = useState(0);
+  const [balance, setBalance] = useState(0);
 
   const handleLogOut = () => {
     dispatch(logout());
@@ -76,11 +76,15 @@ function Header() {
       //const response = await api.get("/profile");
       const profileData = response.data;
       setRole(profileData.role);
-      setName(profileData.name);
-      setPrice(responseprice.data.balance);
+      // setName(profileData.name);
+      setBalance(responseprice.data.balance);
     } catch (error) {
       console.error("Error fetching profile data:", error);
     }
+  };
+
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
   };
 
   useEffect(() => {
@@ -97,7 +101,8 @@ function Header() {
           />
         </Link>
       </div>
-      <nav className="header__nav">
+
+      <div className="header__nav">
         <ul>
           <li className="header__link">
             <Link to="/">Trang chủ</Link>
@@ -113,6 +118,10 @@ function Header() {
 
           <li className="header__link">
             <Link to="/contest">Lịch thi đấu</Link>
+          </li>
+
+          <li className="header__link">
+            <Link to="/policy">Quy định</Link>
           </li>
 
           {/* <li
@@ -141,7 +150,7 @@ function Header() {
             <SearchOutlined className="search-icon" />
           </div>
         </ul>
-      </nav>
+      </div>
 
       <div className="header__button">
         {user == null ? (
@@ -163,7 +172,7 @@ function Header() {
               <ul className="">
                 <li>
                   <Link to="/wallet">
-                    <WalletOutlined /> Số dư ví: đ
+                    <WalletOutlined /> Số dư ví: {formatCurrency(balance)}
                   </Link>
                 </li>
               </ul>

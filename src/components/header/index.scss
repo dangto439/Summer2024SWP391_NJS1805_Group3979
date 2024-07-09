@@ -184,10 +184,6 @@
       display: flex;
       gap: 10px
     }
-
-    &__menu{
-    
-    }
   
     &__wallet{
       // text-align: center;
@@ -216,6 +212,10 @@
           text-decoration: none;
           color: #000000;
         } 
+      }
+
+      li :hover{
+        color: #4096ff;
       }
     }
 }
