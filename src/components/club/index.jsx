@@ -61,21 +61,6 @@ const Club = () => {
       headerAlign: "left",
       align: "left",
     },
-    // {
-    //   field: "age",
-    //   headerName: "Số lượng sân",
-    //   type: "number",
-    //   headerAlign: "left",
-    //   align: "left",
-    // },
-    // {
-    //   field: "age",
-    //   headerName: "Thời gian hoạt động",
-    //   type: "number",
-    //   headerAlign: "left",
-    //   align: "left",
-    // },
-
     {
       field: "description",
       headerName: "Mô tả",

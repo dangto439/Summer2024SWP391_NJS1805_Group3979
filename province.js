@@ -95,7 +95,7 @@ const dataProvnices = {
       "Thới Lai",
       "Vĩnh Thạnh",
     ],
-    Huế: [
+    "Huế": [
       "Huế",
       "Hương Thủy",
       "Hương Trà",

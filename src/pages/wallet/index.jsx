@@ -1,12 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./index.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import api from "../../config/axios";
 import { toast } from "react-toastify";
+import ViewTransaction from "../../components/viewtransaction/viewtransaction";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/features/counterSlice";
 import { Form, Input } from "antd";
 
 function Wallet() {
+  const user = useSelector(selectUser);
+
   const [amount, setAmount] = useState("");
+  const [data, setData] = useState([]);
   const [visible, setVisible] = useState(true);
 
   const handleInputChange = (e) => {
@@ -32,6 +38,16 @@ function Wallet() {
       toast.error("Không thể thanh toán!");
     }
   };
+
+  //load data
+  const fetchData = async () => {
+    const response = await api.get(`get-transactions/${user.id}`);
+    setData(response.data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <div className="wallet">
