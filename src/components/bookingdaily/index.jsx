@@ -16,6 +16,7 @@ function BookingDaily({ club }) {
   const [totalPrice, setTotalPrice] = useState(0);
   const [columns, setColumns] = useState([]);
   const [promotionCode, setPromotionCode] = useState("");
+  const [flexibleBooking, setFlexibleBooking] = useState([]);
 
   useEffect(() => {
     const fetchCourtsData = async () => {
@@ -121,15 +122,14 @@ function BookingDaily({ club }) {
     setTotalPrice(price);
   };
 
-  // const handleWallet = async (values) => {
-  //   try {
-  //     const response = await api.post(`/vnpay?amount=${values}`);
-  //     const paymentLink = response.data;
-  //     window.location.href = paymentLink;
-  //   } catch (error) {
-  //     toast.error("Không thể thanh toán!");
-  //   }
-  // };
+  const fetchflexible = async () => {
+    const response = await api.get(`booking/flexible`);
+    setFlexibleBooking(response.data);
+  };
+
+  useEffect(() => {
+    fetchflexible();
+  }, []);
 
   const handleSubmit = async () => {
     if (selectedSlots.length === 0) {

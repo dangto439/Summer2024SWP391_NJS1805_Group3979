@@ -15,6 +15,7 @@ import { tokens } from "../../theme.js";
 import Header from "../dashboard/Header.jsx";
 import DeleteButton from "../global/deletebutton/index.jsx";
 import api from "../../config/axios.js";
+import { message } from "antd";
 
 const style = {
   position: "absolute",
@@ -70,7 +71,8 @@ const PromotionManager = ({ clubId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.endDate.isBefore(formData.startDate)) {
-      alert("Ngày kết thúc phải sau ngày bắt đầu.");
+      // alert("Ngày kết thúc phải sau ngày bắt đầu.");
+      message.error("Ngày kết thúc phải sau ngày bắt đầu.");
       return;
     }
     const formattedData = {

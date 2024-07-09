@@ -2,15 +2,30 @@ import { useState } from "react";
 import "./index.scss";
 import { Button, Col, Form, Input, InputNumber, Row } from "antd";
 import moment from "moment";
+import api from "../../config/axios";
+import { useNavigate } from "react-router-dom";
 
 const BookingFlexible = ({ club }) => {
   const [selectedDate, setSelectedDate] = useState(moment().month());
+  const navigate = useNavigate();
   const onChange = (value) => {
     console.log("changed", value);
   };
 
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const onFinish = async (values) => {
+    const bookingflexible = {
+      promotionCode: values.promotionCode,
+      clubId: club.clubId,
+      amountTime: values.amountTime,
+    };
+    // const response = await api.post(`booking/flexible`, bookingflexible);
+    navigate("/bill", {
+      state: {
+        type: "FLEXIBLE",
+        booking: bookingflexible,
+        club: club.clubId,
+      },
+    });
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -54,7 +69,7 @@ const BookingFlexible = ({ club }) => {
               },
             ]}
           >
-            <InputNumber min={10} defaultValue={10} onChange={onChange} />
+            <InputNumber min={10} onChange={onChange} />
           </Form.Item>
 
           <Form.Item label="Nhập mã khuyến mãi" name="promotionCode">

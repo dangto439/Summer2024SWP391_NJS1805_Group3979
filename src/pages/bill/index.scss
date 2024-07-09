@@ -1,0 +1,83 @@
+.bill-container {
+  width: 50%;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  background-color: #fff;
+
+  .bill-header {
+    text-align: center;
+    margin-bottom: 20px;
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+  }
+
+  .bill-body {
+    .bill-section {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+
+      label {
+        font-weight: bold;
+        margin-right: 10px;
+      }
+
+      .bill-value {
+        text-align: right;
+      }
+
+      &.total-amount {
+        color: #ff0000; // Màu sắc khác biệt cho Total Amount
+        font-size: 18px;
+        font-weight: bold;
+      }
+    }
+
+    .booking-details {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+
+      th, td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+      }
+
+      th {
+        background-color: #f2f2f2;
+      }
+    }
+  }
+
+  .bill-footer {
+    text-align: center;
+    margin-top: 20px;
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+  }
+}
+
+.label {
+  font-weight: bold;
+  margin-right: 10px;
+}

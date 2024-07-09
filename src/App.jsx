@@ -34,6 +34,7 @@ import Wallet from "./pages/wallet";
 import ClubOwnerDasboard from "./components/clubowner";
 import BookingManager from "./components/booking-manager-clubowner";
 import PromotionManager from "./components/promotion-manager";
+import Bill from "./pages/bill";
 
 function App() {
   const user = useSelector(selectUser);
@@ -229,6 +230,10 @@ function App() {
         //   element: <ManageAccount />,
         // },
       ],
+    },
+    {
+      path: "/bill",
+      element: <Bill />,
     },
   ]);
 
