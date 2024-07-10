@@ -79,7 +79,7 @@ const HistoryBooking = () => {
   ];
 
   return (
-    <div style={{ height: "100vh" }}>
+    <div className="history-booking-page" >
       <h1>Lịch sử đặt lịch</h1>
       <Space
         style={{

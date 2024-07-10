@@ -72,19 +72,25 @@ function ListClub() {
   const handleOnSubmit = (value) => {
     console.log(value);
     console.log(listClub);
+  
+  const containsString = (mainStr, subStr) => {
+      return mainStr.toLowerCase().indexOf(subStr.toLowerCase()) !== -1;
+  };
+  
     setData(
       listClub
-        .filter((item) => !value.search || item.clubName.includes(value.search))
+        .filter((item) => !value.search || containsString(item.clubName, value.search))
         .filter((item) => !value.district || item.district === value.district)
         .filter((item) => !value.city || item.province === value.city)
     );
   };
+  
   return (
     <div className="list-club">
       <h1>SÂN CẦU LÔNG VIỆT NAM</h1>
       <div className="list-club-outstanding">
         <div className="list-club-main-image">
-          <img src="https://i.pinimg.com/564x/78/98/e3/7898e3d931d316ec5eb502f0909c6d55.jpg" />
+          <img src="https://media-cdn-v2.laodong.vn/storage/newsportal/2022/12/8/1125177/Tap-Dong-Tac-Co-Ban.jpg" />
 
           <div className="list-club-all">
             <div className="list-club-search">
@@ -127,9 +133,10 @@ function ListClub() {
                     placeholder="Chọn Quận/Huyện"
                   />
                 </Form.Item>
+                
                 <Form.Item>
-                  <div className="form-search">
-                    <Button htmlType="submit">
+                  <div className="form-search-button">
+                    <Button className="submit-search-button" htmlType="submit">
                       <SearchOutlined />
                     </Button>
                   </div>
@@ -156,8 +163,8 @@ function ListClub() {
                       {club.district}, {club.province}
                     </p>
                     <p>
-                      <i className="list-club-clock"></i> {club.openTime} -{" "}
-                      {club.closeTime}
+                      <i className="list-club-clock"></i> {club.openTime}g -{" "}
+                      {club.closeTime}g
                     </p>
                     <p>
                       <i className="list-club-phone"></i> Hotline:{" "}
@@ -166,7 +173,7 @@ function ListClub() {
                     <p className="list-club-description">{club.description}</p>
                     <div className="buttons">
                       <button
-                        className="booking-button"
+                        className="booking-button-list"
                         onClick={() => handleBooking(club)}
                       >
                         Đặt lịch

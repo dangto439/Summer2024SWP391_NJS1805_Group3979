@@ -4,12 +4,10 @@ function Intro() {
   return (
     <>
       <div className="introduction">
-        <div className="introduction__img-left">
           <img
             src="https://i.pinimg.com/564x/4a/1e/f6/4a1ef631d7af7819ce1a64de5f66b618.jpg"
             alt=""
-          />
-        </div>
+          />     
         <div className="introduction__information">
           <h1>Chào Mừng Đến Với DatSan79</h1>
           <p>

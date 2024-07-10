@@ -86,8 +86,8 @@ export default function CarouselClub() {
                       {club.clubAddress}, {club.district}, {club.province}
                     </p>
                     <p>
-                      <i className="carousel-club-clock"></i> {club.openTime} -{" "}
-                      {club.closeTime}
+                      <i className="carousel-club-clock"></i> {club.openTime}g -{" "}
+                      {club.closeTime}g
                     </p>
                     <p>
                       <i className="carousel-club-phone"></i> Hotline:{" "}
@@ -99,7 +99,7 @@ export default function CarouselClub() {
 
                     <div className="buttons">
                       <button
-                        className="booking-button"
+                        className="booking-button-carousel"
                         onClick={() => handleBooking(club)}
                       >
                         Đặt lịch
@@ -153,8 +153,8 @@ export default function CarouselClub() {
                       {club.clubAddress}, {club.district}, {club.province}
                     </p>
                     <p>
-                      <i className="carousel-club-clock"></i> {club.openTime} -{" "}
-                      {club.closeTime}
+                      <i className="carousel-club-clock"></i> {club.openTime}g -{" "}
+                      {club.closeTime}g
                     </p>
                     <p>
                       <i className="carousel-club-phone"></i> Hotline:{" "}
