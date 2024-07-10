@@ -9,6 +9,8 @@ import Club from "../club/index";
 import Court from "../court/index";
 import api from "../../config/axios";
 import { useEffect, useState } from "react";
+import Tournaments from "../tournaments";
+import NewTournament from "../tournaments/newtournament";
 
 function Dashboard() {
   const [theme, colorMode] = useMode();
@@ -55,6 +57,8 @@ function Dashboard() {
               {/* <Route path="booking/clubid1" element={<Booking />} /> */}
 
               <Route path="profile" element={<Profile />} />
+              <Route path="tournaments" element={<Tournaments />} />
+              <Route path="tournaments/new" element={<NewTournament />} />
             </Routes>
           </Box>
         </Box>

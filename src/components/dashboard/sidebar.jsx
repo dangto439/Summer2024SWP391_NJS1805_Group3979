@@ -345,6 +345,13 @@ const MySidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+            <Item
+              title="Cuoc thi"
+              to="tournaments"
+              icon={<PieChartOutlineOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
           </Box>
         </Menu>
       </Drawer>

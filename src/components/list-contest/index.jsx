@@ -5,9 +5,13 @@ import {
   Route,
   useLocation,
   Link as RouterLink,
+  Link,
+  Outlet,
 } from "react-router-dom";
 import axios from "axios";
 import Tournament from "../tournament";
+import ContestDetail from "../../components/contest-detail";
+import RegisterContest from "../../components/register-contest";
 
 const ListContest = () => {
   const [contests, setContests] = useState([]);
@@ -219,9 +223,25 @@ const ListContest = () => {
             </Typography>
             {location.pathname === "/contest/sapdienra" && (
               <Box mt={2} display="flex" justifyContent="flex-start">
+                {/* <Button
+                  component={Link}
+                  to={`/contest/sapdienra/chitiet/${contest.id}`}
+                  variant="contained"
+                  sx={{ marginRight: "15px", backgroundColor: "#6992CE" }}
+                >
+                  Chi tiết
+                </Button>
+                <Button
+                  component={Link}
+                  to={`/contest/sapdienra/thamgia/${contest.id}`}
+                  variant="contained"
+                  sx={{ backgroundColor: "#B84848" }}
+                >
+                  Tham gia
+                </Button> */}
                 <Button
                   component={RouterLink}
-                  to={`chitiet/${contest.id}`}
+                  to={`/contest/sapdienra/chitiet/${contest.id}`}
                   variant="contained"
                   sx={{ marginRight: "15px", backgroundColor: "#6992CE" }}
                 >
@@ -229,7 +249,7 @@ const ListContest = () => {
                 </Button>
                 <Button
                   component={RouterLink}
-                  to="thamgia"
+                  to={`/contest/sapdienra/thamgia/${contest.id}`}
                   variant="contained"
                   sx={{ backgroundColor: "#B84848" }}
                 >
@@ -241,7 +261,7 @@ const ListContest = () => {
             location.pathname === "/contest" ? (
               <Box mt={2} display="flex" justifyContent="center">
                 <Button
-                  component={RouterLink}
+                  component={Link}
                   to={`chitiet2/${contest.id}`}
                   variant="contained"
                   sx={{ marginRight: "15px", backgroundColor: "#6992CE" }}
@@ -310,10 +330,13 @@ const ListContest = () => {
         {renderHotContests()}
       </Box>
       <Box>
-        <Routes>
+        {/* <Routes>
           <Route path="chitiet2/:id" element={<Tournament />} />
-        </Routes>
+          <Route path="chitiet/:id" element={<ContestDetail />} />
+          <Route path="thamgia/:id" element={<RegisterContest />} />
+        </Routes> */}
       </Box>
+      <Outlet />
     </Box>
   );
 };

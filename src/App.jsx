@@ -1,5 +1,11 @@
 /* eslint-disable react/prop-types */
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  RouterProvider,
+  createBrowserRouter,
+  Route,
+  Routes,
+  Outlet,
+} from "react-router-dom";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import ForgetPassword from "./pages/forgot-password";
@@ -11,7 +17,7 @@ import HomePage from "./pages/home";
 import Dashboard from "./components/dashboard";
 import { useSelector } from "react-redux";
 import { selectUser } from "./redux/features/counterSlice";
-import { Navigate } from "react-router-dom/dist";
+import { Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Profile from "./components/profile";
 import Intro from "./pages/intro";
@@ -33,6 +39,8 @@ import ScheduleContest from "./components/scheduler-contest";
 import Checkin from "./pages/check-in";
 import Tournament from "../src/components/tournament";
 import Wallet from "./pages/wallet";
+import ContestDetail from "../src/components/contest-detail";
+import RegisterContest from "../src/components/register-contest";
 
 function App() {
   const user = useSelector(selectUser);
@@ -106,12 +114,30 @@ function App() {
             {
               path: "sapdienra",
               element: <ListContest />,
+              // children: [
+              //   {
+              //     path: "chitiet/:id",
+              //     element: <ContestDetail />,
+              //   },
+              //   {
+              //     path: "thamgia/:id",
+              //     element: <RegisterContest />,
+              //   },
+              // ],
             },
             {
               path: "thang",
               element: <ScheduleContest />,
             },
           ],
+        },
+        {
+          path: "chitiet/:id",
+          element: <ContestDetail />,
+        },
+        {
+          path: "thamgia/:id",
+          element: <RegisterContest />,
         },
         {
           path: "/checkin",
@@ -151,7 +177,6 @@ function App() {
         },
       ],
     },
-
     {
       path: "/login",
       element: <Login />,
@@ -214,25 +239,19 @@ function App() {
           path: "staff/allstaff",
           element: <Staff />,
         },
-
         {
           path: "court/clubid1",
           element: <Court />,
         },
-        // {
-        //   path: "booking/clubid1",
-        //   element: <Staff />,
-        // },
-
         {
           path: "profile",
           element: <Profile />,
         },
 
-        // {
-        //   path: "manage-account",
-        //   element: <ManageAccount />,
-        // },
+        {
+          path: "manage-account",
+          element: <ManageAccount />,
+        },
       ],
     },
   ]);
