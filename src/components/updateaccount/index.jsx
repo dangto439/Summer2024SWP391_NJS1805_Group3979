@@ -27,27 +27,24 @@ const UpdateAccount = ({ id }) => {
   };
 
   const [formData, setFormData] = useState({
+    accountId: 0,
+    phone: "",
+    email: "",
+    name: "",
+    role: "",
+    gender: "",
+    supervisorID: 0,
     accountStatus: "",
     avatar: "",
-    email: "",
-    gender: "",
-    name: "",
-    phone: "",
+    signupDate: "",
     password: "",
-    role: "",
   });
 
   const handleUpdateAccount = async (values) => {
-    const updatedValues = {
-      ...values,
-      accountId: values.id,
-    };
-    delete updatedValues.id;
     try {
-      const response = await api.put(
-        `/update-account-admin?password=${formData.password}`,
-        updatedValues
-      );
+      console.log(values);
+      const response = await api.put(`/update-account-admin`, values);
+      console.log(response.data);
       message.success("Cập nhật thành công");
     } catch (error) {
       message.error("Cập nhật thất bại", error);
@@ -64,14 +61,27 @@ const UpdateAccount = ({ id }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log(formData.password);
     handleUpdateAccount(formData);
   };
 
   async function fetchAccounts() {
     try {
       const response = await api.get(`/account/${id}`);
-      setFormData(response.data);
+      const data = response.data;
+      const formData = {
+        accountId: data.id,
+        phone: data.phone,
+        email: data.email,
+        name: data.name,
+        role: data.role,
+        gender: data.gender,
+        supervisorID: data.supervisorID,
+        accountStatus: data.accountStatus,
+        avatar: data.avatar,
+        signupDate: data.signupDate,
+        password: "",
+      };
+      setFormData(formData);
     } catch (error) {
       console.error("Error fetching account data:", error);
     }

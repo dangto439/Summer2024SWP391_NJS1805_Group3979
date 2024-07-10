@@ -164,10 +164,10 @@ function AdminDasboard() {
           </div>
           <h1>{totalPrice} VND</h1>
         </div>
-        <div>
+        {/* <div>
           <DatePicker onChange={onChangeYear} picker="year" />
           <DatePicker onChange={onChangeMonth} picker="month" />
-        </div>
+        </div> */}
         <div className="charts">
           <ResponsiveContainer width="100%" height={500}>
             <AreaChart
