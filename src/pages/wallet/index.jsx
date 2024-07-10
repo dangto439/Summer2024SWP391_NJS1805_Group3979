@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import ViewTransaction from "../../components/viewtransaction/viewtransaction";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/features/counterSlice";
-import { Form, Input } from "antd";
+import { Form, Input, message } from "antd";
 
 function Wallet() {
   const user = useSelector(selectUser);
@@ -28,6 +28,13 @@ function Wallet() {
     //cập nhật transaction sang deposit
   };
 
+  const handleSubmitTransfer = async (e) => {
+    // console.log(e);
+    console.log(e.email);
+    const receiverWalletId = await fetchWalletReceiver(e.email);
+    console.log(receiverWalletId);
+  };
+
   //mo trang thanh toan Vnpay
   const handleWalletVnpay = async (values) => {
     try {
@@ -43,6 +50,15 @@ function Wallet() {
   const fetchData = async () => {
     const response = await api.get(`get-transactions/${user.id}`);
     setData(response.data);
+  };
+
+  const fetchWalletReceiver = async (email) => {
+    try {
+      const response = await api.post(`/wallet/${email}`);
+      return response.data;
+    } catch (error) {
+      message.error(error.response.data);
+    }
   };
 
   useEffect(() => {
@@ -166,7 +182,7 @@ function Wallet() {
             <Form
               className="form-group"
               autoComplete="off"
-              onFinish={handleSubmit}
+              onFinish={handleSubmitTransfer}
             >
               <h3 htmlFor="amount">Chuyển tiền:</h3>
               <div className="form-group-login">

@@ -151,8 +151,14 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
   useEffect(() => {
     if (mode === "update" && clubid) {
       //viet cu phap update du lieu tu DB len
+      fetchDataForm();
     }
   }, [mode, clubid]);
+
+  const fetchDataForm = async () => {
+    const response = await api.get(`/club/${clubid}`);
+    console.log(response.data);
+  };
 
   // hiển thị quận huyện tương ứng với city
   useEffect(() => {

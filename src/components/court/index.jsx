@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { Box, IconButton, useTheme } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme.js";
 import Header from "../dashboard/Header.jsx";
-import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import DeleteButton from "../global/deletebutton/index.jsx";
 // import Forms from "./forms.jsx";
 import api from "../../config/axios.js";
@@ -22,19 +21,9 @@ const Club = ({ clubId }) => {
   // };
 
   const handleCreate = async () => {
-    // setMode("create");
-    // setSelectedCourtId(null);
-    // setFormOpen(true);
     await api.post(`/court/${clubId}`);
     fetchCourts();
   };
-  // const handleFormClose = () => {
-  //   setFormOpen(false);
-  // };
-
-  // const handleFormSubmit = () => {
-  //   handleFormClose();
-  // };
 
   const columns = [
     {
@@ -59,37 +48,26 @@ const Club = ({ clubId }) => {
       align: "center",
     },
     // {
-    //   field: "update",
-    //   headerName: "Cập Nhật",
+    //   field: "delete",
+    //   headerName: "Xóa",
     //   flex: 1,
     //   headerAlign: "center",
     //   align: "center",
     //   renderCell: (params) => (
-    //     <IconButton
-    //       onClick={() => handleUpdate(params.id)}
-    //       sx={{ color: "#CE671B" }}
-    //     >
-    //       <PublishedWithChangesIcon />
-    //     </IconButton>
+    //     <DeleteButton
+    //       id={params.id}
+    //       rows={rows}
+    //       setRows={setRows}
+    //       linkapi={"court"}
+    //     />
     //   ),
     // },
-    {
-      field: "delete",
-      headerName: "Xóa",
-      flex: 1,
-      headerAlign: "center",
-      align: "center",
-      renderCell: (params) => (
-        <DeleteButton id={params.id} rows={rows} setRows={setRows} />
-      ),
-    },
   ];
 
   const fetchCourts = async () => {
     try {
       // nội dung fetch
       const response = await api.get(`/courts/${clubId}`);
-      // console.log(response.data);
       setRows(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);

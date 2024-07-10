@@ -18,8 +18,8 @@ const Club = () => {
   const handleUpdate = (id) => {
     setMode("update");
     setSelectedClubId(id);
-    console.log(id);
     setFormOpen(true);
+    // console.log(id);
   };
 
   const handleCreate = () => {
@@ -186,7 +186,7 @@ const Club = () => {
         onSubmit={handleFormSubmit}
         fetFunction={fetchallClubs}
         mode={mode}
-        id={selectedClubId}
+        clubid={selectedClubId}
       />
     </Box>
   );
