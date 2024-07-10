@@ -57,16 +57,6 @@ function Footer() {
                 Quy định
               </a>
             </li>
-            <li className="footer-link-item">
-              <a href="#" title="Small Business" className="footer-link">
-                Small Business
-              </a>
-            </li>
-            <li className="footer-link-item">
-              <a href="#" title="Website Builder" className="footer-link">
-                Website Builder
-              </a>
-            </li>
           </ul>
         </div>
         <div className="footer-category">

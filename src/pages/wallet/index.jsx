@@ -3,7 +3,7 @@ import "./index.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import api from "../../config/axios";
 import { toast } from "react-toastify";
-import ViewTransaction from "../../components/viewtransaction/viewtransaction";
+// import ViewTransaction from "../../components/viewtransaction/viewtransaction";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/features/counterSlice";
 import { Form, Input, message } from "antd";
@@ -15,7 +15,17 @@ function Wallet() {
   const [data, setData] = useState([]);
   const [visible, setVisible] = useState(true);
 
+  const formatCurrency = (value) => {
+    if (!value) return value;
+    // Remove all non-digit characters
+    const cleanedValue = value.replace(/\D/g, "");
+    // Format the number with commas
+    const formattedValue = new Intl.NumberFormat("vi-VN").format(cleanedValue);
+    return `${formattedValue}đ`;
+  };
+
   const handleInputChange = (e) => {
+    const formattedValue = formatCurrency(e.target.value);
     setAmount(e.target.value);
   };
 

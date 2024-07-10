@@ -103,6 +103,7 @@ function ClubDetail() {
               </i>{" "}
               {club.hotline}
             </li>
+            
           </ul>
         </div>
 
@@ -131,12 +132,14 @@ function ClubDetail() {
           </ul>
         </div>
         <div className="club-booking-button">
-          <button
+        
+            <button
             onClick={() => handleBooking(club)}
-            className="booking-button"
+            className="booking-button-detail"
           >
             <p>Đặt lịch ngay</p>
           </button>
+           
         </div>
       </div>
     </div>

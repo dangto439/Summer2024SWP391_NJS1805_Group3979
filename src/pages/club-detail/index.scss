@@ -4,7 +4,9 @@
     width: auto;
     h1 {
       text-align: center;
-      margin-bottom: 20px;
+      // margin-bottom: 20px;
+      font-weight: 500;
+      color: rgb(52, 119, 35) ;
     }
 
     h2{
@@ -51,13 +53,13 @@
       border-radius: 10px;
       padding: 20px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        max-width: 800px;
-        margin: 20px;
-        height: auto;
-        font-size: 20px;
-        ul{
+      max-width: 800px;
+      margin: 20px;
+      height: auto;
+      font-size: 20px;
+      ul{
           // font-size: 40px;
-          li{
+        li{
             list-style: none;
           }
         }
@@ -148,15 +150,16 @@
       font-family: "Font Awesome 5 Pro";
     }
 
-    // .club-booking-button{
+    // .club-booking-button-detail{
     //   display: block;
     //   text-align: start;
     // }
 
-    .booking-button {
+    .booking-button-detail {
       all: unset;
       display: flex;
       align-items: center;
+      justify-content: center;
       position: relative;
       padding: 0.6em 2em;
       border: mediumspringgreen solid 0.15em;
@@ -169,56 +172,56 @@
       transition: border 300ms, color 300ms;
       // user-select: none;
       // margin-left: 200px;
-      margin-top: 120px;
+      // margin-top: 120px;
       
     }
     
-    .booking-button p {
-      z-index: 1;
-    }
     
-    .booking-button:hover {
-      color: #212121;
-    }
-    
-    .booking-button:active {
-      border-color: teal;
-    }
-    
-    .booking-button::after, .booking-button::before {
-      content: "";
-      position: absolute;
-      width: 9.5em;
-      aspect-ratio: 1;
-      background: mediumspringgreen;
-      opacity: 50%;
-      border-radius: 50%;
-      transition: transform 500ms, background 300ms;
-    }
-    
-    .booking-button::before {
-      left: 0;
-      transform: translateX(-8em);
-    }
-    
-    .booking-button::after {
-      right: 0;
-      transform: translateX(8em);
-    }
-    
-    .booking-button:hover:before {
-      transform: translateX(-1em);
-    }
-    
-    .booking-button:hover:after {
-      transform: translateX(1em);
-    }
-    
-    .booking-button:active:before,
-    .booking-button:active:after {
-      background: teal;
-    }
 }
   
-  
+.booking-button-detail p {
+  z-index: 1;
+}
+
+.booking-button-detail:hover {
+  color: #212121;
+}
+
+.booking-button-detail:active {
+  border-color: teal;
+}
+
+.booking-button-detail::after, .booking-button-detail::before {
+  content: "";
+  position: absolute;
+  width: 9.5em;
+  aspect-ratio: 1;
+  background: rgb(4, 255, 46);
+  opacity: 50%;
+  border-radius: 50%;
+  transition: transform 500ms, background 300ms;
+}
+
+.booking-button-detail::before {
+  left: 0;
+  transform: translateX(-8em);
+}
+
+.booking-button-detail::after {
+  right: 0;
+  transform: translateX(8em);
+}
+
+.booking-button-detail:hover:before {
+  transform: translateX(-1em);
+}
+
+.booking-button-detail:hover:after {
+  transform: translateX(1em);
+}
+
+.booking-button-detail:active:before,
+.booking-button-detail:active:after {
+  background: teal;
+}
   
