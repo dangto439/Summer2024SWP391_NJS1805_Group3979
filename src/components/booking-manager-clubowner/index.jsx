@@ -54,46 +54,6 @@ const BookingManager = ({ clubId }) => {
       headerAlign: "center",
       align: "center",
     },
-    {
-      field: "delete",
-      headerName: "Xóa",
-      flex: 1,
-      headerAlign: "center",
-      align: "center",
-      renderCell: (params) => (
-        <DeleteButton id={params.id} rows={rows} setRows={setRows} />
-      ),
-    },
-    // {
-    //   field: "courtName",
-    //   headerName: "Tên Sân",
-    //   flex: 1,
-    //   cellClassName: "name-column--cell",
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
-    // {
-    //   field: "courtStatus",
-    //   headerName: "Trạng thái",
-    //   type: "number",
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
-    // {
-    //   field: "update",
-    //   headerName: "Cập Nhật",
-    //   flex: 1,
-    //   headerAlign: "center",
-    //   align: "center",
-    //   renderCell: (params) => (
-    //     <IconButton
-    //       onClick={() => handleUpdate(params.id)}
-    //       sx={{ color: "#CE671B" }}
-    //     >
-    //       <PublishedWithChangesIcon />
-    //     </IconButton>
-    //   ),
-    // },
     // {
     //   field: "delete",
     //   headerName: "Xóa",
@@ -101,7 +61,7 @@ const BookingManager = ({ clubId }) => {
     //   headerAlign: "center",
     //   align: "center",
     //   renderCell: (params) => (
-    //     <DeleteButton id={params.id} rows={rows} setRows={setRows} />
+    //     <DeleteButton id={params.bookingId} rows={rows} setRows={setRows} />
     //   ),
     // },
   ];
@@ -161,7 +121,7 @@ const BookingManager = ({ clubId }) => {
         <DataGrid
           rows={rows}
           columns={columns}
-          getRowId={(row) => row.courtId}
+          getRowId={(row) => row.bookingId}
         />
       </Box>
 

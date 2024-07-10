@@ -135,16 +135,16 @@ const PromotionManager = ({ clubId }) => {
       headerAlign: "center",
       align: "center",
     },
-    {
-      field: "delete",
-      headerName: "Xóa",
-      flex: 1,
-      headerAlign: "center",
-      align: "center",
-      renderCell: (params) => (
-        <DeleteButton id={params.promotionId} rows={rows} setRows={setRows} />
-      ),
-    },
+    // {
+    //   field: "delete",
+    //   headerName: "Xóa",
+    //   flex: 1,
+    //   headerAlign: "center",
+    //   align: "center",
+    //   renderCell: (params) => (
+    //     <DeleteButton id={params.promotionId} rows={rows} setRows={setRows} />
+    //   ),
+    // },
   ];
 
   const fetchPromotions = async () => {
