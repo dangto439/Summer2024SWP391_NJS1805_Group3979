@@ -8,8 +8,12 @@ import api from "../../config/axios";
 import { toast } from "react-toastify";
 import { UploadOutlined } from "@mui/icons-material";
 import uploadFile from "../../utils/upload";
+import { useTheme } from "@mui/material";
+import { tokens } from "../../theme";
 
 function Profile() {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
   const [formProfile] = useForm();
   const [formPassword] = useForm();
   const { confirm } = Modal;
@@ -102,7 +106,7 @@ function Profile() {
   };
 
   return (
-    <div className="profile">
+    <div className="profile" style={{ backgroundColor: colors.grey[100] }}>
       <Form
         form={formProfile}
         className="form-profile"

@@ -216,13 +216,11 @@ button {
 
 .list-club-search{
   margin-top: 40px;
-  margin-right: 200px;
-  border: 1px solid rgb(117, 113, 113);
-  display: flex;
-  justify-content: center;
+  margin-left: 0;
+  // border: 1px solid rgb(117, 113, 113);
+  margin-left: -105px;
   text-align: center;
   border-radius: 10px;
-  align-items: center;
 }
 
 .list-club-search-form{
@@ -240,7 +238,7 @@ button {
 
 .form-search{
   display: flex;
-  gap: 20px;
+  gap: 30px;
   // align-items: center;
 
 
