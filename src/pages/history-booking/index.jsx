@@ -3,10 +3,12 @@ import { Space, Table } from "antd";
 import { useEffect, useState } from "react";
 import api from "../../config/axios";
 import moment from "moment";
+import { render } from "@fullcalendar/core/preact.js";
 
 const HistoryBooking = () => {
   const [booking, setBooking] = useState([]);
   const [nameType, setNameType] = useState("");
+  const [status, setStatus] = useState("");
 
   const fetchHistoryBooking = async () => {
     const response = await api.get("/bookings/current-account");
@@ -33,6 +35,14 @@ const HistoryBooking = () => {
     } else setNameType("Ngày");
 
     return nameType;
+  };
+
+  const formatBookingStatus = (value) => {
+    if (value == "PENDING" || value == null || value == "") {
+      setStatus("Đang xử lý");
+    } else setStatus("Đã xác nhận");
+
+    return status;
   };
 
   const columns = [
@@ -67,6 +77,7 @@ const HistoryBooking = () => {
       title: "Trạng thái",
       dataIndex: "bookingStatus",
       key: "bookingStatus",
+      render: (status) => formatBookingStatus(status),
     },
     {
       title: "Tổng tiền",
@@ -79,7 +90,7 @@ const HistoryBooking = () => {
   ];
 
   return (
-    <div className="history-booking-page" >
+    <div className="history-booking-page">
       <h1>Lịch sử đặt lịch</h1>
       <Space
         style={{

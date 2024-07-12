@@ -72,19 +72,21 @@ function ListClub() {
   const handleOnSubmit = (value) => {
     console.log(value);
     console.log(listClub);
-  
-  const containsString = (mainStr, subStr) => {
+
+    const containsString = (mainStr, subStr) => {
       return mainStr.toLowerCase().indexOf(subStr.toLowerCase()) !== -1;
-  };
-  
+    };
+
     setData(
       listClub
-        .filter((item) => !value.search || containsString(item.clubName, value.search))
+        .filter(
+          (item) => !value.search || containsString(item.clubName, value.search)
+        )
         .filter((item) => !value.district || item.district === value.district)
         .filter((item) => !value.city || item.province === value.city)
     );
   };
-  
+
   return (
     <div className="list-club">
       <h1>SÂN CẦU LÔNG VIỆT NAM</h1>
@@ -133,7 +135,7 @@ function ListClub() {
                     placeholder="Chọn Quận/Huyện"
                   />
                 </Form.Item>
-                
+
                 <Form.Item>
                   <div className="form-search-button">
                     <Button className="submit-search-button" htmlType="submit">
