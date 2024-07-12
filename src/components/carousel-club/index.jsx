@@ -53,7 +53,7 @@ export default function CarouselClub() {
 
       <Swiper
         autoplay={{
-          delay: 4000,
+          delay: 5000,
           disableOnInteraction: false,
         }}
         slidesPerView={2}
@@ -120,7 +120,7 @@ export default function CarouselClub() {
       </div>
       <Swiper
         autoplay={{
-          delay: 4000,
+          delay: 8000,
           disableOnInteraction: false,
         }}
         slidesPerView={2}

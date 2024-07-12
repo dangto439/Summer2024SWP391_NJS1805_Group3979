@@ -1,4 +1,4 @@
-  .list-club {
+.list-club {
   display: flex;
   // flex-wrap: wrap;
   flex-direction: column;
@@ -7,22 +7,22 @@
   // position: static;
   // overflow: hidden;
   // position: relative ;
-  
-  h1{
+
+  h1 {
     font-size: 30px;
     font-weight: 500px;
     padding: 10px 10px;
     // margin-bottom: 0;
-    color: #1D8D1D;
+    color: #1d8d1d;
   }
 }
 
-.list-club-all{
+.list-club-all {
   // margin: 0 200px;
   margin-left: 300px;
 }
 
-.pagination-club{
+.pagination-club {
   display: flex;
   // justify-content: center;
   margin-top: 20px;
@@ -55,52 +55,50 @@
   width: 30%;
   margin-right: 20px;
 
-  h2{
+  h2 {
     font-weight: bold;
   }
 }
 
-.list-club-outstanding-info-card{
+.list-club-outstanding-info-card {
   display: flex;
   // width: 10%;
   flex-direction: row;
-  h2{
+  h2 {
     font-size: 18px;
     text-align: left;
     cursor: pointer;
   }
-  p{
+  p {
     text-align: left;
   }
 }
 
-.list-club-outstanding-image{
+.list-club-outstanding-image {
   // width: 20%;
-  // object-fit: cover; 
+  // object-fit: cover;
   padding-right: 8px;
-  img{
+  img {
     cursor: pointer;
-    min-width: 220px;
-    height: 120px;
-    
+    min-width: 250px;
+    height: 140px;
+
     border-radius: 8px;
   }
-
 }
 
-.list-club-main-image{
+.list-club-main-image {
   width: 70%;
   // height: 800px;
   padding-left: 20px;
   padding-right: 20px;
-  
-  img{
+
+  img {
     border-radius: 10px;
     width: 100%;
     height: 800px;
-      // height: 220px;
+    // height: 220px;
   }
-  
 }
 
 .list-club-card {
@@ -119,7 +117,7 @@
   max-width: 95%;
   min-height: 250px;
 
-.list-club-image {
+  .list-club-image {
     img {
       width: 220px;
       height: 220px;
@@ -127,94 +125,93 @@
       border-radius: 10px;
       cursor: pointer;
     }
-}
+  }
 
-.list-club-details {
+  .list-club-details {
     margin-top: 20px;
     // text-align: center;
     // text-align: left;
     width: 800px;
 
-  h2 {
+    h2 {
       font-size: 20px;
-      color: #007BFF;
+      color: #007bff;
       margin-bottom: 10px;
       text-align: left;
       margin-left: 40px;
       cursor: pointer;
-  }
+    }
 
-  p {
+    p {
       margin: 5px 0;
       margin-left: 20px;
       text-align: left;
-      
-    i {
+
+      i {
         margin-right: 5px;
         color: #888;
-       
       }
+    }
+
+    .list-club-description {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #555;
+      // text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+  .buttons {
+    display: flex;
+    // justify-content: end;
+    justify-content: center;
   }
 
-.list-club-description {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #555; 
-  // text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  button {
+    padding: 10px 30px;
+    border: unset;
+    border-radius: 8px;
+    color: #212121;
+    z-index: 1;
+    background: #49cd66;
+    position: relative;
+    font-weight: 600;
+    font-size: 17px;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    transition: all 250ms;
+    cursor: pointer;
+    // overflow: hidden;
+  }
+
+  button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    border-radius: 8px;
+    background-color: #65c766;
+    z-index: -1;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    transition: all 250ms;
+  }
+
+  button:hover {
+    color: #e8e8e8;
+  }
+
+  button:hover::before {
+    width: 100%;
   }
 }
-.buttons{
-  display: flex;
-  // justify-content: end;
-  justify-content: center;
-}
 
-button {
-  padding: 10px 30px;
-  border: unset;
-  border-radius: 8px;
-  color: #212121;
-  z-index: 1;
-  background: #49cd66;
-  position: relative;
-  font-weight: 600;
-  font-size: 17px;
-  -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-  box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-  transition: all 250ms;
-  cursor: pointer;
-  // overflow: hidden;
- }
- 
- button::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 0;
-  border-radius: 8px;
-  background-color: #65C766;
-  z-index: -1;
-  -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-  box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-  transition: all 250ms
- }
- 
- button:hover {
-  color: #e8e8e8;
- }
- 
- button:hover::before {
-  width: 100%;
- }
-}
-
-.list-club-search{
+.list-club-search {
   margin-top: 40px;
   margin-left: 0;
   // border: 1px solid rgb(117, 113, 113);
@@ -223,46 +220,43 @@ button {
   border-radius: 10px;
 }
 
-.list-club-search-form{
+.list-club-search-form {
   // display: flex;
   // flex-direction: row;
-  
 }
-.submit-search-button{
-  
+.submit-search-button {
 }
-.form-search-button{
+.form-search-button {
   text-align: center;
   justify-content: center;
 }
 
-.form-search{
+.form-search {
   display: flex;
   gap: 30px;
   // align-items: center;
 
+  label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
 
-    label {
-      display: block;
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
-
-    input[type='select'] {
-      width: 100%;
-      padding: 0px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      margin-bottom: 10px;
-    }
-    input[type='text'] {
-      width: 100%;
-      padding: 5px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      margin-bottom: 10px;
-    }
+  input[type="select"] {
+    width: 100%;
+    padding: 0px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
   // justify-content: center;
 }

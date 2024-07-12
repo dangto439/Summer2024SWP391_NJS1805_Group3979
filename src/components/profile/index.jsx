@@ -8,12 +8,8 @@ import api from "../../config/axios";
 import { toast } from "react-toastify";
 import { UploadOutlined } from "@mui/icons-material";
 import uploadFile from "../../utils/upload";
-import { useTheme } from "@mui/material";
-import { tokens } from "../../theme";
 
 function Profile() {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
   const [formProfile] = useForm();
   const [formPassword] = useForm();
   const { confirm } = Modal;
@@ -86,10 +82,16 @@ function Profile() {
 
   const handleUpdateProfile = async (values) => {
     try {
-      const response = await uploadFile(values.avatar.file.originFileObj);
-      values.avatar = response;
+      if (values.avatar && values.avatar.file) {
+        const response = await uploadFile(values.avatar.file.originFileObj);
+        values.avatar = response;
+      } else {
+        values.avatar = avatarUrl;
+      }
       const account = await api.put("/profile", values);
       fetchProfileData();
+      formProfile.resetFields(["avatar"]);
+      toast.success("Cập nhật thông tin thành công!");
     } catch (error) {
       toast.error("Cập nhật thông tin thất bại!");
     }
@@ -106,7 +108,7 @@ function Profile() {
   };
 
   return (
-    <div className="profile" style={{ backgroundColor: colors.grey[100] }}>
+    <div className="profile">
       <Form
         form={formProfile}
         className="form-profile"
