@@ -17,6 +17,8 @@ function Wallet() {
   const user = useSelector(selectUser);
 
   const [amount, setAmount] = useState("");
+  const [nameType, setNameType] = useState("");
+  const [balance, setBalance] = useState(0);
   const [transaction, setTransaction] = useState([]);
 
   const [modalTransfer, setModalTransfer] = useState(false);
@@ -49,6 +51,15 @@ function Wallet() {
     }).format(value);
   };
 
+  const formatType = (value) => {
+    if (value == "RECEIVE") {
+      setNameType("Chuyển tiền");
+    } else {
+      setNameType("Nhận tiền");
+    }
+    return nameType;
+  };
+
   const handleInputChange = (e) => {
     // const formattedValue = formatCurrency(e.target.value);
     setAmount(e.target.value);
@@ -63,10 +74,28 @@ function Wallet() {
   };
 
   const handleTransfer = async (e) => {
-    // console.log(e);
-    console.log(e.email);
-    const receiverWalletId = await fetchWalletReceiver(e.email);
-    console.log(receiverWalletId);
+    const response = await fetchWalletReceiver(e.email);
+    const receiverWalletId = response.walletId;
+    const amount = e.amount;
+    const senderWalletId = user.id;
+    const bookingId = 0;
+
+    const transferDetails = {
+      senderWalletId: senderWalletId,
+      receiverWalletId: receiverWalletId,
+      amount: amount,
+      bookingId: bookingId,
+    };
+    // console.log(transferDetails);
+    try {
+      const transfer = await api.post("/wallet/transfer", transferDetails);
+      toast.success("Chuyển tiền thành công!");
+    } catch (error) {
+      toast.error("Chuyển tiền thất bại!");
+    }
+    fetchData();
+    setModalTransfer(false);
+    formRecharge.resetFields();
   };
 
   //mo trang thanh toan Vnpay
@@ -82,15 +111,39 @@ function Wallet() {
 
   //load data
   const fetchData = async () => {
-    const response = await api.get(`get-transactions/${user.id}`);
-    setTransaction(response.data);
-    console.log(response.data);
+    try {
+      const response = await api.get(`get-transactions/${user.id}`);
+      const response2 = await api.get(`wallet/${user.id}`);
+      setBalance(response2.data.balance);
+      const transactions = response.data;
+      // console.log(transactions);
+      const transactionsWithAccounts = await Promise.all(
+        transactions.map(async (item) => {
+          const [reAccount, seAccount] = await Promise.all([
+            api.get(`account/${item.receiverWallet.walletId}`),
+            api.get(`account/${item.senderWallet.walletId}`),
+          ]);
+          // console.log(reAccount.data);
+          // console.log(seAccount.data);
+          return {
+            ...item,
+            receiverAccount: reAccount.data.name,
+            senderAccount: seAccount.data.name,
+          };
+        })
+      );
+
+      setTransaction(transactionsWithAccounts);
+      console.log(transactionsWithAccounts);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   const fetchWalletReceiver = async (email) => {
     try {
-      const response = await api.post(`/wallet/${email}`);
-      console.log(response.data);
+      const response = await api.get(`/wallet-email/${email}`);
+      // console.log(response.data);
       return response.data;
     } catch (error) {
       message.error(error.response.data);
@@ -106,11 +159,7 @@ function Wallet() {
       title: "Loại giao dịch",
       dataIndex: "type",
       key: "type",
-    },
-    {
-      title: "Loại lịch",
-      dataIndex: "bookingType",
-      key: "bookingType",
+      // render: (text) => formatType(text),
     },
     {
       title: "Thời gian",
@@ -122,10 +171,16 @@ function Wallet() {
       render: (text) => moment(text).format("HH:mm, DD/MM/YYYY"),
     },
     {
-      title: "Người nhận",
-      dataIndex: "receicerWallet.walletId",
-      key: "receicerWallet.walletId",
+      title: "Người gửi",
+      dataIndex: "senderAccount",
+      key: "senderAccount",
     },
+    {
+      title: "Người nhận",
+      dataIndex: "receiverAccount",
+      key: "receiverAccount",
+    },
+
     {
       title: "Số tiền",
       dataIndex: "amount",
@@ -133,6 +188,11 @@ function Wallet() {
       sorter: (a, b) => a.amount - b.amount,
       sortDirections: ["descend", "ascend"],
       render: (text) => formatCurrency(text),
+    },
+    {
+      title: "Ghi chú",
+      dataIndex: "description",
+      key: "description",
     },
   ];
 
@@ -168,7 +228,10 @@ function Wallet() {
           width={500}
           height={500}
           footer={null}
-          onCancel={() => setModalRecharge(false)}
+          onCancel={() => {
+            setModalRecharge(false);
+            formRecharge.resetFields();
+          }}
         >
           <Form
             className="form-group"
@@ -182,15 +245,15 @@ function Wallet() {
             </div>
             <div className="form-group-recharge">
               <Form.Item
-                name="amout"
+                name="amount"
                 rules={[{ required: true, message: "Vui lòng nhập số tiền!" }]}
               >
                 <Input
                   onChange={handleInputChange}
                   type="number"
                   min={10000}
-                  name="amout"
-                  id="amout"
+                  name="amount"
+                  id="amount"
                   placeholder="Số tiền nạp vào 10.000đ - 1.000.000đ"
                   className="form-input-login"
                   size="large"
@@ -222,7 +285,10 @@ function Wallet() {
           centered
           open={modalTransfer}
           footer={null}
-          onCancel={() => setModalTransfer(false)}
+          onCancel={() => {
+            setModalTransfer(false);
+            formTransfer.resetFields();
+          }}
         >
           <Form
             className="form-group"
@@ -246,8 +312,8 @@ function Wallet() {
                 ]}
               >
                 <Input
-                  name="amout"
-                  id="amout"
+                  name="amount"
+                  id="amount"
                   placeholder="Email người nhận tiền"
                   className="form-input-login"
                   size="large"
@@ -255,14 +321,14 @@ function Wallet() {
               </Form.Item>
 
               <Form.Item
-                name="amout"
+                name="amount"
                 rules={[{ required: true, message: "Vui lòng nhập số tiền!" }]}
               >
                 <Input
                   type="number"
                   min={10000}
-                  name="amout"
-                  id="amout"
+                  name="amount"
+                  id="amount"
                   placeholder="Số tiền chuyển 10.000đ - 1.000.000đ"
                   className="form-input-login"
                   size="large"
@@ -300,7 +366,7 @@ function Wallet() {
             <MdAttachMoney fontSize={50} color="white" />
           </div>
           <div>
-            <li>0Đ</li>
+            <li>{formatCurrency(balance)}</li>
             <li>Số dư hiện tại</li>
           </div>
         </div>
