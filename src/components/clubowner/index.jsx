@@ -12,11 +12,8 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  ComposedChart,
   Area,
-  Line,
-  LineChart,
-  Customized,
+  AreaChart,
 } from "recharts";
 import "./index.scss";
 import { useEffect, useState } from "react";
@@ -32,6 +29,9 @@ function ClubOwnerDasboard() {
   const [bookingNumber, setBookingNumber] = useState(0);
   const [clubNumber, setClubNumber] = useState(0);
   const [courtNumber, setCourtNumber] = useState(0);
+  const [dataTransaction, setTransaction] = useState([]);
+  const [bookingDataChart, setBookingDataChart] = useState([]);
+  const [priceDataChart, setPrriceDataChart] = useState([]);
 
   const data = [
     {
@@ -78,30 +78,6 @@ function ClubOwnerDasboard() {
     },
   ];
 
-  const CustomizedRectangle = (props) => {
-    const { formattedGraphicalItems } = props;
-    // get first and second series in chart
-    const firstSeries = formattedGraphicalItems[0];
-    const secondSeries = formattedGraphicalItems[1];
-
-    // render custom content using points from the graph
-    return firstSeries?.props?.points.map((firstSeriesPoint, index) => {
-      const secondSeriesPoint = secondSeries?.props?.points[index];
-      const yDifference = firstSeriesPoint.y - secondSeriesPoint.y;
-
-      return (
-        <Rectangle
-          key={firstSeriesPoint.payload.name}
-          width={10}
-          height={yDifference}
-          x={secondSeriesPoint.x - 5}
-          y={secondSeriesPoint.y}
-          fill={yDifference > 0 ? "red" : yDifference < 0 ? "green" : "none"}
-        />
-      );
-    });
-  };
-
   const fetchData = async () => {
     try {
       const [
@@ -110,19 +86,50 @@ function ClubOwnerDasboard() {
         bookingResponse,
         clubsResponse,
         CoursResponse,
+        bookingDataChartResponse,
+        priceInDataChartesponse,
+        priceOutDataChartesponse,
       ] = await Promise.all([
         api.get(`/wallet/${user.id}`),
         api.get(`get-transactions/${user.id}`),
-
-        api.get(`/get-all-account`), //cần chỉnh
+        api.get(`/get-all-account`), //cần chỉnh để lấy số lượng booking trên sân
         api.get(`/current-clubs`), //lấy số lượng sân hiện tại của account
         api.get(`/courts/amount`),
+        api.get(`/dashboard-club-chart-account/${user.id}`),
+        api.get(`/dashboard-club-area-chart?walletId=${user.id}&year=2024`), //tiền vào
+        api.get(
+          `/dashboard-club-area-chart-refund?walletId=${user.id}&year=2024`
+        ), //tiền ra
       ]);
 
       setTotalPrice(totalPriceResponse.data.balance);
+      setTransaction(transactionResponse.data);
       setBookingNumber(bookingResponse.data.length);
       setClubNumber(clubsResponse.data.length);
       setCourtNumber(CoursResponse.data);
+      const confirmDataBookingChart = bookingDataChartResponse.data.map(
+        (item) => ({
+          name: `Thang ${item.month}`,
+          soluongbooking: item.sumamount,
+        })
+      );
+      setBookingDataChart(confirmDataBookingChart);
+      const confirmDataPriceInChart = priceInDataChartesponse.data.map(
+        (item) => ({
+          name: `Thang ${item.month}`,
+          tienvao: item.sumamount,
+        })
+      );
+      const confirmDataPriceOutChart = priceOutDataChartesponse.data.map(
+        (item) => ({
+          tienra: item.sumamount,
+        })
+      );
+      const mergedDataChart = confirmDataPriceInChart.map((item, index) => ({
+        ...item,
+        ...confirmDataPriceOutChart[index],
+      }));
+      setPrriceDataChart(mergedDataChart);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -168,10 +175,10 @@ function ClubOwnerDasboard() {
         </div>
         <div className="charts">
           <ResponsiveContainer width="100%" height={500}>
-            <LineChart
+            <BarChart
               width={500}
               height={300}
-              data={data}
+              data={priceDataChart}
               margin={{
                 top: 5,
                 right: 30,
@@ -184,10 +191,17 @@ function ClubOwnerDasboard() {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="priceout" stroke="#8884d8" />
-              <Line type="monotone" dataKey="pricein" stroke="#82ca9d" />
-              <Customized component={CustomizedRectangle} />
-            </LineChart>
+              <Bar
+                dataKey="tienra"
+                fill="#8884d8"
+                activeBar={<Rectangle fill="pink" stroke="blue" />}
+              />
+              <Bar
+                dataKey="tienvao"
+                fill="#82ca9d"
+                activeBar={<Rectangle fill="gold" stroke="purple" />}
+              />
+            </BarChart>
           </ResponsiveContainer>
         </div>
         <div className="charts">
@@ -195,7 +209,7 @@ function ClubOwnerDasboard() {
             <BarChart
               width={500}
               height={300}
-              data={data}
+              data={bookingDataChart}
               margin={{
                 top: 5,
                 right: 30,
@@ -209,48 +223,16 @@ function ClubOwnerDasboard() {
               <Tooltip />
               <Legend />
               <Bar
-                dataKey="priceout"
+                dataKey="soluongbooking"
                 fill="#8884d8"
                 activeBar={<Rectangle fill="pink" stroke="blue" />}
               />
-              <Bar
-                dataKey="pricein"
-                fill="#82ca9d"
-                activeBar={<Rectangle fill="gold" stroke="purple" />}
-              />
             </BarChart>
-          </ResponsiveContainer>
-          <ResponsiveContainer width="100%" height={500}>
-            <ComposedChart
-              width={500}
-              height={400}
-              data={data}
-              margin={{
-                top: 20,
-                right: 20,
-                bottom: 20,
-                left: 20,
-              }}
-            >
-              <CartesianGrid stroke="#f5f5f5" />
-              <XAxis dataKey="name" scale="band" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Area
-                type="monotone"
-                dataKey="amt"
-                fill="#8884d8"
-                stroke="#8884d8"
-              />
-              <Bar dataKey="priceout" barSize={20} fill="#413ea0" />
-              <Line type="monotone" dataKey="pricein" stroke="#ff7300" />
-            </ComposedChart>
           </ResponsiveContainer>
         </div>
       </div>
       <div>
-        <ViewTransaction />
+        <ViewTransaction data={dataTransaction} />
       </div>
     </main>
   );

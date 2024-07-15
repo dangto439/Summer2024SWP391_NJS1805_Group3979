@@ -109,7 +109,7 @@ function AdminDasboard() {
       const transformedData1 = simpleBarChartResponseByYear.data.map(
         (item) => ({
           name: `Tháng ${item.month}`,
-          soluongdondatsan: item.sumamount,
+          TongGiaBooking: item.sumamount,
         })
       );
       SetSimpleBarChart(transformedData1);
@@ -213,7 +213,7 @@ function AdminDasboard() {
               <Tooltip />
               <Legend />
               <Bar
-                dataKey="soluongdondatsan"
+                dataKey="TongGiaBooking"
                 fill="#82ca9d"
                 activeBar={<Rectangle fill="gold" stroke="purple" />}
               />

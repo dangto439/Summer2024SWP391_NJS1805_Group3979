@@ -50,6 +50,9 @@ function Payment() {
         updatedTransaction
       );
       setTransaction(updatedTransaction);
+      if (transactionType === "DEPOSIT") {
+        window.location.reload();
+      }
     } catch (error) {
       toast.error("Cập nhật transaction thất bại");
     }
