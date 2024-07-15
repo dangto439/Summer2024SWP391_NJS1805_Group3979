@@ -157,7 +157,8 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
 
   const fetchDataForm = async () => {
     const response = await api.get(`/club/${clubid}`);
-    console.log(response.data);
+
+    // console.log(response.data.province);
   };
 
   // hiển thị quận huyện tương ứng với city
@@ -261,7 +262,7 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
         margin="10px"
         fontSize="25px"
       >
-        {mode === "create" ? "Tạo Mới Club" : "Cập Nhật Club"}
+        {mode === "create" ? "Tạo Mới CLB" : "Cập Nhật CLB"}
       </DialogTitle>
       <Typography
         marginRight="60%"

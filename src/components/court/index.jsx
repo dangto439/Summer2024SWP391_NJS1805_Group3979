@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { Box, useTheme } from "@mui/material";
+import { Box, IconButton, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme.js";
 import Header from "../dashboard/Header.jsx";
-import DeleteButton from "../global/deletebutton/index.jsx";
+import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
+
 // import Forms from "./forms.jsx";
 import api from "../../config/axios.js";
+import { message } from "antd";
 const Club = ({ clubId }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -23,6 +25,16 @@ const Club = ({ clubId }) => {
   const handleCreate = async () => {
     await api.post(`/court/${clubId}`);
     fetchCourts();
+  };
+
+  const handleUpdate = async (courtId) => {
+    try {
+      await api.put(`/court/change-status/${courtId}`);
+      fetchCourts();
+      message.success("Cập nhật trạng sân thành công");
+    } catch (error) {
+      message.error("Cập nhật trạng thái sấn thất bại");
+    }
   };
 
   const columns = [
@@ -47,21 +59,21 @@ const Club = ({ clubId }) => {
       headerAlign: "center",
       align: "center",
     },
-    // {
-    //   field: "delete",
-    //   headerName: "Xóa",
-    //   flex: 1,
-    //   headerAlign: "center",
-    //   align: "center",
-    //   renderCell: (params) => (
-    //     <DeleteButton
-    //       id={params.id}
-    //       rows={rows}
-    //       setRows={setRows}
-    //       linkapi={"court"}
-    //     />
-    //   ),
-    // },
+    {
+      field: "update",
+      headerName: "Cập Nhật Trạng Thái Sân",
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
+      renderCell: (params) => (
+        <IconButton
+          onClick={() => handleUpdate(params.id)}
+          sx={{ color: "#CE671B" }}
+        >
+          <PublishedWithChangesIcon />
+        </IconButton>
+      ),
+    },
   ];
 
   const fetchCourts = async () => {

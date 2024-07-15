@@ -38,7 +38,8 @@ function BookingDaily({ club }) {
 
       try {
         const courtsResponse = await api.get(`/courts/${club.clubId}`);
-        const courts = courtsResponse.data;
+        let courts = courtsResponse.data;
+        courts = courts.filter((court) => court.courtStatus !== "INACTIVE");
 
         const slotsPromises = courts.map((court) =>
           api.get(
@@ -172,6 +173,7 @@ function BookingDaily({ club }) {
           club: club.clubId,
         },
       });
+      // console.log(bookingData);
     } catch (error) {
       console.error("Error submitting booking:", error);
       message.error("Đặt sân thất bại. Vui lòng thử lại.");

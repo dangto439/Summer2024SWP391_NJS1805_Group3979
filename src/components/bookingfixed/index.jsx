@@ -9,6 +9,7 @@ import {
   Input,
   Modal,
   Row,
+  Radio,
   message,
 } from "antd";
 import api from "../../config/axios";
@@ -21,8 +22,10 @@ function BookingFixed({ club }) {
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [promotionCode, setPromotionCode] = useState("");
   const [options, setOptions] = useState([]);
+  const [selectedCourtOption, setSelectedCourtOption] = useState("any");
   const navigate = useNavigate();
   const [courtId, setCourtId] = useState([]);
+  const [autoChoose, setAutoChoose] = useState([]);
 
   const onChange = (date, dateString) => {
     setSelectedDate(date);
@@ -38,20 +41,20 @@ function BookingFixed({ club }) {
 
   const fetchCourt = async () => {
     const response = await api.get(`/courts/${club.clubId}`); // lấy court hiện tại của club
-    const courts = response.data;
+    let courts = response.data;
+
+    courts = courts.filter((court) => court.courtStatus !== "INACTIVE");
     const options = courts.map((court) => ({
       label: court.courtName,
       value: court.courtId,
     }));
-    const defaultOption = {
-      label: "sân bất kì",
-      value: 0,
-    };
-
-    const finalOptions = [defaultOption, ...options];
 
     // Set options
-    setOptions(finalOptions);
+    setOptions(options);
+
+    // Set option auto
+    const values = options.map((item) => item.value);
+    setAutoChoose(values);
   };
 
   const fetchSlots = async () => {
@@ -75,22 +78,13 @@ function BookingFixed({ club }) {
   const handleDayChange = (checkedValues) => {
     setSelectedDays(checkedValues);
   };
-  //   try {
-  //     const response = await api.post(`/vnpay?amount=${values}`);
-  //     const paymentLink = response.data;
-  //     window.location.href = paymentLink;
-  //   } catch (error) {
-  //     toast.error("Không thể thanh toán!");
-  //   }
-  // };
 
-  //bắt lỗi nếu người dùng không chọn gì hết
   const handleSubmit = async () => {
     if (!selectedDate) {
       message.warning("Vui lòng chọn thời gian.");
       return;
     }
-    if (courtId.length === 0) {
+    if (selectedCourtOption === "specific" && courtId.length === 0) {
       message.warning("Vui lòng chọn ít nhất một sân.");
       return;
     }
@@ -110,9 +104,10 @@ function BookingFixed({ club }) {
       promotionCode: promotionCode,
       dayOfWeeks: selectedDays,
       slotIds: selectedSlots,
-      courtIds: courtId,
+      courtIds: selectedCourtOption === "any" ? autoChoose : courtId,
     };
 
+    // setAutoChoose();
     try {
       // Check slots
       const checkbooking = await api.post("/booking/fixed/check", bookingData);
@@ -134,6 +129,7 @@ function BookingFixed({ club }) {
                 club: club.clubId,
               },
             });
+            // console.log(bookingData);
           } catch (error) {
             message.error(error.response.data);
           }
@@ -160,6 +156,10 @@ function BookingFixed({ club }) {
 
   const handleInputChange = (e) => {
     setPromotionCode(e.target.value);
+  };
+
+  const handleCourtOptionChange = (e) => {
+    setSelectedCourtOption(e.target.value);
   };
 
   return (
@@ -195,13 +195,16 @@ function BookingFixed({ club }) {
           disabledDate={disabledDate}
           picker="month"
         />
-        <Checkbox.Group options={options} onChange={onChangeSelectCourt} />
-        {/* <Select
-          options={options}
-          defaultValue={0}
-          onChange={onChangeSelectCourt}
-          style={{ width: 200 }}
-        /> */}
+        <Radio.Group
+          onChange={handleCourtOptionChange}
+          value={selectedCourtOption}
+        >
+          <Radio value="any">một sân bất kì</Radio>
+          <Radio value="specific">chọn sân mình muốn</Radio>
+        </Radio.Group>
+        {selectedCourtOption === "specific" && (
+          <Checkbox.Group options={options} onChange={onChangeSelectCourt} />
+        )}
         <Checkbox.Group
           onChange={handleDayChange}
           options={dayOptions}

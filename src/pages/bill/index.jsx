@@ -58,15 +58,11 @@ function Bill() {
   const handleBookingFixed = async () => {
     const response = await api.post(`booking/fixed`, booking);
     setResult(response.data);
-    console.log(response.data.bookingDetailResponseList);
-    // Handle response or update state as needed
   };
 
   const handleBookingDaily = async () => {
     const response = await api.post(`booking/daily`, booking);
     setResult(response.data);
-    console.log(response.data);
-    // Handle response or update state as needed
   };
 
   const handleCreateTransactionAndWallet = async (bookingtransfer) => {
@@ -175,7 +171,7 @@ function Bill() {
                         <td>{result.clubName}</td>
                         <td>{detail.courtName}</td>
                         <td>{detail.playingDate}</td>
-                        <td>{detail.price}</td>
+                        <td>{detail.price} VND</td>
                       </tr>
                     ))}
                 </tbody>
