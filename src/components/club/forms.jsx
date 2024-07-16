@@ -28,7 +28,10 @@ import hours from "../../../hours";
 const schema = yup.object().shape({
   clubName: yup.string().required("Tên Club là bắt buộc"),
   clubDescription: yup.string().required("Mô tả là bắt buộc"),
-  clubHotLine: yup.string().required("Số hotline là bắt buộc"),
+  clubHotLine: yup
+    .string()
+    .required("Số hotline là bắt buộc")
+    .matches(/^[0-9]+$/, "Chỉ cho phép nhập số"),
   capacity: yup.number().required("Số lượng sân là bắt buộc").min(1),
   city: yup.string().required("Tỉnh / Thành phố là bắt buộc"),
   district: yup.string().required("Quận / Huyện là bắt buộc"),
@@ -318,6 +321,13 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
                 margin="normal"
                 error={!!errors.clubHotLine}
                 helperText={errors.clubHotLine?.message}
+                inputProps={{
+                  inputMode: "numeric",
+                  pattern: "[0-9]*",
+                }}
+                onInput={(e) => {
+                  e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                }}
               />
             )}
           />

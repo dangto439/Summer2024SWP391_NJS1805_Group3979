@@ -44,10 +44,21 @@ function App() {
 
   const AuthRoute = ({ children }) => {
     if (user == null) {
-      toast.error("bạn cần đăng nhập tài khoản admin trước");
+      toast.error("Bạn cần đăng nhập tài khoản admin trước");
       return <Navigate to="/login" />;
     } else if (user.role != "ADMIN") {
       toast.error("Bạn không phải là Admin!");
+      return <Navigate to="/login" />;
+    }
+    return children;
+  };
+
+  const ClubOwnerRoute = ({ children }) => {
+    if (user == null) {
+      toast.error("Bạn cần đăng nhập tài khoản chủ CLB trước");
+      return <Navigate to="/login" />;
+    } else if (user.role != "CLUB_OWNER") {
+      toast.error("Bạn không phải là chủ CLB!");
       return <Navigate to="/login" />;
     }
     return children;
@@ -208,8 +219,12 @@ function App() {
       ],
     },
     {
-      path: "/dashboard/*",
-      element: <Dashboard />,
+      path: "/dashboard/",
+      element: (
+        <ClubOwnerRoute>
+          <Dashboard />
+        </ClubOwnerRoute>
+      ),
       children: [
         {
           path: "",

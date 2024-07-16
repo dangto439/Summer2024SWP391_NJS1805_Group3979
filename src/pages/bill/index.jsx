@@ -6,6 +6,7 @@ import api from "../../config/axios";
 import { useState, useEffect } from "react";
 import moment from "moment";
 import { message } from "antd";
+import { toast } from "react-toastify";
 
 function Bill() {
   const user = useSelector(selectUser);
@@ -70,6 +71,16 @@ function Bill() {
     console.log(reponse.data);
   };
 
+  const handleWalletVnpay = async (values) => {
+    try {
+      const response = await api.post(`/vnpay?amount=${values}`);
+      const paymentLink = response.data;
+      window.location.href = paymentLink;
+    } catch (error) {
+      toast.error("Không thể thanh toán!");
+    }
+  };
+
   const handleSubmit = async () => {
     try {
       const bookingtransfer = {
@@ -78,12 +89,22 @@ function Bill() {
         amount: result.totalPrice,
         bookingId: result.bookingId,
       };
+      sessionStorage.setItem(
+        "bookingtransfer",
+        JSON.stringify(bookingtransfer)
+      );
       await handleCreateTransactionAndWallet(bookingtransfer);
 
       navigate("/history-booking");
       message.success("Đặt sân thành công!");
     } catch (error) {
       message.error(error.response.data);
+      sessionStorage.setItem("typepayment", "BOOKING");
+      //nếu có lỗi thì nó chuyển qua trang thanh toán để nạp tiền
+      handleWalletVnpay(result.totalPrice);
+      //cập nhật lại transaction 1 lần nữa
+
+      //thanh toán thành công thì chuyển qua trang historybooking
     }
   };
   return (

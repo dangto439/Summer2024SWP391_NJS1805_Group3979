@@ -21,9 +21,14 @@ function Payment() {
   const vnp_ResponseCode = query.get("vnp_ResponseCode");
   const walletId = query.get("walletId");
   const transactionId = query.get("transactionId");
+  const typePayment = sessionStorage.getItem("typepayment");
 
   const handleClickHome = () => {
     navigate("/");
+  };
+
+  const handleBookingHistory = () => {
+    navigate("/history-booking");
   };
 
   const isSuccess = Number(vnp_ResponseCode) === 0;
@@ -63,9 +68,22 @@ function Payment() {
     }
   };
 
+  const handleCreateTransactionAndWallet = async (bookingtransfer) => {
+    const reponse = await api.post("/wallet/transfer-booking", bookingtransfer);
+    sessionStorage.removeItem("bookingtransfer");
+  };
+
   useEffect(() => {
     const processPayment = async () => {
       await handleGetTransaction();
+      if (isSuccess && typePayment === "BOOKING") {
+        const bookingtransfer = JSON.parse(
+          sessionStorage.getItem("bookingtransfer")
+        );
+        await handleCreateTransactionAndWallet(bookingtransfer);
+        sessionStorage.removeItem("typepayment");
+        navigate("/history-booking");
+      }
       if (isSuccess) {
         await handleWalletDeposit();
         await handleUpdateTransactionDeposit("DEPOSIT");
@@ -94,7 +112,9 @@ function Payment() {
             <Button type="primary" key="console" onClick={handleClickHome}>
               Quay lại trang chủ
             </Button>,
-            <Button key="buy">Xem lại lịch sử đặt sân</Button>,
+            <Button key="buy" onClick={handleBookingHistory}>
+              Xem lại lịch sử đặt sân
+            </Button>,
           ]}
         />
       ) : (
