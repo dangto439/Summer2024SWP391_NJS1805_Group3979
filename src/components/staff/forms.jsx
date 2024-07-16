@@ -18,13 +18,19 @@ import {
 import api from "../../config/axios";
 
 const schema = yup.object().shape({
-  clubId: yup.string().required("Club ID is required"),
-  name: yup.string().required("Name is required"),
+  clubId: yup.string().required("Vui lòng chọn Clb"),
+  name: yup.string().required("Vui lòng nhập tên nhân viên"),
   phone: yup
     .string()
-    .matches(/(0[3|5|7|8|9])+([0-9]{8})\b/, "Invalid phone number")
+    .matches(
+      /(0[3|5|7|8|9])+([0-9]{8})\b/,
+      "Vui lòng kiểm tra lại số điện thoại"
+    )
     .required("Phone number is required"),
-  email: yup.string().email("Invalid email").required("Email is required"),
+  email: yup
+    .string()
+    .email("Invalid email")
+    .required("Vui lòng kiểm tra lại email"),
   // gender: yup.string().required("Gender is required"),
   // password: yup.string().required("Password is required"),
 });
@@ -74,17 +80,17 @@ const AddStaffForm = ({ open, onClose, onSubmit }) => {
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Thêm mới Staff Account</DialogTitle>
+      <DialogTitle>Thêm mới nhân viên</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(handleFormSubmit)}>
           <FormControl fullWidth margin="normal" error={!!errors.clubId}>
-            <InputLabel>Club Name</InputLabel>
+            <InputLabel>Tên Clb</InputLabel>
             <Controller
               name="clubId"
               control={control}
               defaultValue=""
               render={({ field }) => (
-                <Select {...field} label="Club Name">
+                <Select {...field} label="Tên Clb">
                   {clubs.map((club) => (
                     <MenuItem key={club.clubId} value={club.clubId}>
                       {club.clubName}
@@ -98,7 +104,7 @@ const AddStaffForm = ({ open, onClose, onSubmit }) => {
 
           <FormControl fullWidth margin="normal" error={!!errors.name}>
             <TextField
-              label="Name"
+              label="Tên Nhân viên"
               {...control.register("name")}
               error={!!errors.name}
               helperText={errors.name?.message}
@@ -107,7 +113,7 @@ const AddStaffForm = ({ open, onClose, onSubmit }) => {
 
           <FormControl fullWidth margin="normal" error={!!errors.phone}>
             <TextField
-              label="Phone Number"
+              label="Số điện thoại nhân viên"
               {...control.register("phone")}
               error={!!errors.phone}
               helperText={errors.phone?.message}
