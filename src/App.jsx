@@ -139,7 +139,11 @@ function App() {
         },
         {
           path: "/booking/:clubId",
-          element: <Booking />,
+          element: (
+            <PrivateRoute>
+              <Booking />
+            </PrivateRoute>
+          ),
         },
         {
           path: "/profile",
@@ -269,7 +273,11 @@ function App() {
     },
     {
       path: "/bill",
-      element: <Bill />,
+      element: (
+        <PrivateRoute>
+          <Bill />
+        </PrivateRoute>
+      ),
     },
   ]);
 
