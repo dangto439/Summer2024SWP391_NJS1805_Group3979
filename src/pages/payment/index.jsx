@@ -21,7 +21,6 @@ function Payment() {
   const vnp_ResponseCode = query.get("vnp_ResponseCode");
   const walletId = query.get("walletId");
   const transactionId = query.get("transactionId");
-  const typePayment = sessionStorage.getItem("typepayment");
 
   const handleClickHome = () => {
     navigate("/");
@@ -76,17 +75,18 @@ function Payment() {
   useEffect(() => {
     const processPayment = async () => {
       await handleGetTransaction();
-      if (isSuccess && typePayment === "BOOKING") {
-        const bookingtransfer = JSON.parse(
-          sessionStorage.getItem("bookingtransfer")
-        );
-        await handleCreateTransactionAndWallet(bookingtransfer);
-        sessionStorage.removeItem("typepayment");
-        navigate("/history-booking");
-      }
       if (isSuccess) {
         await handleWalletDeposit();
         await handleUpdateTransactionDeposit("DEPOSIT");
+        const typePayment = sessionStorage.getItem("typepayment");
+        if (typePayment === "BOOKING") {
+          const bookingtransfer = JSON.parse(
+            sessionStorage.getItem("bookingtransfer")
+          );
+          await handleCreateTransactionAndWallet(bookingtransfer);
+          sessionStorage.removeItem("typepayment");
+          navigate("/history-booking");
+        }
       } else {
         await handleUpdateTransactionDeposit("CANCEL");
       }
