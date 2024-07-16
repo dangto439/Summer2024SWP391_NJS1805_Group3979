@@ -37,10 +37,11 @@ import Contest from "./pages/contest";
 import ListContest from "../src/components/list-contest";
 import ScheduleContest from "./components/scheduler-contest";
 import Checkin from "./pages/check-in";
-import Tournament from "../src/components/tournament";
+// import Tournament from "../src/components/tournament";
 import Wallet from "./pages/wallet";
 import ContestDetail from "../src/components/contest-detail";
 import RegisterContest from "../src/components/register-contest";
+import Game from "../src/components/tournaments/game";
 
 function App() {
   const user = useSelector(selectUser);
@@ -93,6 +94,7 @@ function App() {
           path: "/wallet",
           element: <Wallet />,
         },
+
         {
           path: "/contest/*",
           element: (
@@ -104,12 +106,12 @@ function App() {
             {
               path: "dangdienra",
               element: <ListContest />,
-              children: [
-                {
-                  path: "chitiet2/:id",
-                  element: <Tournament />,
-                },
-              ],
+              // children: [
+              //   {
+              //     path: "chitiet2/:id",
+              //     element: <Tournament />,
+              //   },
+              // ],
             },
             {
               path: "sapdienra",
@@ -176,6 +178,10 @@ function App() {
           element: <Payment />,
         },
       ],
+    },
+    {
+      path: "/game",
+      element: <Game />,
     },
     {
       path: "/login",
