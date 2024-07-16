@@ -1,19 +1,32 @@
 import "./index.scss";
-import { Space, Table } from "antd";
+import { Badge, Space, Table } from "antd";
 import { useEffect, useState } from "react";
 import api from "../../config/axios";
 import moment from "moment";
-import { render } from "@fullcalendar/core/preact.js";
 
 const HistoryBooking = () => {
   const [booking, setBooking] = useState([]);
-  const [nameType, setNameType] = useState("");
-  const [status, setStatus] = useState("");
+  const [bookingDetail, setBookingDetail] = useState([]);
 
   const fetchHistoryBooking = async () => {
     const response = await api.get("/bookings/current-account");
-    console.log(response.data);
     setBooking(response.data);
+    // console.log(response.data);
+  };
+
+  const fetchHistoryBookingDetail = async (bookingId) => {
+    try {
+      const response = await api.get(`booking/booking-detail/${bookingId}`);
+      if (response.data) {
+        setBookingDetail(response.data);
+      } else {
+        setBookingDetail([]); // or setBookingDetail([]) if you prefer an empty array
+      }
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching booking details:", error);
+      setBookingDetail([]); // or setBookingDetail([]) in case of error
+    }
   };
 
   useEffect(() => {
@@ -28,24 +41,95 @@ const HistoryBooking = () => {
   };
 
   const formatBookingType = (value) => {
-    if (value == "FIXEDBOOKING") {
-      setNameType("Cố định");
-    } else if (value == "FLEXIBLEBOOKING") {
-      setNameType("Linh hoạt");
-    } else setNameType("Ngày");
-
-    return nameType;
+    if (value === "FIXEDBOOKING") {
+      return "Cố định";
+    } else if (value === "FLEXIBLEBOOKING") {
+      return "Linh hoạt";
+    } else return "Ngày";
   };
 
   const formatBookingStatus = (value) => {
-    if (value == "PENDING" || value == null || value == "") {
-      setStatus("Đang xử lý");
-    } else setStatus("Đã xác nhận");
+    if (value === "PENDING" || value === null || value === "") {
+      return "Đang xử lý";
+    } else return "Đã xác nhận";
+  };
 
-    return status;
+  const expandedRowRender = () => {
+    const columns = [
+      {
+        title: "Id",
+        dataIndex: "bookingDetailId",
+        key: "bookingDetailId",
+      },
+
+      {
+        title: "Ngày chơi",
+        dataIndex: "playingDate",
+        key: "playingDate",
+        defaultSortOrder: "descend",
+        sorter: (a, b) => new Date(a.playingDate) - new Date(b.playingDate),
+        sortDirections: ["descend", "ascend"],
+        render: (text) => moment(text).format("HH:mm, DD/MM/YYYY"),
+      },
+      {
+        title: "Sân",
+        dataIndex: "courtName",
+        key: "courtName",
+      },
+      {
+        title: "Mã checking",
+        dataIndex: "checkInCode",
+        key: "checkInCode",
+      },
+      {
+        title: "Giá tiền",
+        dataIndex: "price",
+        key: "price",
+        sorter: (a, b) => a.price - b.price,
+        sortDirections: ["descend", "ascend"],
+        render: (text) => formatCurrency(text),
+      },
+      {
+        title: "Giờ bắt đầu",
+        dataIndex: "timeSlot",
+        key: "timeSlot",
+      },
+      {
+        title: "Trạng thái",
+        dataIndex: "status",
+        key: "status",
+      },
+      {
+        title: "Action",
+        key: "operation",
+        render: () => (
+          <Space size="middle">
+            <a>Pause</a>
+            <a>Stop</a>
+          </Space>
+        ),
+      },
+    ];
+
+    return (
+      <Table
+        columns={columns}
+        dataSource={bookingDetail.map((detail) => ({
+          ...detail,
+          key: detail.bookingDetailId, // Hoặc sử dụng một thuộc tính duy nhất khác nếu thích
+        }))}
+        pagination={{ pageSize: 5, position: ["bottomCenter"] }}
+      />
+    );
   };
 
   const columns = [
+    {
+      title: "Booking Id",
+      dataIndex: "bookingId",
+      key: "bookingId",
+      // hidden: "true",
+    },
     {
       title: "Tên CLB",
       dataIndex: "clubName",
@@ -96,15 +180,22 @@ const HistoryBooking = () => {
         style={{
           marginBottom: 16,
         }}
-      >
-        {/* <Button onClick={setAgeSort}>Sort age</Button>
-        <Button onClick={clearFilters}>Clear filters</Button>
-        <Button onClick={clearAll}>Clear filters and sorters</Button> */}
-      </Space>
+      ></Space>
       <Table
+        key={booking}
         columns={columns}
         dataSource={booking}
-        pagination={{ pageSize: 20 }}
+        pagination={{ pageSize: 20, position: ["bottomCenter"] }}
+        expandable={{
+          expandedRowRender,
+          onExpand: (expanded, record) => {
+            if (expanded) {
+              expandedRowRender(record.bookingId);
+              fetchHistoryBookingDetail(record.bookingId);
+            }
+          },
+          // defaultExpandedRowKeys: ["19"],
+        }}
       />
     </div>
   );
