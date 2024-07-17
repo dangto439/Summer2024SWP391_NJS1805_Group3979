@@ -22,8 +22,9 @@ import { PlusOutlined } from "@ant-design/icons";
 import api from "../../config/axios";
 import uploadFile from "../../utils/upload";
 import { tokens } from "../../theme";
-import dataProvnices from "../../../province";
+// import dataProvnices from "../../../province";
 import hours from "../../../hours";
+import axios from "axios";
 
 const schema = yup.object().shape({
   clubName: yup.string().required("Tên Club là bắt buộc"),
@@ -33,8 +34,8 @@ const schema = yup.object().shape({
     .required("Số hotline là bắt buộc")
     .matches(/^[0-9]+$/, "Chỉ cho phép nhập số"),
   capacity: yup.number().required("Số lượng sân là bắt buộc").min(1),
-  city: yup.string().required("Tỉnh / Thành phố là bắt buộc"),
-  district: yup.string().required("Quận / Huyện là bắt buộc"),
+  // city: yup.string().required("Tỉnh / Thành phố là bắt buộc"),
+  // district: yup.string().required("Quận / Huyện là bắt buộc"),
   clubAddress: yup.string().required("Địa chỉ cụ thể là bắt buộc"),
   openingTime: yup.string().required("Giờ mở cửa là bắt buộc"),
   closingTime: yup
@@ -138,18 +139,21 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
     handleSubmit,
     watch,
     setValue,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
   const [districts, setDistricts] = useState([]);
-  const selectedCity = watch("city");
+  const [selectedCity, setSelectCity] = useState([]);
   const [fileList, setFileList] = useState([]);
   const [previewImage, setPreviewImage] = useState("");
   const [previewOpen, setPreviewOpen] = useState(false);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [provinceGhn, setProvinceGhn] = useState([]);
+  const [districtGhn, setDistrictsGhn] = useState([]);
 
   useEffect(() => {
     if (mode === "update" && clubid) {
@@ -166,11 +170,32 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
 
   // hiển thị quận huyện tương ứng với city
   useEffect(() => {
-    if (selectedCity) {
-      setDistricts(dataProvnices[selectedCity]);
-      setValue("district", "");
-    }
-  }, [selectedCity, setValue]);
+    const FetchAllProvice = async () => {
+      const response = await axios
+        .get(
+          "https://online-gateway.ghn.vn/shiip/public-api/master-data/province",
+          {
+            headers: {
+              Token: "9f5dafd2-8d28-11ee-af43-6ead57e9219a",
+            },
+          }
+        )
+        .then((res) => {
+          const formatData = res.data.data.map((province) => ({
+            value: province.ProvinceID,
+            label: province.ProvinceName,
+          }));
+          setProvinceGhn(formatData);
+          // console.log(provinceGhn);
+        });
+    };
+    FetchAllProvice();
+  }, []);
+
+  const handleClose = () => {
+    reset();
+    onClose();
+  };
 
   //urlImages
   const handleFormSubmit = async (data) => {
@@ -185,12 +210,16 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
       rushPrice: parseInt(data.courtPricePeakHours.replace(/\./g, ""), 10),
     };
 
+    const resProv = provinceGhn.find((item) => item.value === selectedCity);
+
+    const resDis = districtGhn.find((item) => item.value === data.district);
+
     const adjustedData = {
       clubName: data.clubName,
       clubDescription: data.clubDescription,
       clubAddress: data.clubAddress,
-      district: data.district,
-      province: data.city,
+      district: resDis.label,
+      province: resProv.label,
       clubHotLine: data.clubHotLine,
       capacity: data.capacity,
       openingTime: parseInt(data.openingTime, 10),
@@ -210,16 +239,12 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
 
     try {
       if (mode === "create") {
-        console.log(adjustedData.urlImages);
+        // console.log(adjustedData.urlImages);
         const reponse = await api.post("/club", adjustedData);
-
-        await api.post(`/court-slot/${reponse.data.clubId}`, courslotData); // tao court lost
-
-        await api.post(
-          `/discount-rule/${reponse.data.clubId}`,
-          discountRuleData
-        );
-
+        const [response1, response2] = await Promise.all([
+          api.post(`/court-slot/${reponse.data.clubId}`, courslotData),
+          api.post(`/discount-rule/${reponse.data.clubId}`, discountRuleData),
+        ]);
         await fetFunction();
       } else if (mode === "update" && clubid) {
         await api.put(`/club/${clubid}`, adjustedData);
@@ -229,6 +254,7 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
         await api.post(`/discount-rule/${clubid}`, discountRuleData);
         await fetFunction();
       }
+      reset();
       onClose();
     } catch (error) {
       console.error("tạo sân thất bại!");
@@ -248,10 +274,37 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
     );
   };
 
+  const fetchDistrict = async (data) => {
+    const response = await axios
+      .get(
+        "https://online-gateway.ghn.vn/shiip/public-api/master-data/district",
+        {
+          params: { province_id: data },
+          headers: {
+            Token: "9f5dafd2-8d28-11ee-af43-6ead57e9219a",
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        const formatData = res.data.data.map((district) => ({
+          value: district.DistrictID,
+          label: district.DistrictName,
+        }));
+        setDistrictsGhn(formatData);
+      });
+  };
+
+  const handleProvinceChange = (event) => {
+    // console.log(value.target);
+    setSelectCity(event.target.value);
+    fetchDistrict(event.target.value);
+  };
+
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       sx={{
         "& .MuiDialog-paper": {
           backgroundColor: colors.grey[900],
@@ -524,9 +577,11 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
               />
             )}
           />
+
           <Controller
             name="city"
             control={control}
+            value={selectedCity}
             render={({ field }) => (
               <FormControl
                 fullWidth
@@ -534,11 +589,15 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
                 variant="outlined"
                 error={!!errors.city}
               >
-                <InputLabel>Tỉnh / Thành phố</InputLabel>
-                <Select {...field} label="Tỉnh / Thành phố">
-                  {Object.keys(dataProvnices).map((city) => (
-                    <MenuItem key={city} value={city}>
-                      {city}
+                <InputLabel>Tỉnh / Thành Phố</InputLabel>
+                <Select
+                  {...field}
+                  label="Tỉnh / Thành Phố"
+                  onChange={handleProvinceChange}
+                >
+                  {provinceGhn.map((city, index) => (
+                    <MenuItem key={index} value={city.value}>
+                      {city.label}
                     </MenuItem>
                   ))}
                 </Select>
@@ -546,6 +605,7 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
               </FormControl>
             )}
           />
+
           <Controller
             name="district"
             control={control}
@@ -558,9 +618,9 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
               >
                 <InputLabel>Quận / Huyện</InputLabel>
                 <Select {...field} label="Quận / Huyện">
-                  {districts.map((district) => (
-                    <MenuItem key={district} value={district}>
-                      {district}
+                  {districtGhn.map((district, index) => (
+                    <MenuItem key={index} value={district.value}>
+                      {district.label}
                     </MenuItem>
                   ))}
                 </Select>
@@ -568,6 +628,7 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
               </FormControl>
             )}
           />
+
           <Controller
             name="clubAddress"
             control={control}
@@ -603,7 +664,7 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
             />
           </div>
           <DialogActions>
-            <Button onClick={onClose} color="primary">
+            <Button onClick={handleClose} color="primary">
               Hủy
             </Button>
             <Button type="submit" color="primary" variant="contained">
