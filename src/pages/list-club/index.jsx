@@ -1,5 +1,5 @@
 import "./index.scss";
-import { useNavigate } from "react-router-dom";
+import { Await, useNavigate } from "react-router-dom";
 import RoomIcon from "@mui/icons-material/Room";
 import { useEffect, useState } from "react";
 import api from "../../config/axios";
@@ -9,6 +9,7 @@ import { Button, Form, Input, Select, Pagination } from "antd";
 
 function ListClub() {
   const [listClub, setListClub] = useState([]);
+  const [listClubOutstanding, setListClubOutstanding] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5); // Number of clubs per page
   const navigate = useNavigate();
@@ -41,6 +42,8 @@ function ListClub() {
   const fetchListClubData = async () => {
     try {
       const response = await api.get("/clubs");
+      const responseOutstanding = await api.get("/clubs/outstanding");
+      setListClubOutstanding(responseOutstanding.data);
       setListClub(response.data);
       setData(response.data);
     } catch (error) {
@@ -200,7 +203,7 @@ function ListClub() {
           <div className="text-wrap">
             <div className="text-line"></div>
           </div>
-          {listClub.map((club) => (
+          {listClubOutstanding.map((club) => (
             <>
               <div
                 key={club.clubId}
