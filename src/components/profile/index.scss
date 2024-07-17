@@ -4,6 +4,10 @@
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
+
+  .ant-upload-list.ant-upload-list-text {
+    display: none !important;
+  }
 }
 
 h1 {
@@ -36,7 +40,6 @@ h1 {
   margin-bottom: 5px;
   width: 50%;
   margin-top: -10px;
-  
 
   label {
     font-size: 14px;
@@ -45,13 +48,12 @@ h1 {
   &:last-child {
     margin-bottom: 0;
   }
-  a{
+  a {
     margin-left: 230px;
   }
-  #gender{
+  #gender {
     width: 50%;
     display: block;
-  
   }
 }
 
@@ -67,24 +69,25 @@ h1 {
   }
 }
 
-.change-button{
+.change-button {
   width: 150px;
   height: 54px;
   margin-left: 150px;
 }
 
-.form-group-password{
+.form-group-password {
   margin-left: 200px;
   margin-top: -82px;
   width: 50%;
 }
 
-.form-group-modal{
+.form-group-modal {
   font-size: 14px;
   font-weight: 500;
 }
 
-.save-button, .cancel-button {
+.save-button,
+.cancel-button {
   background-color: #5bc0de;
   color: white;
   border: none;
@@ -93,14 +96,14 @@ h1 {
   cursor: pointer;
   margin-right: 10px;
   margin-top: 10px;
-  
 }
 
 .cancel-button {
   background-color: #d9534f;
 }
 
-.save-button:hover, .cancel-button:hover {
+.save-button:hover,
+.cancel-button:hover {
   opacity: 0.5;
 }
 
