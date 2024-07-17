@@ -9,7 +9,6 @@ import {
   Outlet,
 } from "react-router-dom";
 import axios from "axios";
-import Tournament from "../tournament";
 import ContestDetail from "../../components/contest-detail";
 import RegisterContest from "../../components/register-contest";
 
@@ -18,91 +17,77 @@ const ListContest = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 2;
   const location = useLocation();
+  const today = new Date();
 
   // Dữ liệu tạm test
-  const listContestsNotStart = [
+  const allContests = [
     {
-      id: 1,
-      startdate: "2024-07-20",
-      enddate: "2024-08-20",
-      image: "https://via.placeholder.com/150",
+      contestId: 1,
+      participationPrice: 100000,
+      capacity: 100,
       name: "Cuộc thi A",
-      location: "Hà Nội",
-      description: "Mô tả cuộc thi A",
-      scale: "100 người",
-      phonenumber: "0123456789",
+      firstPrize: 1000000,
+      secondPrize: 500000,
+      startDate: "2024-07-20",
+      endDate: "2024-08-20",
+      clubId: 1,
+      urlBanner: "https://via.placeholder.com/150",
     },
     {
-      id: 2,
-      startdate: "2024-08-15",
-      enddate: "2024-09-15",
-      image: "https://via.placeholder.com/150",
+      contestId: 2,
+      participationPrice: 150000,
+      capacity: 200,
       name: "Cuộc thi B",
-      location: "TP.HCM",
-      time: "09:00 AM",
-      description: "Mô tả cuộc thi B",
-      scale: "200 người",
-      phonenumber: "0987654321",
+      firstPrize: 2000000,
+      secondPrize: 1000000,
+      startDate: "2024-08-15",
+      endDate: "2024-09-15",
+      clubId: 2,
+      urlBanner: "https://via.placeholder.com/150",
     },
     {
-      id: 3,
-      startdate: "2024-09-10",
-      enddate: "2024-10-10",
-      image: "https://via.placeholder.com/150",
+      contestId: 3,
+      participationPrice: 120000,
+      capacity: 150,
       name: "Cuộc thi C",
-      location: "Đà Nẵng",
-      time: "10:00 AM",
-      description: "Mô tả cuộc thi C",
-      scale: "150 người",
-      phonenumber: "0981234567",
-    },
-  ];
-
-  const listContestsStart = [
-    {
-      id: 1,
-      startdate: "2024-07-20",
-      enddate: "2024-08-20",
-      image: "https://via.placeholder.com/150",
-      name: "Cuộc thi Q",
-      location: "Hà Nội",
-      description: "Mô tả cuộc thi A",
-      scale: "100 người",
+      firstPrize: 1500000,
+      secondPrize: 750000,
+      startDate: "2024-09-10",
+      endDate: "2024-10-10",
+      clubId: 3,
+      urlBanner: "https://via.placeholder.com/150",
     },
     {
-      id: 2,
-      startdate: "2024-08-15",
-      enddate: "2024-09-15",
-      image: "https://via.placeholder.com/150",
-      name: "Cuộc thi E",
-      location: "TP.HCM",
-      time: "09:00 AM",
-      description: "Mô tả cuộc thi B",
-      scale: "200 người",
-    },
-    {
-      id: 3,
-      startdate: "2024-09-10",
-      enddate: "2024-10-10",
-      image: "https://via.placeholder.com/150",
-      name: "Cuộc thi W",
-      location: "Đà Nẵng",
-      time: "10:00 AM",
-      description: "Mô tả cuộc thi C",
-      scale: "150 người",
+      contestId: 4,
+      participationPrice: 110000,
+      capacity: 80,
+      name: "Cuộc thi D",
+      firstPrize: 1200000,
+      secondPrize: 600000,
+      startDate: "2024-07-10",
+      endDate: "2024-07-15",
+      clubId: 4,
+      urlBanner: "https://via.placeholder.com/150",
     },
   ];
 
   useEffect(() => {
     const fetchContests = async () => {
       try {
+        const contestsNotStart = allContests.filter(
+          (contest) => new Date(contest.startDate) > today
+        );
+        const contestsStart = allContests.filter(
+          (contest) => new Date(contest.startDate) <= today
+        );
+
         if (
           location.pathname === "/contest" ||
           location.pathname === "/contest/dangdienra"
         ) {
-          setContests(listContestsStart);
+          setContests(contestsStart);
         } else if (location.pathname === "/contest/sapdienra") {
-          setContests(listContestsNotStart);
+          setContests(contestsNotStart);
         }
       } catch (error) {
         console.error("Error getting data: ", error);
@@ -110,26 +95,6 @@ const ListContest = () => {
     };
     fetchContests();
   }, [location.pathname]);
-
-  // Call Api để làm thật
-  //  useEffect(() => {
-  //   const fetchContests = async () => {
-  //     try {
-  //       let endpoint = "/contests";
-  //       if (location.pathname === "/contest" || location.pathname === "/contest/dangdienra") {
-  //         endpoint = "/contests/start";
-  //       } else if (location.pathname === "/contest/sapdienra") {
-  //         endpoint = "/contests/notstar";
-  //       }
-
-  //       const response = await axios.get(endpoint);
-  //       setContests(response.data);
-  //     } catch (error) {
-  //       console.error("Error getting data: ", error);
-  //     }
-  //   };
-  //   fetchContests();
-  // }, [location.pathname]);
 
   // Dữ liệu test
   const hotContests = [
@@ -186,17 +151,17 @@ const ListContest = () => {
     );
 
     return currentContests.map((contest) => (
-      <Box key={contest.id} mb={3}>
+      <Box key={contest.contestId} mb={3}>
         <Box display="flex" alignItems="center" mt={2}>
           <Typography variant="h6" color="textSecondary" sx={{ mr: 2 }}>
-            {formatDate(contest.startdate)}
+            {formatDate(contest.startDate)}
           </Typography>
           <Divider sx={{ flexGrow: 1 }} />
         </Box>
 
         <Box display="flex" mt={2}>
           <img
-            src={contest.image}
+            src={contest.urlBanner}
             alt={contest.name}
             style={{ width: "300px", height: "200px", marginRight: "100px" }}
           />
@@ -205,27 +170,21 @@ const ListContest = () => {
               {contest.name}
             </Typography>
             <Typography variant="body1" textAlign="left">
-              <strong>Địa điểm:</strong> {contest.location}
+              <strong>Ngày bắt đầu:</strong> {contest.startDate}
               <br />
-              <strong>Ngày bắt đầu:</strong> {contest.startdate}
+              <strong>Ngày kết thúc:</strong> {contest.endDate}
               <br />
-              <strong>Ngày kết thúc:</strong> {contest.enddate}
+              <strong>Phần thưởng nhất:</strong> {contest.firstPrize}
               <br />
-              <strong>Mô tả:</strong> {contest.description}
+              <strong>Phần thưởng nhì:</strong> {contest.secondPrize}
               <br />
-              <strong>Số lượng:</strong> {contest.scale}
-              <br />
-              {location.pathname === "/contest/sapdienra" && (
-                <>
-                  <strong>Số liên hệ:</strong> {contest.phonenumber}
-                </>
-              )}
+              <strong>Số lượng:</strong> {contest.capacity}
             </Typography>
             {location.pathname === "/contest/sapdienra" && (
               <Box mt={2} display="flex" justifyContent="flex-start">
-                {/* <Button
+                <Button
                   component={Link}
-                  to={`/contest/sapdienra/chitiet/${contest.id}`}
+                  to={`/contest/sapdienra/chitiet/${contest.contestId}`}
                   variant="contained"
                   sx={{ marginRight: "15px", backgroundColor: "#6992CE" }}
                 >
@@ -233,23 +192,7 @@ const ListContest = () => {
                 </Button>
                 <Button
                   component={Link}
-                  to={`/contest/sapdienra/thamgia/${contest.id}`}
-                  variant="contained"
-                  sx={{ backgroundColor: "#B84848" }}
-                >
-                  Tham gia
-                </Button> */}
-                <Button
-                  component={RouterLink}
-                  to={`/contest/sapdienra/chitiet/${contest.id}`}
-                  variant="contained"
-                  sx={{ marginRight: "15px", backgroundColor: "#6992CE" }}
-                >
-                  Chi tiết
-                </Button>
-                <Button
-                  component={RouterLink}
-                  to={`/contest/sapdienra/thamgia/${contest.id}`}
+                  to={`/contest/sapdienra/thamgia/${contest.contestId}`}
                   variant="contained"
                   sx={{ backgroundColor: "#B84848" }}
                 >
@@ -262,7 +205,7 @@ const ListContest = () => {
               <Box mt={2} display="flex" justifyContent="center">
                 <Button
                   component={Link}
-                  to={`chitiet2/${contest.id}`}
+                  to={`/contest/dangdienra/chitiet2/${contest.contestId}`}
                   variant="contained"
                   sx={{ marginRight: "15px", backgroundColor: "#6992CE" }}
                 >
@@ -335,8 +278,8 @@ const ListContest = () => {
           <Route path="chitiet/:id" element={<ContestDetail />} />
           <Route path="thamgia/:id" element={<RegisterContest />} />
         </Routes> */}
+        <Outlet />
       </Box>
-      <Outlet />
     </Box>
   );
 };

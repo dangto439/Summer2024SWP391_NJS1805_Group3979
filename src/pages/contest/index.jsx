@@ -19,8 +19,6 @@ import ListContest from "../../components/list-contest";
 import ScheduleContest from "../../components/scheduler-contest";
 import SearchIcon from "@mui/icons-material/Search";
 import { tokens } from "../../theme";
-import axios from "axios";
-import Tournament from "../../components/tournament";
 import ContestDetail from "../../components/contest-detail";
 import RegisterContest from "../../components/register-contest";
 
@@ -50,7 +48,7 @@ const Contest = () => {
   //   const fetchContests = async () => {
   //     try {
   //       //check xem cú pháp call api đúng khum
-  //       const response = await axios.get("/contests");
+  //       const response = await api.get("/contests");
   //       setContests(response.data);
   //     } catch (error) {
   //       console.error("Error get data: ", error);
@@ -121,18 +119,7 @@ const Contest = () => {
           >
             Đang diễn ra
           </Button>
-          {/* <Button
-            component={RouterLink}
-            to="sapdienra"
-            sx={{
-              borderBottom:
-                location.pathname === "/contest/sapdienra"
-                  ? `2px solid ${colors.greenAccent[500]}`
-                  : "none",
-            }}
-          >
-            Sắp diễn ra
-          </Button> */}
+
           <Button
             component={RouterLink}
             to="/contest/sapdienra"
@@ -160,36 +147,9 @@ const Contest = () => {
         </Box>
       </Box>
 
-      {/* <Routes>
-        <Route path="" element={<ListContest />} />
-        <Route path="dangdienra/*" element={<ListContest />} />
-
-        <Route path="chitiet2/:id" element={<Tournament />} />
-        <Route
-          path="/contest/sapdienra/chitiet/:id"
-          element={<ContestDetail />}
-        />
-        <Route
-          path="/contest/sapdienra/thamgia/:id"
-          element={<RegisterContest />}
-        />
-
-        <Route path="sapdienra" element={<ListContest />} />
-        <Route path="thang" element={<ScheduleContest />} />
-      </Routes> */}
-
-      {/* <Routes>
-        <Route path="/contest" element={<ListContest />} />
-        <Route path="/contest/sapdienra" element={<ListContest />} />
-        <Route
-          path="/contest/sapdienra/chitiet/:id"
-          element={<ContestDetail />}
-        />
-        <Route
-          path="/contest/sapdienra/thamgia/:id"
-          element={<RegisterContest />}
-        />
-      </Routes> */}
+      <Routes>
+        <Route path="/" element={<ListContest />} />
+      </Routes>
 
       <Outlet />
     </Box>

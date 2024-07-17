@@ -37,11 +37,12 @@ import Contest from "./pages/contest";
 import ListContest from "../src/components/list-contest";
 import ScheduleContest from "./components/scheduler-contest";
 import Checkin from "./pages/check-in";
-// import Tournament from "../src/components/tournament";
+import Tournament from "../src/components/tournaments/testgamebycustomer";
 import Wallet from "./pages/wallet";
 import ContestDetail from "../src/components/contest-detail";
 import RegisterContest from "../src/components/register-contest";
-import Game from "../src/components/tournaments/game";
+// import Game from "../src/components/tournaments/game";
+import Game from "../src/components/tournaments/testgamebyowner";
 
 function App() {
   const user = useSelector(selectUser);
@@ -106,41 +107,30 @@ function App() {
             {
               path: "dangdienra",
               element: <ListContest />,
-              // children: [
-              //   {
-              //     path: "chitiet2/:id",
-              //     element: <Tournament />,
-              //   },
-              // ],
             },
             {
               path: "sapdienra",
               element: <ListContest />,
-              // children: [
-              //   {
-              //     path: "chitiet/:id",
-              //     element: <ContestDetail />,
-              //   },
-              //   {
-              //     path: "thamgia/:id",
-              //     element: <RegisterContest />,
-              //   },
-              // ],
             },
             {
               path: "thang",
               element: <ScheduleContest />,
             },
+            {
+              path: "dangdienra/chitiet2/:id",
+              element: <Tournament />,
+            },
+            {
+              path: "sapdienra/chitiet/:id",
+              element: <ContestDetail />,
+            },
+            {
+              path: "sapdienra/thamgia/:id",
+              element: <RegisterContest />,
+            },
           ],
         },
-        {
-          path: "chitiet/:id",
-          element: <ContestDetail />,
-        },
-        {
-          path: "thamgia/:id",
-          element: <RegisterContest />,
-        },
+
         {
           path: "/checkin",
           element: <Checkin />,
