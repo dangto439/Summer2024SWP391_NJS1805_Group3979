@@ -3,7 +3,6 @@ import "./index.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import api from "../../config/axios";
 import { toast } from "react-toastify";
-// import ViewTransaction from "../../components/viewtransaction/viewtransaction";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/features/counterSlice";
 import { Button, Form, Input, message, Modal, Space, Table } from "antd";
@@ -18,10 +17,11 @@ function Wallet() {
   const user = useSelector(selectUser);
 
   const [amount, setAmount] = useState("");
-  const [nameType, setNameType] = useState("");
   const [balance, setBalance] = useState(0);
+  const [totalIn, setTotalIn] = useState(0);
+  const [totalOut, setTotalOut] = useState(0);
   const [transaction, setTransaction] = useState([]);
-  const { setBalance2, balance2 } = useOutletContext();
+  const { setBalanceChange, balanceChange } = useOutletContext();
   const [modalTransfer, setModalTransfer] = useState(false);
   const [modalRecharge, setModalRecharge] = useState(false);
 
@@ -53,12 +53,17 @@ function Wallet() {
   };
 
   const formatType = (value) => {
-    if (value == "RECEIVE") {
-      setNameType("Chuyển tiền");
-    } else {
-      setNameType("Nhận tiền");
-    }
-    return nameType;
+    if (value === "TRANSFER") {
+      return "Chuyển tiền";
+    } else if (value === "DEPOSIT") {
+      return "Nạp tiền";
+    } else if (value === "REFUND") {
+      return "Hoàn tiền";
+    } else if (value === "RECEIVE") {
+      return "Nhận tiền";
+    } else if (value === "PENDING") {
+      return "Đang xử lý";
+    } else return "Huỷ bỏ";
   };
 
   const handleInputChange = (e) => {
@@ -89,9 +94,10 @@ function Wallet() {
     };
     // console.log(transferDetails);
     try {
+      // eslint-disable-next-line no-unused-vars
       const transfer = await api.post("/wallet/transfer", transferDetails);
       toast.success("Chuyển tiền thành công!");
-      setBalance2(balance2 - amount);
+      setBalanceChange(balanceChange - amount);
     } catch (error) {
       console.log(error);
       toast.error("Chuyển tiền thất bại!");
@@ -117,24 +123,52 @@ function Wallet() {
     try {
       const response = await api.get(`get-transactions/${user.id}`);
       const response2 = await api.get(`wallet/${user.id}`);
+      const response3 = await api.get(
+        `transactions/amount-in?accountId=${user.id}`
+      );
+      const response4 = await api.get(
+        `transactions/amount-out?accountId=${user.id}`
+      );
+      setTotalIn(response3.data);
+      setTotalOut(response4.data);
       setBalance(response2.data.balance);
       const transactions = response.data;
-      // console.log(transactions);
-      const transactionsWithAccounts = await Promise.all(
-        transactions.map(async (item) => {
-          const [reAccount, seAccount] = await Promise.all([
-            api.get(`account/${item.receiverWallet.walletId}`),
-            api.get(`account/${item.senderWallet.walletId}`),
-          ]);
-          // console.log(reAccount.data);
-          // console.log(seAccount.data);
-          return {
-            ...item,
-            receiverAccount: reAccount.data.name,
-            senderAccount: seAccount.data.name,
-          };
+
+      const walletIds = new Set();
+      transactions.forEach((item) => {
+        if (item.receiverWallet && item.receiverWallet.walletId) {
+          walletIds.add(item.receiverWallet.walletId);
+        }
+        if (item.senderWallet && item.senderWallet.walletId) {
+          walletIds.add(item.senderWallet.walletId);
+        }
+      });
+
+      const accountData = await Promise.all(
+        Array.from(walletIds).map(async (walletId) => {
+          try {
+            const account = await api.get(`account/${walletId}`);
+            return { walletId, name: account.data.name };
+          } catch (error) {
+            console.error(
+              `Error fetching account data for wallet ID ${walletId}:`,
+              error
+            );
+            return { walletId, name: null };
+          }
         })
       );
+
+      const accountMap = accountData.reduce((map, account) => {
+        map[account.walletId] = account.name;
+        return map;
+      }, {});
+
+      const transactionsWithAccounts = transactions.map((item) => ({
+        ...item,
+        receiverAccount: accountMap[item.receiverWallet?.walletId] || null,
+        senderAccount: accountMap[item.senderWallet?.walletId] || null,
+      }));
 
       setTransaction(transactionsWithAccounts);
       console.log(transactionsWithAccounts);
@@ -162,7 +196,7 @@ function Wallet() {
       title: "Loại giao dịch",
       dataIndex: "type",
       key: "type",
-      // render: (text) => formatType(text),
+      render: (text) => formatType(text),
     },
     {
       title: "Thời gian",
@@ -378,7 +412,7 @@ function Wallet() {
             <TbMoneybag fontSize={50} color="white" />
           </div>
           <div>
-            <li>0Đ</li>
+            <li>{formatCurrency(totalIn)}</li>
             <li>Tổng tiền nhận vào</li>
           </div>
         </div>
@@ -387,7 +421,7 @@ function Wallet() {
             <FaMoneyBillTransfer fontSize={50} color="white" />
           </div>
           <div>
-            <li>0Đ</li>
+            <li>{formatCurrency(totalOut)}</li>
             <li>Tổng tiền chi</li>
           </div>
         </div>
@@ -407,7 +441,7 @@ function Wallet() {
         <Table
           columns={columns}
           dataSource={transaction}
-          pagination={{ pageSize: 20 }}
+          pagination={{ pageSize: 20, position: ["bottomCenter"] }}
         />
       </div>
     </div>

@@ -15,7 +15,7 @@ import { logout, selectUser } from "../../redux/features/counterSlice";
 import { toast } from "react-toastify";
 import api from "../../config/axios";
 
-function Header({ balance2 }) {
+function Header({ balanceChange }) {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const navigate = useNavigate();
@@ -175,7 +175,7 @@ function Header({ balance2 }) {
               <ul className="">
                 <li>
                   <Link to="/wallet">
-                    <WalletOutlined /> Số dư ví: {formatCurrency(balance2)}
+                    <WalletOutlined /> Số dư ví: {formatCurrency(balanceChange)}
                   </Link>
                 </li>
               </ul>
