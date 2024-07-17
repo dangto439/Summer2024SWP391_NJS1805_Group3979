@@ -49,6 +49,7 @@ function ClubDetail() {
         <img src="https://danviet.mediacdn.vn/296231569849192448/2022/4/28/tien-minh-16511235589661350080581.jpg" />
       </div> */}
       <h1>{club.clubName}</h1>
+
       <div className="club-content">
         <div className="club-image">
           <PictureOutlined /> <h2>HÌNH ẢNH</h2>
@@ -57,14 +58,42 @@ function ClubDetail() {
           </div>
           <img src={club.urlImages} alt={club.clubName} />
         </div>
-        <div className="club-description">
-          <InfoCircleOutlined /> <h2>MÔ TẢ</h2>
-          <div className="text-wrap">
-            <div className="text-line"></div>
+        <div className="club-description-utilities">
+          <div className="club-description">
+            <InfoCircleOutlined /> <h2>MÔ TẢ</h2>
+            <div className="text-wrap">
+              <div className="text-line"></div>
+            </div>
+            <p>{club.description}</p>
           </div>
-          <p>{club.description}</p>
+          <div className="club-utilities">
+            <UnorderedListOutlined />
+            <h2>TIỆN ÍCH</h2>
+            <div className="text-wrap">
+              <div className="text-line"></div>
+            </div>
+            <ul>
+              <li>
+                <CheckCircleOutlined className="icon" /> Wifi
+              </li>
+              <li>
+                <CheckCircleOutlined className="icon" /> Chỗ gửi xe
+              </li>
+              <li>
+                <CheckCircleOutlined className="icon" /> Nước uống
+              </li>
+              <li>
+                <CheckCircleOutlined className="icon" /> Ghế nghỉ ngơi
+              </li>
+              <li>
+                <CheckCircleOutlined className="icon" /> Tổ chức sự kiện giải
+                đấu
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
+
       <div className="club-introduction">
         <div className="club-infomation">
           <InfoCircleOutlined />
@@ -72,74 +101,47 @@ function ClubDetail() {
           <div className="text-wrap">
             <div className="text-line"></div>
           </div>
-          <ul>
-            <li>
-              <i className="fas fa-map-marker-alt"></i>
-              <RoomOutlinedIcon fontSize="small" /> {club.clubAddress},{" "}
-              {club.district}, {club.province}
-            </li>
-            <li>
-              <i className="fas fa-clock">
-                <AccessTimeIcon fontSize="small" />
-              </i>{" "}
-              {club.openTime}g - {club.closeTime}g
-            </li>
-
-            <li>
-              <i className="nav-icon fal fa-shuttlecock">
-                <GiTennisCourt />
-              </i>{" "}
-              Tổng {owner.capacity} sân
-            </li>
-            <li>
-              <i className="club-phone">
-                <PersonOutlineOutlinedIcon fontSize="small" />
-              </i>{" "}
-              {owner.nameOwner}
-            </li>
-            <li>
-              <i className="fas fa-phone">
-                <PhoneOutlinedIcon fontSize="small" />
-              </i>{" "}
-              {club.hotline}
-            </li>
-            
-          </ul>
-        </div>
-
-        <div className="club-utilities">
-          <UnorderedListOutlined />
-          <h2>TIỆN ÍCH</h2>
-          <div className="text-wrap">
-            <div className="text-line"></div>
+          <div className="club-information-booking-button">
+            <ul>
+              <li>
+                <i className="fas fa-map-marker-alt"></i>
+                <RoomOutlinedIcon fontSize="small" /> {club.clubAddress},{" "}
+                {club.district}, {club.province}
+              </li>
+              <li>
+                <i className="fas fa-clock">
+                  <AccessTimeIcon fontSize="small" />
+                </i>{" "}
+                {club.openTime}g - {club.closeTime}g
+              </li>
+              <li>
+                <i className="nav-icon fal fa-shuttlecock">
+                  <GiTennisCourt />
+                </i>{" "}
+                Tổng {owner.capacity} sân
+              </li>
+              <li>
+                <i className="club-phone">
+                  <PersonOutlineOutlinedIcon fontSize="small" />
+                </i>{" "}
+                {owner.nameOwner}
+              </li>
+              <li>
+                <i className="fas fa-phone">
+                  <PhoneOutlinedIcon fontSize="small" />
+                </i>{" "}
+                {club.hotline}
+              </li>
+            </ul>
+            <div className="club-booking-button">
+              <button
+                onClick={() => handleBooking(club)}
+                className="booking-button-detail"
+              >
+                <p>Đặt lịch ngay</p>
+              </button>
+            </div>
           </div>
-          <ul>
-            <li>
-              <CheckCircleOutlined className="icon" /> Wifi
-            </li>
-            <li>
-              <CheckCircleOutlined className="icon" /> Chỗ gửi xe
-            </li>
-            <li>
-              <CheckCircleOutlined className="icon" /> Nước uống
-            </li>
-            <li>
-              <CheckCircleOutlined className="icon" /> Ghế nghỉ ngơi
-            </li>
-            <li>
-              <CheckCircleOutlined className="icon" /> Tổ chức sự kiện giải đấu
-            </li>
-          </ul>
-        </div>
-        <div className="club-booking-button">
-        
-            <button
-            onClick={() => handleBooking(club)}
-            className="booking-button-detail"
-          >
-            <p>Đặt lịch ngay</p>
-          </button>
-           
         </div>
       </div>
     </div>

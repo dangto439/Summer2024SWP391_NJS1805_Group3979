@@ -7,13 +7,13 @@ import { selectUser } from "../../redux/features/counterSlice";
 import api from "../../config/axios";
 
 function Layout() {
-  const [balance2, setBalance2] = useState(0);
+  const [balanceChange, setBalanceChange] = useState(0);
   const user = useSelector(selectUser);
 
   const fetchBalance = async () => {
     const response = await api.get(`/wallet/${user.id}`);
     console.log(response);
-    setBalance2(response.data.balance);
+    setBalanceChange(response.data.balance);
   };
 
   useEffect(() => {
@@ -22,9 +22,9 @@ function Layout() {
 
   return (
     <div>
-      <Header balance2={balance2} />
+      <Header balanceChange={balanceChange} />
       <div>
-        <Outlet context={{ setBalance2, balance2 }} />
+        <Outlet context={{ setBalanceChange, balanceChange }} />
       </div>
       <Footer />
     </div>
