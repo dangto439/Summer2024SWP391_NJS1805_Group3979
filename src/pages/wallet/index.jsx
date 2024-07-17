@@ -12,6 +12,7 @@ import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { MdAttachMoney } from "react-icons/md";
 import { TbMoneybag } from "react-icons/tb";
 import { useForm } from "antd/es/form/Form";
+import { useOutletContext } from "react-router-dom";
 
 function Wallet() {
   const user = useSelector(selectUser);
@@ -20,7 +21,7 @@ function Wallet() {
   const [nameType, setNameType] = useState("");
   const [balance, setBalance] = useState(0);
   const [transaction, setTransaction] = useState([]);
-
+  const { setBalance2, balance2 } = useOutletContext();
   const [modalTransfer, setModalTransfer] = useState(false);
   const [modalRecharge, setModalRecharge] = useState(false);
 
@@ -90,7 +91,9 @@ function Wallet() {
     try {
       const transfer = await api.post("/wallet/transfer", transferDetails);
       toast.success("Chuyển tiền thành công!");
+      setBalance2(balance2 - amount);
     } catch (error) {
+      console.log(error);
       toast.error("Chuyển tiền thất bại!");
     }
     fetchData();

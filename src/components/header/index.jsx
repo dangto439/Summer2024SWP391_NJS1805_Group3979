@@ -15,7 +15,7 @@ import { logout, selectUser } from "../../redux/features/counterSlice";
 import { toast } from "react-toastify";
 import api from "../../config/axios";
 
-function Header() {
+function Header({ balance2 }) {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const navigate = useNavigate();
@@ -84,7 +84,10 @@ function Header() {
   };
 
   const formatCurrency = (value) => {
-    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(value);
   };
 
   useEffect(() => {
@@ -172,7 +175,7 @@ function Header() {
               <ul className="">
                 <li>
                   <Link to="/wallet">
-                    <WalletOutlined /> Số dư ví: {formatCurrency(balance)}
+                    <WalletOutlined /> Số dư ví: {formatCurrency(balance2)}
                   </Link>
                 </li>
               </ul>
