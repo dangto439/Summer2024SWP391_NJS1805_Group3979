@@ -6,26 +6,33 @@ import moment from "moment";
 
 const HistoryBooking = () => {
   const [booking, setBooking] = useState([]);
-  const [bookingDetail, setBookingDetail] = useState([]);
+  const [bookingDetails, setBookingDetails] = useState({});
 
   const fetchHistoryBooking = async () => {
     const response = await api.get("/bookings/current-account");
-    setBooking(response.data);
-    // console.log(response.data);
+    const booking = response.data.map((item) => {
+      return {
+        ...item,
+        key: item.bookingId,
+      };
+    });
+    setBooking(booking);
+    console.log(booking);
   };
 
   const fetchHistoryBookingDetail = async (bookingId) => {
     try {
       const response = await api.get(`booking/booking-detail/${bookingId}`);
-      if (response.data) {
-        setBookingDetail(response.data);
-      } else {
-        setBookingDetail([]); // or setBookingDetail([]) if you prefer an empty array
-      }
-      console.log(response.data);
+      setBookingDetails((prevDetails) => ({
+        ...prevDetails,
+        [bookingId]: response.data,
+      }));
     } catch (error) {
       console.error("Error fetching booking details:", error);
-      setBookingDetail([]); // or setBookingDetail([]) in case of error
+      setBookingDetails((prevDetails) => ({
+        ...prevDetails,
+        [bookingId]: [],
+      }));
     }
   };
 
@@ -54,14 +61,13 @@ const HistoryBooking = () => {
     } else return "Đã xác nhận";
   };
 
-  const expandedRowRender = () => {
+  const expandedRowRender = (bookingId) => {
     const columns = [
       {
         title: "Id",
         dataIndex: "bookingDetailId",
         key: "bookingDetailId",
       },
-
       {
         title: "Ngày chơi",
         dataIndex: "playingDate",
@@ -110,14 +116,10 @@ const HistoryBooking = () => {
         ),
       },
     ];
-
     return (
       <Table
         columns={columns}
-        dataSource={bookingDetail.map((detail) => ({
-          ...detail,
-          key: detail.bookingDetailId, // Hoặc sử dụng một thuộc tính duy nhất khác nếu thích
-        }))}
+        dataSource={bookingDetails[bookingId] || []}
         pagination={{ pageSize: 5, position: ["bottomCenter"] }}
       />
     );
@@ -128,7 +130,6 @@ const HistoryBooking = () => {
       title: "Booking Id",
       dataIndex: "bookingId",
       key: "bookingId",
-      // hidden: "true",
     },
     {
       title: "Tên CLB",
@@ -187,14 +188,12 @@ const HistoryBooking = () => {
         dataSource={booking}
         pagination={{ pageSize: 20, position: ["bottomCenter"] }}
         expandable={{
-          expandedRowRender,
+          expandedRowRender: (record) => expandedRowRender(record.bookingId),
           onExpand: (expanded, record) => {
             if (expanded) {
-              expandedRowRender(record.bookingId);
               fetchHistoryBookingDetail(record.bookingId);
             }
           },
-          // defaultExpandedRowKeys: ["19"],
         }}
       />
     </div>
