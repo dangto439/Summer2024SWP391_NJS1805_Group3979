@@ -17,7 +17,7 @@ const fetchGames = async (contestId) => {
 };
 
 const fetchPlayingTime = async (gameId) => {
-  const response = await api.get(`/contest/${gameId}`);
+  const response = await api.get(`/contest/game/${gameId}`);
   return response.data.playingDate;
 };
 
@@ -107,13 +107,16 @@ const GamebyOwner = () => {
   const [hoveredSeed, setHoveredSeed] = useState(null);
   const [rounds, setRounds] = useState([]);
   const [totalRounds, setTotalRounds] = useState(0);
-  const contestId = 1;
+  const contestId = 8;
 
   useEffect(() => {
     const loadData = async () => {
-      const contestDetails = await fetchContestDetails(contestId);
+      const [contestDetails, games] = await Promise.all([
+        fetchContestDetails(contestId),
+        fetchGames(contestId),
+      ]);
+
       const totalMatches = contestDetails.capacity - 1;
-      const games = await fetchGames(contestId);
 
       const timePromises = games.map((game) => fetchPlayingTime(game.gameId));
       const scorePromises = games.map((game) => fetchScores(game.gameId));
