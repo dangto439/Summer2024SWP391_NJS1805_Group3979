@@ -2,16 +2,16 @@ import { Box, useTheme, Button } from "@mui/material";
 import Header from "../dashboard/Header";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import api from "../../config/axios";
 
 const Tournaments = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState([]);
-  const [columns, setColumns] = useState([]);
   const navigate = useNavigate();
 
   const handleCreateATournament = () => {
@@ -20,13 +20,14 @@ const Tournaments = () => {
 
   const allColumns = [
     {
-      field: "clubname",
+      field: "clubName",
+      flex: 1,
       headerName: "Câu lạc bộ",
       headerAlign: "left",
       align: "left",
     },
     {
-      field: "tournamentname",
+      field: "name",
       headerName: "Cuộc thi",
       flex: 1,
       cellClassName: "name-column--cell",
@@ -34,20 +35,20 @@ const Tournaments = () => {
       align: "left",
     },
     {
-      field: "capical",
+      field: "capacity",
       headerName: "Quy mô",
       headerAlign: "left",
       align: "left",
     },
     {
-      field: "startime",
+      field: "startDate",
       headerName: "Ngày bắt đầu",
       flex: 1,
       headerAlign: "left",
       align: "left",
     },
     {
-      field: "endtime",
+      field: "endDate",
       headerName: "Ngày kết thúc",
       flex: 1,
       headerAlign: "left",
@@ -67,6 +68,19 @@ const Tournaments = () => {
     },
   ];
 
+  useEffect(() => {
+    const fetchContest = async () => {
+      const response = await api.get("/contest/current-account");
+      const updatedRows = await Promise.all(
+        response.data.map(async (item) => {
+          const club = await api.get(`/club/${item.clubId}`);
+          return { ...item, clubName: club.data.clubName };
+        })
+      );
+      setRows(updatedRows);
+    };
+    fetchContest();
+  }, []);
   return (
     <Box>
       <Header
@@ -111,7 +125,7 @@ const Tournaments = () => {
         <DataGrid
           rows={rows}
           columns={allColumns}
-          getRowId={(row) => row.staffId}
+          getRowId={(row) => row.contestId}
         />
       </Box>
     </Box>

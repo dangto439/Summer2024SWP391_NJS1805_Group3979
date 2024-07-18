@@ -76,17 +76,12 @@ function NewTournament() {
         secondPrize: parseFloat(secondPrize),
         startDate: startTime,
         endDate: endTime,
-        capacity: parseInt(quantity) + 1,
+        capacity: parseInt(quantity),
         participationPrice: parseFloat(participationFee),
         clubId: parseInt(hostClubId),
       };
-      console.log(formData);
-
       const response = await api.post("/contest", formData);
-
-      console.log("Tournament saved successfully:", response.data);
-
-      // navigate(`/dashboard/tournaments/${response.data.id}`);
+      navigate(`/dashboard/tournaments/${response.data.id}`);
     } catch (error) {
       console.error("Error saving tournament:", error);
     }
