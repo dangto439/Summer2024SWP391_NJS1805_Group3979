@@ -72,11 +72,15 @@ const generateRounds = (data, timeData, scoreData, totalMatches) => {
     });
   });
 
+  // Tổng số vòng đấu
   const totalRounds = Math.ceil(Math.log2(totalMatches + 1));
 
-  for (let i = 1; i <= totalRounds; i++) {
-    const matchesInRound = totalMatches / Math.pow(2, i - 1);
+  // Số trận đấu tối đa trong vòng đầu tiên
+  const initialMatches = Math.ceil(totalMatches / 2);
 
+  for (let i = 1; i <= totalRounds; i++) {
+    // Số trận đấu trong vòng hiện tại
+    const matchesInRound = Math.ceil(initialMatches / Math.pow(2, i - 1));
     const roundSeeds = [];
 
     for (let j = 0; j < matchesInRound; j++) {
@@ -89,7 +93,7 @@ const generateRounds = (data, timeData, scoreData, totalMatches) => {
             { id: null, name: "?", score: null, setScore: null },
             { id: null, name: "?", score: null, setScore: null },
           ],
-          playingTime: "Unknown",
+          playingDate: "Unknown",
         });
       }
     }
@@ -215,9 +219,6 @@ const GamebyOwner = () => {
                 alignItems: "center",
               }}
             >
-              {/* <SeedTeam style={{ color: "white" }}>
-                {seed.teams[0]?.name || "NO TEAM"}
-              </SeedTeam> */}
               <span
                 style={{
                   backgroundColor: getScoreBackgroundColor(
@@ -239,7 +240,6 @@ const GamebyOwner = () => {
                 alignItems: "center",
               }}
             >
-              {/* <SeedTeam>{seed.teams[1]?.name || "NO TEAM"}</SeedTeam> */}
               <span
                 style={{
                   backgroundColor: getScoreBackgroundColor(
@@ -295,7 +295,7 @@ const GamebyOwner = () => {
           title: renderRoundTitle(index),
         }))}
         renderSeedComponent={CustomSeed}
-        twoSided={true}
+        twoSided={false}
       />
       {isOpen && (
         <Form

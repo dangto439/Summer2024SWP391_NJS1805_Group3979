@@ -7,107 +7,33 @@ import {
   Seed,
 } from "@sportsgram/brackets";
 
-const testData = [
-  {
-    gameId: 1,
-    contestId: 1,
-    playingDate: "2024-07-15",
-    firstPlayerId: 101,
-    secondPlayerId: 102,
-    scoreFirstPlayer: 3,
-    scoreSecondPlayer: 2,
-    gameNumber: 1,
-    round: 1,
-  },
-  {
-    gameId: 2,
-    contestId: 1,
-    playingDate: "2024-07-15",
-    firstPlayerId: 103,
-    secondPlayerId: 104,
-    scoreFirstPlayer: 1,
-    scoreSecondPlayer: 3,
-    gameNumber: 2,
-    round: 1,
-  },
-  {
-    gameId: 3,
-    contestId: 1,
-    playingDate: "2024-07-16",
-    firstPlayerId: 105,
-    secondPlayerId: 106,
-    scoreFirstPlayer: 2,
-    scoreSecondPlayer: 3,
-    gameNumber: 3,
-    round: 1,
-  },
-  {
-    gameId: 4,
-    contestId: 1,
-    playingDate: "2024-07-16",
-    firstPlayerId: 107,
-    secondPlayerId: 108,
-    scoreFirstPlayer: 3,
-    scoreSecondPlayer: 1,
-    gameNumber: 4,
-    round: 1,
-  },
-];
-const testTime = [
-  {
-    gameId: 1,
-    playingTime: "2024-07-15 10:00 AM",
-  },
-  {
-    gameId: 2,
-    playingTime: "2024-07-15 12:00 PM",
-  },
-  {
-    gameId: 3,
-    playingTime: "2024-07-16 02:00 PM",
-  },
-  {
-    gameId: 4,
-    playingTime: "2024-07-16 04:00 PM",
-  },
-];
+import api from "../../config/axios";
 
-const testScore = [
-  {
-    scoreId: 1,
-    gameId: 1,
-    setNumber: "FIRSTSET",
-    firstPlayerSetScore: 3,
-    secondPlayerSetScore: 2,
-  },
-  {
-    scoreId: 2,
-    gameId: 2,
-    setNumber: "FIRSTSET",
-    firstPlayerSetScore: 1,
-    secondPlayerSetScore: 3,
-  },
-  {
-    scoreId: 3,
-    gameId: 3,
-    setNumber: "FIRSTSET",
-    firstPlayerSetScore: 2,
-    secondPlayerSetScore: 3,
-  },
-  {
-    scoreId: 4,
-    gameId: 4,
-    setNumber: "FIRSTSET",
-    firstPlayerSetScore: 3,
-    secondPlayerSetScore: 1,
-  },
-];
+const fetchGames = async (contestId) => {
+  const response = await api.get(`/contest/games/${contestId}`);
+  return response.data;
+};
+
+const fetchPlayingTime = async (gameId) => {
+  const response = await api.get(`/contest/game/${gameId}`);
+  return response.data.playingDate;
+};
+
+const fetchScores = async (gameId) => {
+  const response = await api.get(`/score/${gameId}`);
+  return response.data;
+};
+
+const fetchContestDetails = async (contestId) => {
+  const response = await api.get(`/contest/${contestId}`);
+  return response.data;
+};
 
 const generateRounds = (data, timeData, scoreData, totalMatches) => {
   const rounds = [];
   const roundData = {};
 
-  data.forEach((game) => {
+  data.forEach((game, index) => {
     const {
       round,
       gameId,
@@ -117,9 +43,8 @@ const generateRounds = (data, timeData, scoreData, totalMatches) => {
       scoreSecondPlayer,
     } = game;
 
-    const playingTime =
-      timeData.find((time) => time.gameId === gameId)?.playingTime || "Unknown";
-    const setScore = scoreData.find((score) => score.gameId === gameId);
+    const playingDate = timeData[index] || "Unknown";
+    const setScore = scoreData[index];
 
     if (!roundData[round]) {
       roundData[round] = [];
@@ -141,15 +66,19 @@ const generateRounds = (data, timeData, scoreData, totalMatches) => {
           setScore: setScore?.secondPlayerSetScore || 0,
         },
       ],
-      playingTime,
+      playingDate,
     });
   });
 
+  // Tổng số vòng đấu
   const totalRounds = Math.ceil(Math.log2(totalMatches + 1));
 
-  for (let i = 1; i <= totalRounds; i++) {
-    const matchesInRound = totalMatches / Math.pow(2, i - 1);
+  // Số trận đấu tối đa trong vòng đầu tiên
+  const initialMatches = Math.ceil(totalMatches / 2);
 
+  for (let i = 1; i <= totalRounds; i++) {
+    // Số trận đấu trong vòng hiện tại
+    const matchesInRound = Math.ceil(initialMatches / Math.pow(2, i - 1));
     const roundSeeds = [];
 
     for (let j = 0; j < matchesInRound; j++) {
@@ -159,10 +88,10 @@ const generateRounds = (data, timeData, scoreData, totalMatches) => {
         roundSeeds.push({
           id: null,
           teams: [
-            { id: null, name: "?", score: null, setScore: null },
-            { id: null, name: "?", score: null, setScore: null },
+            { id: null, name: "Winner", score: null, setScore: null },
+            { id: null, name: "Winner", score: null, setScore: null },
           ],
-          playingTime: "Unknown",
+          playingDate: "Unknown",
         });
       }
     }
@@ -174,28 +103,37 @@ const generateRounds = (data, timeData, scoreData, totalMatches) => {
 };
 
 const GamebyCustomer = () => {
-  const totalMatches = 15;
-  const initialRounds = generateRounds(
-    testData,
-    testTime,
-    testScore,
-    totalMatches
-  );
-  const [rounds, setRounds] = useState(initialRounds);
-  const [totalRounds, setTotalRounds] = useState(
-    Math.ceil(Math.log2(totalMatches + 1))
-  );
+  const [rounds, setRounds] = useState([]);
+  const [totalRounds, setTotalRounds] = useState(0);
+  const contestId = 8;
 
   useEffect(() => {
-    const updatedRounds = generateRounds(
-      testData,
-      testTime,
-      testScore,
-      totalMatches
-    );
-    setRounds(updatedRounds);
-    setTotalRounds(Math.ceil(Math.log2(totalMatches + 1)));
-  }, [totalMatches]);
+    const loadData = async () => {
+      const [contestDetails, games] = await Promise.all([
+        fetchContestDetails(contestId),
+        fetchGames(contestId),
+      ]);
+
+      const totalMatches = contestDetails.capacity - 1;
+
+      const timePromises = games.map((game) => fetchPlayingTime(game.gameId));
+      const scorePromises = games.map((game) => fetchScores(game.gameId));
+
+      const playingDates = await Promise.all(timePromises);
+      const scores = await Promise.all(scorePromises);
+
+      const updatedRounds = generateRounds(
+        games,
+        playingDates,
+        scores,
+        totalMatches
+      );
+      setRounds(updatedRounds);
+      setTotalRounds(Math.ceil(Math.log2(totalMatches + 1)));
+    };
+
+    loadData();
+  }, [contestId]);
 
   const renderRoundTitle = (roundIndex) => {
     if (roundIndex === totalRounds - 1) {
@@ -206,6 +144,7 @@ const GamebyCustomer = () => {
       return `Round ${roundIndex + 1}`;
     }
   };
+
   const CustomSeed = ({
     seed,
     breakpoint,
@@ -223,7 +162,7 @@ const GamebyCustomer = () => {
       <Wrapper mobileBreakpoint={breakpoint} style={{ fontSize: 12 }}>
         <SeedItem>
           <div style={{ textAlign: "center", marginBottom: "8px" }}>
-            {seed.playingTime}
+            {seed.playingDate}
           </div>
           <div
             style={{
@@ -292,7 +231,7 @@ const GamebyCustomer = () => {
           title: renderRoundTitle(index),
         }))}
         renderSeedComponent={CustomSeed}
-        twoSided={true}
+        twoSided={false}
       />
     </>
   );
