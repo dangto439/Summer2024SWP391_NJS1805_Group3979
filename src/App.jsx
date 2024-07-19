@@ -37,12 +37,12 @@ import Contest from "./pages/contest";
 import ListContest from "../src/components/list-contest";
 import ScheduleContest from "./components/scheduler-contest";
 import Checkin from "./pages/check-in";
-import Tournament from "../src/components/tournaments/testgamebycustomer";
+import Tournament from "../src/components/tournaments/gamebycustomer";
 import Wallet from "./pages/wallet";
 import ContestDetail from "../src/components/contest-detail";
 import RegisterContest from "../src/components/register-contest";
 // import Game from "../src/components/tournaments/game";
-import Game from "../src/components/tournaments/testgamebyowner";
+import Game from "../src/components/tournaments/gamebyowner";
 
 function App() {
   const user = useSelector(selectUser);

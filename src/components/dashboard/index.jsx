@@ -11,7 +11,8 @@ import api from "../../config/axios";
 import { useEffect, useState } from "react";
 import Tournaments from "../tournaments";
 import NewTournament from "../tournaments/newtournament";
-
+import TournamentDetail from "../tournaments/tournamentsdetail";
+import GamebyOwner from "../tournaments/gamebyowner";
 function Dashboard() {
   const [theme, colorMode] = useMode();
   const [clubs, setClubs] = useState([]);
@@ -59,6 +60,16 @@ function Dashboard() {
               <Route path="profile" element={<Profile />} />
               <Route path="tournaments" element={<Tournaments />} />
               <Route path="tournaments/new" element={<NewTournament />} />
+              {/* <Route
+                path="tournaments/detail/:id"
+                element={<TournamentDetail />}
+              /> */}
+              <Route
+                path="tournaments/detail/:id"
+                element={<TournamentDetail />}
+              >
+                <Route index element={<GamebyOwner />} />
+              </Route>
             </Routes>
           </Box>
         </Box>
