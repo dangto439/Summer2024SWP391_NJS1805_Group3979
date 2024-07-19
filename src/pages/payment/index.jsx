@@ -68,7 +68,10 @@ function Payment() {
   };
 
   const handleCreateTransactionAndWallet = async (bookingtransfer) => {
-    const reponse = await api.post("/wallet/transfer-booking", bookingtransfer);
+    const response = await api.post(
+      "/wallet/transfer-booking",
+      bookingtransfer
+    );
     sessionStorage.removeItem("bookingtransfer");
   };
 

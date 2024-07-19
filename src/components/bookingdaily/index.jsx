@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import {
   Button,
@@ -29,8 +30,14 @@ function BookingDaily({ club }) {
   const [flexibleBooking, setFlexibleBooking] = useState([]);
   const [selectedFlexibleId, setSelectedFlexibleId] = useState(0);
   const navigate = useNavigate();
-
   const [check, setCheck] = useState(false);
+
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(value);
+  };
 
   useEffect(() => {
     const fetchCourtsData = async () => {
@@ -199,10 +206,11 @@ function BookingDaily({ club }) {
 
   return (
     <Row className="booking-daily">
-      <Col span={7} className="booking-daily-sidebar">
+      <Col span={6} className="booking-daily-sidebar">
         <Row>
           <Col span={24} className="booking-daily-datepicker-container">
             <DatePicker
+              size="large"
               className="booking-daily-datepicker-format"
               onChange={handleDateChange}
               disabledDate={disabledDate}
@@ -210,9 +218,9 @@ function BookingDaily({ club }) {
           </Col>
           <Col span={24} className="booking-daily-summary">
             <h1>{club.clubName}</h1>
-            <h1>Ngày: {selectedDate}</h1>
-            <h1>Tổng giờ: {totalHours} giờ</h1>
-            <h1>Tổng Tiền: {totalPrice} VND</h1>
+            <p>Ngày: {selectedDate}</p>
+            <p>Tổng giờ: {totalHours} giờ</p>
+            <p>Tổng Tiền: {formatCurrency(totalPrice)}</p>
             <img
               src="https://firebasestorage.googleapis.com/v0/b/badminton-booking-platform.appspot.com/o/z5545153816126_834da2b1757f9fca8d39197a7ac64f93.jpg?alt=media&token=50c69782-7782-42c9-877d-c07a1e906abb"
               alt=""
@@ -222,12 +230,13 @@ function BookingDaily({ club }) {
                 className="booking-daily-select"
                 onChange={handleSelectChange}
                 defaultValue={0}
-                style={{ width: "100%" }}
+                size="large"
+                placeholder="Chọn hình thức thanh toán"
               >
-                <Option value={0}>Đặt bằng tiền</Option>
+                <Option value={0}>Đặt bằng tiền trong ví</Option>
                 {flexibleBooking.map((booking) => (
                   <Option key={booking.bookingId} value={booking.bookingId}>
-                    Đặt lịch linh hoạt
+                    Đặt lịch linh hoạt - {booking.clubName}
                   </Option>
                 ))}
               </Select>
@@ -242,13 +251,14 @@ function BookingDaily({ club }) {
             <Button
               className="booking-daily-submit-button"
               onClick={handleSubmit}
+              size="large"
             >
-              THANH TOÁN
+              Thanh Toán
             </Button>
           </Col>
         </Row>
       </Col>
-      <Col span={17} className="booking-daily-main">
+      <Col span={18} className="booking-daily-main">
         <Table
           columns={columns}
           dataSource={dataSource}

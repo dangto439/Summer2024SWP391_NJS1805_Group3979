@@ -20,6 +20,22 @@ function Bill() {
     moment().format("DD-MM-YYYY")
   );
 
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(value);
+  };
+
+  const formatType = (value) => {
+    if (value === "FIXED") {
+      return "Cố định";
+    } else if (value === "DAILY") {
+      return "Ngày";
+    } else return "Linh hoạt";
+  };
+  console.log(result);
+
   useEffect(() => {
     fetchWallet();
     switch (type) {
@@ -110,7 +126,7 @@ function Bill() {
   return (
     <div className="bill-container">
       <div className="bill-header">
-        <h1>Hóa đơn</h1>
+        <h1>Hóa đơn đặt sân</h1>
       </div>
       <div className="bill-body">
         <div className="bill-section">
@@ -122,14 +138,14 @@ function Bill() {
           <div className="bill-value">{selectedDate}</div>
         </div>
         <div className="bill-section">
-          <label>Loại hình:</label>
-          <div className="bill-value">{type}</div>
+          <label>Loại lịch:</label>
+          <div className="bill-value">{formatType(type)}</div>
         </div>
-        <label className="label">Chi tiết booking:</label>
+        <label className="label">Chi tiết đặt lịch:</label>
         <div className="bill-section">
           {type === "FLEXIBLE" && (
             <div className="bill-section">
-              <table className="booking-details" style={{ width: "920px" }}>
+              <table className="booking-details">
                 <thead>
                   <tr>
                     <th>Câu lạc bộ</th>
@@ -149,7 +165,7 @@ function Bill() {
         <div className="bill-section">
           {type === "FIXED" && (
             <div className="bill-section">
-              <table className="booking-details" style={{ width: "920px" }}>
+              <table className="booking-details">
                 <thead>
                   <tr>
                     <th>Câu lạc bộ</th>
@@ -165,7 +181,7 @@ function Bill() {
                         <td>{result.clubName}</td>
                         <td>{detail.courtName}</td>
                         <td>{detail.playingDate}</td>
-                        <td>{detail.price}</td>
+                        <td>{formatCurrency(detail.price)}</td>
                       </tr>
                     ))}
                 </tbody>
@@ -176,7 +192,7 @@ function Bill() {
         <div className="bill-section">
           {type === "DAILY" && (
             <div className="bill-section">
-              <table className="booking-details" style={{ width: "920px" }}>
+              <table className="booking-details">
                 <thead>
                   <tr>
                     <th>Câu lạc bộ</th>
@@ -192,7 +208,7 @@ function Bill() {
                         <td>{result.clubName}</td>
                         <td>{detail.courtName}</td>
                         <td>{detail.playingDate}</td>
-                        <td>{detail.price} VND</td>
+                        <td>{formatCurrency(detail.price)}</td>
                       </tr>
                     ))}
                 </tbody>
@@ -202,15 +218,19 @@ function Bill() {
         </div>
         <div className="bill-section">
           <label>Giá tạm tính:</label>
-          <div className="bill-value">{result.temporaryPrice}</div>
+          <div className="bill-value">
+            {formatCurrency(result.temporaryPrice)}
+          </div>
         </div>
         <div className="bill-section">
           <label>Giá giảm:</label>
-          <div className="bill-value">{result.discountPrice}</div>
+          <div className="bill-value">
+            {formatCurrency(result.discountPrice)}
+          </div>
         </div>
         <div className="bill-section total-amount">
           <label>Tổng tiền:</label>
-          <div className="bill-value">{result.totalPrice}</div>
+          <div className="bill-value">{formatCurrency(result.totalPrice)}</div>
         </div>
       </div>
       <div className="bill-footer">

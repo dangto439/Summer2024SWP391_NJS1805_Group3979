@@ -106,6 +106,14 @@ function App() {
           element: <Wallet />,
         },
         {
+          path: "/bill",
+          element: (
+            <PrivateRoute>
+              <Bill />
+            </PrivateRoute>
+          ),
+        },
+        {
           path: "/contest/*",
           element: (
             // <PrivateRoute>
@@ -270,14 +278,6 @@ function App() {
         //   element: <ManageAccount />,
         // },
       ],
-    },
-    {
-      path: "/bill",
-      element: (
-        <PrivateRoute>
-          <Bill />
-        </PrivateRoute>
-      ),
     },
   ]);
 

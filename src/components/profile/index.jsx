@@ -19,6 +19,9 @@ function Profile() {
       title: "Bạn chắc chứ?",
       icon: <ExclamationCircleFilled />,
       content: "Thay đổi thông tin của bạn",
+      okText: "Thay đổi",
+      cancelText: "Huỷ",
+
       onOk() {
         handleOk();
       },
@@ -136,7 +139,7 @@ function Profile() {
           </div>
           <Form.Item name="avatar" className="profile-pic-form">
             <Upload onChange={(e) => handlePreviewImg(e)} {...props}>
-              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+              <Button icon={<UploadOutlined />}>Nhấn để tải ảnh lên</Button>
             </Upload>
           </Form.Item>
         </div>
@@ -224,6 +227,9 @@ function Profile() {
             open={isResetPassword}
             onOk={handleResetPassword}
             onCancel={handleCancelResetPassword}
+            cancelText="Huỷ"
+            okText="Lưu"
+            centered
           >
             <Form
               form={formPassword}
