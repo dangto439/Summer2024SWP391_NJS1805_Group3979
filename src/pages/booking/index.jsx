@@ -1,7 +1,7 @@
 import { Menu, Switch } from "antd";
 import BookingDaily from "../../components/bookingdaily";
 import { useEffect, useState } from "react";
-import { MailOutlined } from "@ant-design/icons";
+import { ScheduleOutlined } from "@ant-design/icons";
 import BookingFixed from "../../components/bookingfixed";
 import BookingFlexible from "../../components/bookingFlexible";
 import { useParams } from "react-router-dom";
@@ -26,11 +26,12 @@ function Booking() {
   useEffect(() => {
     getClubById();
   }, [clubId]);
+
   const items = [
     {
       key: "1",
       label: "Chọn loại hình đặt sân",
-      icon: <MailOutlined />,
+      icon: <ScheduleOutlined />,
       children: [
         {
           key: "1",

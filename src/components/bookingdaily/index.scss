@@ -26,9 +26,28 @@
 
       h1 {
         font-size: 1.5em;
-        margin-bottom: 10px;
+        font-weight: bold;
       }
-
+      p {
+        font-size: 20px;
+      }
+      .booking-daily-select {
+        margin-bottom: 20px;
+        width: 600px;
+        height: 50px;
+      }
+      input {
+        padding: 15px 25px;
+        width: 100%;
+        border: 1px solid #cbd5e1;
+        border-radius: 12px;
+        outline: none;
+        transition: linear 0.25s;
+        margin-bottom: 20px;
+        &:focus {
+          border-color: #1dc071;
+        }
+      }
       img {
         width: 100%;
         height: auto;
@@ -36,18 +55,15 @@
       }
 
       .booking-daily-submit-button {
-        width: 100%;
-        padding: 10px;
         background-color: #1890ff;
         color: #ffffff;
         border: none;
         border-radius: 5px;
-        font-size: 1em;
+        font-size: 18px;
         cursor: pointer;
         transition: background-color 0.3s;
-
         &:hover {
-          background-color: #40a9ff;
+          background-color: #18bd23;
         }
       }
     }
@@ -79,7 +95,7 @@
       background-color: red !important;
       color: white !important;
       border-color: red !important;
-      cursor: not-allowed; 
+      cursor: not-allowed;
 
       &:hover,
       &:focus {
