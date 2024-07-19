@@ -1,8 +1,9 @@
 import "./index.scss";
-import { Badge, Space, Table } from "antd";
+import { Button, Popconfirm, Space, Table } from "antd";
 import { useEffect, useState } from "react";
 import api from "../../config/axios";
 import moment from "moment";
+import { toast } from "react-toastify";
 
 const HistoryBooking = () => {
   const [booking, setBooking] = useState([]);
@@ -17,7 +18,7 @@ const HistoryBooking = () => {
       };
     });
     setBooking(booking);
-    console.log(booking);
+    // console.log(booking);
   };
 
   const fetchHistoryBookingDetail = async (bookingId) => {
@@ -40,6 +41,18 @@ const HistoryBooking = () => {
     fetchHistoryBooking();
   }, []);
 
+  const handleCancelBookingDetail = async (bookingDetailId) => {
+    try {
+      const response = await api.delete(
+        `booking/booking-detail/${bookingDetailId}`
+      );
+      toast.success("Hủy thành công!");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data);
+    }
+  };
+
   const formatCurrency = (value) => {
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -58,7 +71,17 @@ const HistoryBooking = () => {
   const formatBookingStatus = (value) => {
     if (value === "PENDING" || value === null || value === "") {
       return "Đang xử lý";
+    } else if (value === "CANCEL") {
+      return "Đã huỷ";
     } else return "Đã xác nhận";
+  };
+
+  const formatBookingDetailStatus = (value) => {
+    if (value === "UNFINISHED") {
+      return "Chưa hoành thành";
+    } else if (value === "FINISHED") {
+      return "Hoàn thành";
+    } else return "Đã hủy";
   };
 
   const expandedRowRender = (bookingId) => {
@@ -104,14 +127,27 @@ const HistoryBooking = () => {
         title: "Trạng thái",
         dataIndex: "status",
         key: "status",
+        render: (status) => formatBookingDetailStatus(status),
       },
       {
-        title: "Action",
+        title: "",
         key: "operation",
-        render: () => (
+        render: (record) => (
           <Space size="middle">
-            <a>Pause</a>
-            <a>Stop</a>
+            <Popconfirm
+              title="Hủy lịch đã đặt!"
+              description="Bạn có chắc chắn muốn hủy lịch này?"
+              okText="Có"
+              cancelText="Hủy"
+              onConfirm={() =>
+                handleCancelBookingDetail(record.bookingDetailId)
+              }
+              disabled={record.status === "CANCEL"}
+            >
+              <Button danger disabled={record.status === "CANCEL"}>
+                Hủy
+              </Button>
+            </Popconfirm>
           </Space>
         ),
       },
@@ -127,9 +163,9 @@ const HistoryBooking = () => {
 
   const columns = [
     {
-      title: "Booking Id",
-      dataIndex: "bookingId",
-      key: "bookingId",
+      title: "STT",
+      key: "index",
+      render: (text, record, index) => index + 1,
     },
     {
       title: "Tên CLB",
