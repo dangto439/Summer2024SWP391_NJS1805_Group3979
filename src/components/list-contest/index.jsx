@@ -1,102 +1,50 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, Typography, Divider, Pagination } from "@mui/material";
-import {
-  Routes,
-  Route,
-  useLocation,
-  Link as RouterLink,
-  Link,
-  Outlet,
-} from "react-router-dom";
-import axios from "axios";
-import ContestDetail from "../../components/contest-detail";
-import RegisterContest from "../../components/register-contest";
+import { useLocation, Link, Outlet } from "react-router-dom";
+import api from "../../config/axios";
 
 const ListContest = () => {
   const [contests, setContests] = useState([]);
+  const [filteredContests, setFilteredContests] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 2;
   const location = useLocation();
   const today = new Date();
 
-  // Dữ liệu tạm test
-  const allContests = [
-    {
-      contestId: 1,
-      participationPrice: 100000,
-      capacity: 100,
-      name: "Cuộc thi A",
-      firstPrize: 1000000,
-      secondPrize: 500000,
-      startDate: "2024-07-20",
-      endDate: "2024-08-20",
-      clubId: 1,
-      urlBanner: "https://via.placeholder.com/150",
-    },
-    {
-      contestId: 2,
-      participationPrice: 150000,
-      capacity: 200,
-      name: "Cuộc thi B",
-      firstPrize: 2000000,
-      secondPrize: 1000000,
-      startDate: "2024-08-15",
-      endDate: "2024-09-15",
-      clubId: 2,
-      urlBanner: "https://via.placeholder.com/150",
-    },
-    {
-      contestId: 3,
-      participationPrice: 120000,
-      capacity: 150,
-      name: "Cuộc thi C",
-      firstPrize: 1500000,
-      secondPrize: 750000,
-      startDate: "2024-09-10",
-      endDate: "2024-10-10",
-      clubId: 3,
-      urlBanner: "https://via.placeholder.com/150",
-    },
-    {
-      contestId: 4,
-      participationPrice: 110000,
-      capacity: 80,
-      name: "Cuộc thi D",
-      firstPrize: 1200000,
-      secondPrize: 600000,
-      startDate: "2024-07-10",
-      endDate: "2024-07-15",
-      clubId: 4,
-      urlBanner: "https://via.placeholder.com/150",
-    },
-  ];
-
   useEffect(() => {
     const fetchContests = async () => {
       try {
-        const contestsNotStart = allContests.filter(
-          (contest) => new Date(contest.startDate) > today
-        );
-        const contestsStart = allContests.filter(
-          (contest) => new Date(contest.startDate) <= today
-        );
-
-        if (
-          location.pathname === "/contest" ||
-          location.pathname === "/contest/dangdienra"
-        ) {
-          setContests(contestsStart);
-        } else if (location.pathname === "/contest/sapdienra") {
-          setContests(contestsNotStart);
-        }
+        const response = await api.get("/contest/current-account");
+        setContests(response.data);
       } catch (error) {
-        console.error("Error getting data: ", error);
+        console.error("Error fetching data: ", error);
       }
     };
     fetchContests();
-  }, [location.pathname]);
+  }, []);
 
-  // Dữ liệu test
+  useEffect(() => {
+    const filterContests = () => {
+      const contestsNotStart = contests.filter(
+        (contest) => new Date(contest.startDate) > today
+      );
+      const contestsStart = contests.filter(
+        (contest) => new Date(contest.startDate) <= today
+      );
+
+      if (
+        location.pathname === "/contest" ||
+        location.pathname === "/contest/dangdienra"
+      ) {
+        setFilteredContests(contestsStart);
+      } else if (location.pathname === "/contest/sapdienra") {
+        setFilteredContests(contestsNotStart);
+      }
+    };
+
+    filterContests();
+  }, [location.pathname, contests, today]);
+
   const hotContests = [
     {
       imgSrc: "https://via.placeholder.com/50",
@@ -140,12 +88,12 @@ const ListContest = () => {
   };
 
   const renderContests = () => {
-    if (!Array.isArray(contests)) {
+    if (!Array.isArray(filteredContests)) {
       return null;
     }
 
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentContests = contests.slice(
+    const currentContests = filteredContests.slice(
       startIndex,
       startIndex + itemsPerPage
     );
@@ -250,7 +198,7 @@ const ListContest = () => {
         <Box mt={3}>{renderContests()}</Box>
         <Box display="flex" justifyContent="center" mt={3}>
           <Pagination
-            count={Math.ceil((contests?.length || 0) / itemsPerPage)}
+            count={Math.ceil((filteredContests?.length || 0) / itemsPerPage)}
             page={currentPage}
             onChange={handlePageChange}
           />
@@ -273,11 +221,6 @@ const ListContest = () => {
         {renderHotContests()}
       </Box>
       <Box>
-        {/* <Routes>
-          <Route path="chitiet2/:id" element={<Tournament />} />
-          <Route path="chitiet/:id" element={<ContestDetail />} />
-          <Route path="thamgia/:id" element={<RegisterContest />} />
-        </Routes> */}
         <Outlet />
       </Box>
     </Box>

@@ -41,21 +41,6 @@ const Contest = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const location = useLocation();
-  // const [contests, setContests] = useState([]);
-
-  //     Chuyển qua call api ở bên listcontest
-  // useEffect(() => {
-  //   const fetchContests = async () => {
-  //     try {
-  //       //check xem cú pháp call api đúng khum
-  //       const response = await api.get("/contests");
-  //       setContests(response.data);
-  //     } catch (error) {
-  //       console.error("Error get data: ", error);
-  //     }
-  //   };
-  //   fetchContests();
-  // }, []);
 
   const Breadcrumb = () => {
     const pathnames = location.pathname.split("/").filter((x) => x);
