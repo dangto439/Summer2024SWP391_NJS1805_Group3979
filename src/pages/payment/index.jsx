@@ -98,6 +98,13 @@ function Payment() {
     processPayment();
   }, [amount]);
 
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(value);
+  };
+
   return (
     <div className="ReturnPay container">
       {isSuccess ? (
@@ -108,7 +115,7 @@ function Payment() {
             <>
               Ngân hàng giao dịch: {vnp_BankCode} <br />
               Ngày thanh toán: {vnp_PayDate} <br />
-              Số tiền thanh toán: {vnp_Amount / 100} VND
+              Số tiền thanh toán: {formatCurrency(vnp_Amount)}
             </>
           }
           extra={[

@@ -95,8 +95,8 @@ export default function CarouselClub() {
                       {club.clubAddress}, {club.district}, {club.province}
                     </p>
                     <p>
-                      <i className="carousel-club-clock"></i> {club.openTime}g -{" "}
-                      {club.closeTime}g
+                      <i className="carousel-club-clock"></i> {club.openTime}:00
+                      - {club.closeTime}:00
                     </p>
                     <p>
                       <i className="carousel-club-phone"></i> Hotline:{" "}
@@ -170,8 +170,8 @@ export default function CarouselClub() {
                       {club.clubAddress}, {club.district}, {club.province}
                     </p>
                     <p>
-                      <i className="carousel-club-clock"></i> {club.openTime}g -{" "}
-                      {club.closeTime}g
+                      <i className="carousel-club-clock"></i> {club.openTime}:00
+                      - {club.closeTime}:00
                     </p>
                     <p>
                       <i className="carousel-club-phone"></i> Hotline:{" "}
