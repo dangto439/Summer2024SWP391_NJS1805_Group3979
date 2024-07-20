@@ -121,7 +121,7 @@ export default function CarouselClub() {
           ))}
         </div>
       </Swiper>
-      ``
+
       <div className="carousel-club-header">
         <h1 className="carousel-club-title">
           DANH SÁCH CÁC SÂN CẦU LÔNG NỔI BẬT

@@ -17,17 +17,9 @@
   }
 }
 
-.list-club-all {
-  // margin: 0 200px;
-  margin-left: 300px;
-}
-
 .pagination-club {
-  display: flex;
-  // justify-content: center;
   margin-top: 20px;
   margin-bottom: 20px;
-  margin-left: 460px;
 }
 
 .list-club-outstanding {
@@ -72,6 +64,10 @@
   p {
     text-align: left;
   }
+  transition: all 0.3s;
+  &:hover {
+    transform: scale(1.03);
+  }
 }
 
 .list-club-outstanding-image {
@@ -89,15 +85,23 @@
 
 .list-club-main-image {
   width: 70%;
-  // height: 800px;
+  display: flex;
+  flex-direction: column;
   padding-left: 20px;
   padding-right: 20px;
+  justify-content: center;
 
   img {
     border-radius: 10px;
     width: 100%;
     height: 800px;
     // height: 220px;
+  }
+  .list-club-all {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 }
 
@@ -108,14 +112,15 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 10px;
   margin-top: 10px;
-  margin-left: -100px;
   display: flex;
-  // justify-content:  ;
-  // flex-direction: row;
   align-items: center;
   background-color: #eaf1f0c4;
-  max-width: 95%;
+  width: 70%;
   min-height: 250px;
+  transition: all 0.3s;
+  &:hover {
+    transform: scale(1.05);
+  }
 
   .list-club-image {
     img {
@@ -129,10 +134,7 @@
 
   .list-club-details {
     margin-top: 20px;
-    // text-align: center;
-    // text-align: left;
-    width: 800px;
-
+    width: 100%;
     h2 {
       font-size: 20px;
       color: #007bff;
@@ -166,7 +168,6 @@
   }
   .buttons {
     display: flex;
-    // justify-content: end;
     justify-content: center;
   }
 
@@ -215,7 +216,6 @@
   margin-top: 40px;
   margin-left: 0;
   // border: 1px solid rgb(117, 113, 113);
-  margin-left: -105px;
   text-align: center;
   border-radius: 10px;
 }
@@ -252,11 +252,10 @@
   }
   input[type="text"] {
     width: 100%;
-    padding: 5px;
+    padding: 8px 50px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-bottom: 10px;
   }
-  // justify-content: center;
 }
