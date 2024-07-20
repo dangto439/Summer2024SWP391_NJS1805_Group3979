@@ -103,6 +103,7 @@ function ListClub() {
                 <Form.Item name="search">
                   <div className="list-club-search-name">
                     <Input
+                      size="large"
                       placeholder="Nhập tên sân cần tìm..."
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
@@ -116,6 +117,7 @@ function ListClub() {
                   name="city"
                 >
                   <Select
+                    size="large"
                     style={{ width: 200 }}
                     className="list-club-location-provinces"
                     onChange={handleCityChange}
@@ -130,6 +132,7 @@ function ListClub() {
                   name="district"
                 >
                   <Select
+                    size="large"
                     className="list-club-location-"
                     style={{ width: 200 }}
                     onChange={handleDistrictChange}
@@ -141,9 +144,12 @@ function ListClub() {
 
                 <Form.Item>
                   <div className="form-search-button">
-                    <Button className="submit-search-button" htmlType="submit">
-                      <SearchOutlined />
-                    </Button>
+                    <Button
+                      size="large"
+                      className="submit-search-button"
+                      htmlType="submit"
+                      icon={<SearchOutlined />}
+                    ></Button>
                   </div>
                 </Form.Item>
               </Form>
@@ -202,6 +208,7 @@ function ListClub() {
               pageSize={pageSize}
               total={data.length}
               onChange={handlePageChange}
+              align="center"
             />
           </div>
         </div>
