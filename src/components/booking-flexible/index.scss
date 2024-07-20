@@ -5,20 +5,35 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
+
     h1 {
       margin: 0;
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 0px;
+    }
+    h2 {
+      margin-bottom: 0px;
+    }
+    p {
+      font-size: 20px;
+    }
+    img {
+      width: 80%;
     }
   }
 
   .booking-flexible__form-wrapper {
     display: flex;
     justify-content: center;
+    align-items: center;
   }
 
   .booking-flexible__form {
-    width: 80%; 
-    max-width: 600px; 
-    
+    width: 80%;
+    max-width: 600px;
+
     .ant-form-item {
       margin-bottom: 16px;
 
@@ -27,7 +42,19 @@
       }
 
       .ant-input,
-      .ant-input-number,
+      .ant-input-number {
+        padding: 15px 25px;
+        width: 100%;
+        border: 1px solid #cbd5e1;
+        border-radius: 12px;
+        outline: none;
+        transition: linear 0.25s;
+        margin-bottom: 20px;
+        &:focus {
+          border-color: #1dc071;
+        }
+      }
+
       .ant-btn {
         width: 100%;
       }

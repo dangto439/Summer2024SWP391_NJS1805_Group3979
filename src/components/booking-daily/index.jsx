@@ -12,7 +12,7 @@ import {
 } from "antd";
 import moment from "moment";
 import api from "../../config/axios";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import "./index.scss";
 import { Option } from "antd/es/mentions";
 import { useNavigate } from "react-router-dom";
@@ -75,14 +75,18 @@ function BookingDaily({ club }) {
           });
           return row;
         });
-
         setDataSource(formattedData);
-
         const generatedColumns = [
+          {
+            title: "Giờ chơi",
+            dataIndex: "time",
+            key: "time",
+          },
           ...courts.map((court) => ({
             title: court.courtName,
             dataIndex: `court_${court.courtId}`,
-            key: court.courtId,
+            key: `court_${court.courtId}`,
+            align: "center",
             render: (slot) =>
               slot ? (
                 <Button
@@ -98,10 +102,8 @@ function BookingDaily({ club }) {
                       : ""
                   }
                   disabled={slot.courtSlotStatus === "INACTIVE"}
-                  onClick={() => handleSlotSelect(slot)}
-                >
-                  {formatTime(slot.slotId)}
-                </Button>
+                  onClick={(event) => handleSlotSelect(slot, event)} // Pass the event
+                ></Button>
               ) : null,
           })),
         ];
@@ -123,15 +125,24 @@ function BookingDaily({ club }) {
     setTotalPrice(0);
   };
 
-  const handleSlotSelect = (slot) => {
+  const handleSlotSelect = (slot, event) => {
     const isSelected = selectedSlots.some(
       (selectedSlot) => selectedSlot.courtSlotId === slot.courtSlotId
     );
+
     const updatedSlots = isSelected
       ? selectedSlots.filter(
           (selectedSlot) => selectedSlot.courtSlotId !== slot.courtSlotId
         )
       : [...selectedSlots, slot];
+
+    // Directly modify the class for immediate feedback
+    const button = event.currentTarget;
+    if (isSelected) {
+      button.classList.remove("selected-slot");
+    } else {
+      button.classList.add("selected-slot");
+    }
 
     setSelectedSlots(updatedSlots);
     calculateTotal(updatedSlots);
@@ -183,7 +194,7 @@ function BookingDaily({ club }) {
       // console.log(bookingData);
     } catch (error) {
       console.error("Error submitting booking:", error);
-      message.error("Đặt sân thất bại. Vui lòng thử lại.");
+      message.error("Đặt sân thất bại. Vui lòng thử lại!");
     }
   };
 
@@ -214,6 +225,8 @@ function BookingDaily({ club }) {
               className="booking-daily-datepicker-format"
               onChange={handleDateChange}
               disabledDate={disabledDate}
+              placeholder="Chọn ngày..."
+              defaultValue={moment()}
             />
           </Col>
           <Col span={24} className="booking-daily-summary">
@@ -221,6 +234,7 @@ function BookingDaily({ club }) {
             <p>Ngày: {selectedDate}</p>
             <p>Tổng giờ: {totalHours} giờ</p>
             <p>Tổng Tiền: {formatCurrency(totalPrice)}</p>
+            <img src={club.urlImages} />
             <img
               src="https://firebasestorage.googleapis.com/v0/b/badminton-booking-platform.appspot.com/o/z5545153816126_834da2b1757f9fca8d39197a7ac64f93.jpg?alt=media&token=50c69782-7782-42c9-877d-c07a1e906abb"
               alt=""
@@ -264,6 +278,7 @@ function BookingDaily({ club }) {
           dataSource={dataSource}
           pagination={false}
           rowKey="time"
+          bordered="true"
         />
       </Col>
     </Row>

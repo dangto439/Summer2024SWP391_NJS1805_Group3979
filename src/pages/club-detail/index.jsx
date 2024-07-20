@@ -123,7 +123,7 @@ function ClubDetail() {
                 <i className="fas fa-clock">
                   <AccessTimeIcon fontSize="small" />
                 </i>{" "}
-                {club.openTime}g - {club.closeTime}g
+                {club.openTime}:00 - {club.closeTime}:00
               </li>
               <li>
                 <i className="nav-icon fal fa-shuttlecock">
