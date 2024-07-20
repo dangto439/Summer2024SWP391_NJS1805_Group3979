@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import "./index.scss";
 import { Button, Col, Form, Input, InputNumber, Row } from "antd";
@@ -34,15 +35,17 @@ const BookingFlexible = ({ club }) => {
 
   return (
     <Row className="booking-flexible">
-      <Col span={7}>
+      <Col span={12}>
         <Row className="booking-flexible__header">
           <Col>
-            <h1>Đặt lịch linh hoạt</h1>
-            <h1>Tháng: {selectedDate}</h1>
+            <h1>{club.clubName}</h1>
+            <h3>Đặt lịch linh hoạt</h3>
+            <p>Tháng: {selectedDate}</p>
+            <img src={club.urlImages} alt={club.clubName} />
           </Col>
         </Row>
       </Col>
-      <Col span={17} className="booking-flexible__form-wrapper">
+      <Col span={12} className="booking-flexible__form-wrapper">
         <Form
           name="basic"
           initialValues={{
@@ -60,7 +63,7 @@ const BookingFlexible = ({ club }) => {
           className="booking-flexible__form"
         >
           <Form.Item
-            label="Nhập thời gian bạn muốn chọn"
+            label="Nhập thời gian bạn muốn chọn:"
             name="amountTime"
             rules={[
               {
@@ -69,16 +72,16 @@ const BookingFlexible = ({ club }) => {
               },
             ]}
           >
-            <InputNumber min={10} onChange={onChange} />
+            <InputNumber size="middle" min={10} onChange={onChange} />
           </Form.Item>
 
-          <Form.Item label="Nhập mã khuyến mãi" name="promotionCode">
-            <Input />
+          <Form.Item label="Nhập mã khuyến mãi:" name="promotionCode">
+            <Input size="large" />
           </Form.Item>
 
           <Form.Item className="booking-flexible__submit-button">
-            <Button type="primary" htmlType="submit">
-              Submit
+            <Button size="large" type="primary" htmlType="submit">
+              Thanh Toán
             </Button>
           </Form.Item>
         </Form>
