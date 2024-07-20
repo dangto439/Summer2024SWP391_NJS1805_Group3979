@@ -90,6 +90,11 @@ function Payment() {
           sessionStorage.removeItem("typepayment");
           navigate("/history-booking");
         }
+        const reloadpage = sessionStorage.getItem("reloadpage");
+        if (reloadpage === "TRUE") {
+          window.location.reload();
+          sessionStorage.removeItem("reloadpage");
+        }
       } else {
         await handleUpdateTransactionDeposit("CANCEL");
       }

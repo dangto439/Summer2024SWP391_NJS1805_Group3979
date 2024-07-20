@@ -112,6 +112,7 @@ function Wallet() {
     try {
       const response = await api.post(`/vnpay?amount=${values}`);
       const paymentLink = response.data;
+      sessionStorage.setItem("reloadpage", "TRUE");
       window.location.href = paymentLink;
     } catch (error) {
       toast.error("Không thể thanh toán!");
