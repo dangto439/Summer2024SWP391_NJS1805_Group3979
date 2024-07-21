@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import {
   Typography,
   Card,
@@ -8,47 +8,72 @@ import {
   Button,
 } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import { Link } from "react-router-dom";
-
-// Dữ liệu giả lập cho cuộc thi
-const contest = {
-  contestId: 1,
-  participationPrice: 50,
-  capacity: 100,
-  name: "Summer Tournament",
-  firstPrize: 500,
-  secondPrize: 200,
-  startDate: "2024-07-17",
-  endDate: "2024-07-20",
-  clubId: 1,
-  urlBanner: "https://example.com/banner.jpg",
-};
-
-// Dữ liệu giả lập cho câu lạc bộ
-const club = {
-  clubId: 1,
-  clubName: "Example Club",
-  clubAddress: "123 Club Street",
-  district: "District 1",
-  province: "Example Province",
-  openTime: "09:00 AM",
-  closeTime: "06:00 PM",
-  hotline: "+123456789",
-  clubStatus: "ACTIVE",
-  description:
-    "Example Club is a premier sports club offering various facilities and events.",
-  urlImages: [
-    "https://example.com/image1.jpg",
-    "https://example.com/image2.jpg",
-  ],
-};
+import { Link, useNavigate, useParams } from "react-router-dom";
+import api from "../../config/axios";
 
 const ContestDetailPage = () => {
+  const { id: contestId } = useParams();
+  const [contest, setContest] = useState([]);
+  const [clubId, setClubId] = useState(null);
+  const [club, setClub] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchContestDetails = async () => {
+      try {
+        const response = await api.get(`/contest/${contestId}`);
+        if (response.status === 200) {
+          setContest(response.data);
+          setClubId(response.data.clubId);
+        } else {
+          console.error(
+            "Error fetching contest details. Status:",
+            response.status
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching contest details: ", error);
+      }
+    };
+    fetchContestDetails();
+  }, [contestId]);
+
+  useEffect(() => {
+    const fetchClubDetails = async (clubId) => {
+      try {
+        const response = await api.get(`/club/${clubId}`);
+        if (response.status === 200) {
+          setClub(response.data);
+        } else {
+          console.error(
+            "Error fetching club details. Status:",
+            response.status
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching club details: ", error);
+      }
+    };
+
+    if (clubId) {
+      fetchClubDetails(clubId);
+    }
+  }, [clubId]);
+
+  const handleShowDetailClub = (club) => {
+    console.log(club);
+    navigate(`/club-detail/${club.clubId}`);
+  };
+
   return (
-    <Box className="contest-detail-page">
+    <Box>
       <Card>
         <CardContent>
-          <Typography variant="h2" gutterBottom>
+          <Typography
+            variant="h2"
+            gutterBottom
+            sx={{ backgroundColor: "#569284", color: "whitesmoke" }}
+          >
             {contest.name}
           </Typography>
           <Typography
@@ -64,26 +89,23 @@ const ContestDetailPage = () => {
             {contest.startDate} - {contest.endDate}
           </Typography>
 
-          <Typography variant="body1" gutterBottom>
-            <strong style={{ color: "#57E314" }}>Phí tham gia: </strong>
-            {contest.participationPrice} VND
-          </Typography>
-        </CardContent>
-      </Card>
-
-      <Card className="contest-banner">
-        <CardMedia
-          component="img"
-          height="500"
-          image={contest.urlBanner}
-          alt="Contest Banner"
-        />
-      </Card>
-
-      <Card className="contest-prizes">
-        <CardContent>
           <Typography
-            variant="h3"
+            variant="h6"
+            gutterBottom
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              marginBottom: "30px",
+            }}
+          >
+            <strong style={{ color: "#57E314", marginRight: "10px" }}>
+              Phí tham gia:{" "}
+            </strong>
+            {contest.participationPrice} ₫
+          </Typography>
+
+          <Typography
+            variant="h6"
             gutterBottom
             sx={{ display: "flex", justifyContent: "center" }}
           >
@@ -97,7 +119,7 @@ const ContestDetailPage = () => {
             <strong style={{ color: "#EF1212", marginRight: "10px" }}>
               Giải nhất:
             </strong>
-            {contest.firstPrize} VND
+            {contest.firstPrize} ₫
           </Typography>
           <Typography
             variant="h6"
@@ -110,33 +132,60 @@ const ContestDetailPage = () => {
             <strong style={{ color: "#EE9191", marginRight: "10px" }}>
               Giải nhì:
             </strong>
-            {contest.secondPrize} VND
+            {contest.secondPrize} ₫
           </Typography>
         </CardContent>
       </Card>
 
-      <Card className="contest-organizer">
+      <Card className="contest-banner">
+        <CardMedia
+          component="img"
+          height="500"
+          image={contest.urlBanner}
+          alt="Contest Banner"
+        />
+      </Card>
+      <Card>
         <CardContent>
-          <Typography
-            variant="h3"
-            gutterBottom
-            sx={{ display: "flex", justifyContent: "center" }}
-          >
-            Nhà tổ chức
-          </Typography>
-          <Box className="club-info">
-            <a href="/club-detail" className="club-name">
+          <Box>
+            <Typography
+              variant="h6"
+              gutterBottom
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "30px",
+              }}
+            >
+              Nhà tổ chức
+            </Typography>
+            <Typography
+              variant="h5"
+              onClick={() => handleShowDetailClub(club)}
+              sx={{
+                color: "blue",
+                display: "flex",
+                justifyContent: "center",
+                marginBottom: "10px",
+              }}
+            >
               {club.clubName}
-            </a>
-            <CardMedia
-              component="img"
-              height="500"
-              image={club.urlImages[0]}
-              alt="Club Image"
-            />
+            </Typography>
             <Typography variant="body1" gutterBottom>
               <strong>Hotline:</strong> {club.hotline}
             </Typography>
+
+            <CardMedia
+              component="img"
+              height="500"
+              image={
+                club.urlImages && club.urlImages.length > 0
+                  ? club.urlImages[0]
+                  : ""
+              }
+              alt="Club Image"
+            />
+
             <Box mt={2} display="flex" justifyContent="center">
               <Button
                 component={Link}
