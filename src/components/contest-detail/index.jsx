@@ -10,6 +10,7 @@ import {
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../config/axios";
+import ConfirmRegistration from "../register-contest";
 
 const ContestDetailPage = () => {
   const { id: contestId } = useParams();
@@ -17,6 +18,7 @@ const ContestDetailPage = () => {
   const [clubId, setClubId] = useState(null);
   const [club, setClub] = useState([]);
   const navigate = useNavigate();
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchContestDetails = async () => {
@@ -60,6 +62,13 @@ const ContestDetailPage = () => {
     }
   }, [clubId]);
 
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleClose = () => {
+    setIsModalVisible(false);
+  };
   const handleShowDetailClub = (club) => {
     console.log(club);
     navigate(`/club-detail/${club.clubId}`);
@@ -196,13 +205,19 @@ const ContestDetailPage = () => {
                 Quay lại
               </Button>
               <Button
+                onClick={showModal}
                 component={Link}
-                to={`/contest/sapdienra/thamgia/${contest.contestId}`}
                 variant="contained"
                 sx={{ backgroundColor: "#B84848" }}
               >
                 Tham gia
               </Button>
+
+              <ConfirmRegistration
+                visible={isModalVisible}
+                onClose={handleClose}
+                id={contest.contestId}
+              />
             </Box>
           </Box>
         </CardContent>

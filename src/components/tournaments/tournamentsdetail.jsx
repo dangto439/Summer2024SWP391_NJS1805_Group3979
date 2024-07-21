@@ -17,6 +17,8 @@ const TournamentDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  sessionStorage.setItem("contestId", contestId);
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 

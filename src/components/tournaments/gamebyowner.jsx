@@ -113,7 +113,8 @@ const GamebyOwner = () => {
   const [hoveredSeed, setHoveredSeed] = useState(null);
   const [rounds, setRounds] = useState([]);
   const [totalRounds, setTotalRounds] = useState(0);
-  const contestId = 8;
+  const contestId = sessionStorage.getItem("contestId");
+  sessionStorage.removeItem("contestId");
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
