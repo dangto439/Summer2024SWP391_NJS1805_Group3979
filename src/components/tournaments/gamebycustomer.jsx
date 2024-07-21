@@ -9,7 +9,6 @@ import {
 
 import api from "../../config/axios";
 import { Box } from "@mui/material";
-import { Margin } from "@mui/icons-material";
 
 const fetchGames = async (contestId) => {
   const response = await api.get(`/contest/games/${contestId}`);

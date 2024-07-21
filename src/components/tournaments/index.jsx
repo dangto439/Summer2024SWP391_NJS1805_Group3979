@@ -3,7 +3,7 @@ import Header from "../dashboard/Header";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import api from "../../config/axios";
 
@@ -17,14 +17,14 @@ const Tournaments = () => {
     navigate("/dashboard/tournaments/new");
   };
 
-  const fetchContestDetails = async (contestId) => {
-    try {
-      const response = await api.get(`/contest/${contestId}`);
-      return response.data;
-    } catch (error) {
-      console.error("Failed to fetch contest details:", error);
-    }
-  };
+  // const fetchContestDetails = async (contestId) => {
+  //   try {
+  //     const response = await api.get(`/contest/${contestId}`);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error("Failed to fetch contest details:", error);
+  //   }
+  // };
 
   const handleViewClick = (contestId) => {
     navigate(`/dashboard/tournaments/detail/${contestId}`);
@@ -138,7 +138,7 @@ const Tournaments = () => {
         <DataGrid
           rows={rows}
           columns={allColumns}
-          getRowId={(row) => row.contestId} // Ensure this is the correct ID field
+          getRowId={(row) => row.contestId}
         />
       </Box>
     </Box>

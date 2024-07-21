@@ -14,7 +14,7 @@ const ListContest = () => {
   useEffect(() => {
     const fetchContests = async () => {
       try {
-        const response = await api.get("/contest/current-account");
+        const response = await api.get("/contests");
         setContests(response.data);
       } catch (error) {
         console.error("Error fetching data: ", error);

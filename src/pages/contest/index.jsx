@@ -96,7 +96,7 @@ const Contest = () => {
             to="dangdienra"
             sx={{
               borderBottom:
-                location.pathname === "/contest/dangdienra" ||
+                location.pathname.startsWith("/contest/dangdienra") ||
                 location.pathname === "/contest"
                   ? `2px solid ${colors.greenAccent[500]}`
                   : "none",
@@ -109,10 +109,9 @@ const Contest = () => {
             component={RouterLink}
             to="/contest/sapdienra"
             sx={{
-              borderBottom:
-                location.pathname === "/contest/sapdienra"
-                  ? `2px solid ${colors.greenAccent[500]}`
-                  : "none",
+              borderBottom: location.pathname.startsWith("/contest/sapdienra")
+                ? `2px solid ${colors.greenAccent[500]}`
+                : "none",
             }}
           >
             Sắp diễn ra
