@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Box, Button, Typography, Divider, Pagination } from "@mui/material";
 import { useLocation, Link, Outlet, useOutletContext } from "react-router-dom";
 import api from "../../config/axios";
+import ConfirmRegistration from "../register-contest";
 
 const ListContest = () => {
   const { searchQuery } = useOutletContext();
@@ -11,6 +12,7 @@ const ListContest = () => {
   const itemsPerPage = 2;
   const location = useLocation();
   const today = new Date();
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchContests = async () => {
@@ -90,6 +92,14 @@ const ListContest = () => {
     "Tháng 12",
   ];
 
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleClose = () => {
+    setIsModalVisible(false);
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const month = months[date.getMonth()];
@@ -149,13 +159,19 @@ const ListContest = () => {
                   Chi tiết
                 </Button>
                 <Button
+                  onClick={showModal}
                   component={Link}
-                  to={`/contest/sapdienra/thamgia/${contest.contestId}`}
+                  // to={`/contest/sapdienra/thamgia/${contest.contestId}`}
                   variant="contained"
                   sx={{ backgroundColor: "#B84848" }}
                 >
                   Tham gia
                 </Button>
+                <ConfirmRegistration
+                  visible={isModalVisible}
+                  onClose={handleClose}
+                  id={contest.contestId}
+                />
               </Box>
             )}
             {location.pathname === "/contest/dangdienra" ||
