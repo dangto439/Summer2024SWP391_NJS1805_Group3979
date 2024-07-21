@@ -73,6 +73,17 @@ function App() {
     return children;
   };
 
+  const ClubStafRoute = ({ children }) => {
+    if (user == null) {
+      toast.error("Bạn cần đăng nhập tài khoản chủ nhân viên trước");
+      return <Navigate to="/login" />;
+    } else if (user.role != "CLUB_STAFF") {
+      toast.error("Bạn không phải là nhân viên");
+      return <Navigate to="/login" />;
+    }
+    return children;
+  };
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -144,7 +155,11 @@ function App() {
         },
         {
           path: "/checkin",
-          element: <Checkin />,
+          element: (
+            <ClubStafRoute>
+              <Checkin />
+            </ClubStafRoute>
+          ),
         },
         {
           path: "/booking/:clubId",
