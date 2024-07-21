@@ -38,6 +38,7 @@ import ClubOwnerDasboard from "./components/clubowner";
 import BookingManager from "./components/booking-manager-clubowner";
 import PromotionManager from "./components/promotion-manager";
 import Bill from "./pages/bill";
+import ClubAdmin from "./components/club-admin";
 
 function App() {
   const user = useSelector(selectUser);
@@ -218,7 +219,7 @@ function App() {
         },
         {
           path: "club",
-          element: <Club />,
+          element: <ClubAdmin />,
         },
         {
           path: "setting",

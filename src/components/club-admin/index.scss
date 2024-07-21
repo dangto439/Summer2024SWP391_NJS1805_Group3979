@@ -1,0 +1,54 @@
+.team-container {
+    .MuiDataGrid-root {
+      border: none;
+  
+      .MuiDataGrid-cell {
+        border-bottom: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666666;
+      }
+  
+      .name-column--cell {
+        color: #2B831F;
+      }
+  
+      .MuiDataGrid-columnHeaders {
+        background-color: #2B831F;
+        border-bottom: none;
+        color: #fff;
+      }
+  
+      .MuiDataGrid-virtualScroller {
+        background-color: #34373F; 
+      }
+  
+      .MuiDataGrid-footerContainer {
+        border-top: none;
+        background-color: #2B831F;
+        color: #fff;
+      }
+  
+      .MuiDataGrid-columnHeader {
+        display: flex;
+        justify-content: center;
+        color: #fff; 
+      }
+      .MuiDataGrid-row {
+        &:hover {
+          background-color: #666666;
+          .MuiDataGrid-cell {
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
+  .MuiDataGrid-cellContent {
+    color: white;
+  }
+
+
+  
