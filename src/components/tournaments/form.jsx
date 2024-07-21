@@ -95,7 +95,7 @@ const Form = ({ isOpen, onClose, onSubmit, mode, seedId, getTeamNames }) => {
         left: "50%",
         transform: "translate(-50%, -50%)",
         width: 800,
-        bgcolor: "background.paper",
+        bgcolor: "whitesmoke",
         border: "2px solid #000",
         boxShadow: 24,
         p: 4,
@@ -163,10 +163,15 @@ const Form = ({ isOpen, onClose, onSubmit, mode, seedId, getTeamNames }) => {
           >
             <Typography>Select time:</Typography>
             <TextField
-              type="datetime-local"
+              type="date"
               value={time}
               onChange={(e) => setTime(e.target.value)}
-              style={{ marginLeft: "8px", width: "300px", margin: "0 8px" }}
+              style={{
+                marginLeft: "8px",
+                width: "300px",
+                margin: "0 8px",
+                backgroundColor: "black",
+              }}
             />
             <Button variant="contained" color="primary" onClick={handleSubmit}>
               Set time
@@ -196,7 +201,11 @@ const Form = ({ isOpen, onClose, onSubmit, mode, seedId, getTeamNames }) => {
                     type="number"
                     value={scores1[0]}
                     onChange={(e) => handleScoreChange(1, 0, e.target.value)}
-                    style={{ width: "50px", margin: "8px 0" }}
+                    style={{
+                      width: "80px",
+                      margin: "8px 0",
+                      backgroundColor: "#3B937E",
+                    }}
                   />
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -205,7 +214,11 @@ const Form = ({ isOpen, onClose, onSubmit, mode, seedId, getTeamNames }) => {
                     type="number"
                     value={scores1[1]}
                     onChange={(e) => handleScoreChange(1, 1, e.target.value)}
-                    style={{ width: "50px", margin: "8px 0" }}
+                    style={{
+                      width: "80px",
+                      margin: "8px 0",
+                      backgroundColor: "#3B937E",
+                    }}
                   />
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -214,7 +227,11 @@ const Form = ({ isOpen, onClose, onSubmit, mode, seedId, getTeamNames }) => {
                     type="number"
                     value={scores1[2]}
                     onChange={(e) => handleScoreChange(1, 2, e.target.value)}
-                    style={{ width: "50px", margin: "8px 0" }}
+                    style={{
+                      width: "80px",
+                      margin: "8px 0",
+                      backgroundColor: "#3B937E",
+                    }}
                   />
                 </Box>
               </Box>
@@ -226,7 +243,11 @@ const Form = ({ isOpen, onClose, onSubmit, mode, seedId, getTeamNames }) => {
                     type="number"
                     value={scores2[0]}
                     onChange={(e) => handleScoreChange(2, 0, e.target.value)}
-                    style={{ width: "50px", margin: "8px 0" }}
+                    style={{
+                      width: "80px",
+                      margin: "8px 0",
+                      backgroundColor: "#3B937E",
+                    }}
                   />
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -235,7 +256,11 @@ const Form = ({ isOpen, onClose, onSubmit, mode, seedId, getTeamNames }) => {
                     type="number"
                     value={scores2[1]}
                     onChange={(e) => handleScoreChange(2, 1, e.target.value)}
-                    style={{ width: "50px", margin: "8px 0" }}
+                    style={{
+                      width: "80px",
+                      margin: "8px 0",
+                      backgroundColor: "#3B937E",
+                    }}
                   />
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -244,7 +269,11 @@ const Form = ({ isOpen, onClose, onSubmit, mode, seedId, getTeamNames }) => {
                     type="number"
                     value={scores2[2]}
                     onChange={(e) => handleScoreChange(2, 2, e.target.value)}
-                    style={{ width: "50px", margin: "8px 0" }}
+                    style={{
+                      width: "80px",
+                      margin: "8px 0",
+                      backgroundColor: "#3B937E",
+                    }}
                   />
                 </Box>
               </Box>
