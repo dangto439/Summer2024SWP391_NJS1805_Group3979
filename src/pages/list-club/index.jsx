@@ -3,9 +3,9 @@ import { Await, useNavigate } from "react-router-dom";
 import RoomIcon from "@mui/icons-material/Room";
 import { useEffect, useState } from "react";
 import api from "../../config/axios";
-import dataProvnices from "../../../province";
 import { SearchOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Select, Pagination } from "antd";
+import axios from "axios";
 
 function ListClub() {
   const [listClub, setListClub] = useState([]);
@@ -14,29 +14,21 @@ function ListClub() {
   const [pageSize, setPageSize] = useState(5); // Number of clubs per page
   const navigate = useNavigate();
   const [selectedCity, setSelectedCity] = useState("");
-  const [districts, setDistricts] = useState([]);
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [input, setInput] = useState("");
   const [data, setData] = useState([]);
+  const [provinceGhn, setProvinceGhn] = useState([]);
+  const [districtGhn, setDistrictsGhn] = useState([]);
 
-  const optionsCities = Object.keys(dataProvnices).map((city) => {
-    return {
-      label: city,
-      value: city,
-    };
-  });
-  const optionsDistrict = districts.map((district) => {
-    return { label: district, value: district };
-  });
   const handleCityChange = (event) => {
-    const city = event;
-    setSelectedCity(city);
-    setDistricts(dataProvnices[city] || []);
-    setSelectedDistrict("");
+    const resProv = provinceGhn.find((item) => item.value === event);
+    setSelectedCity(resProv.label);
+    fetchDistrict(event);
   };
 
   const handleDistrictChange = (event) => {
-    setSelectedDistrict(event);
+    const resDis = districtGhn.find((item) => item.value === event);
+    setSelectedDistrict(resDis.label);
   };
 
   const fetchListClubData = async () => {
@@ -51,8 +43,50 @@ function ListClub() {
     }
   };
 
+  const FetchAllProvice = async () => {
+    const response = await axios
+      .get(
+        "https://online-gateway.ghn.vn/shiip/public-api/master-data/province",
+        {
+          headers: {
+            Token: "9f5dafd2-8d28-11ee-af43-6ead57e9219a",
+          },
+        }
+      )
+      .then((res) => {
+        const formatData = res.data.data.map((province) => ({
+          value: province.ProvinceID,
+          label: province.ProvinceName,
+        }));
+        setProvinceGhn(formatData);
+        // console.log(provinceGhn);
+      });
+  };
+
+  const fetchDistrict = async (data) => {
+    const response = await axios
+      .get(
+        "https://online-gateway.ghn.vn/shiip/public-api/master-data/district",
+        {
+          params: { province_id: data },
+          headers: {
+            Token: "9f5dafd2-8d28-11ee-af43-6ead57e9219a",
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        const formatData = res.data.data.map((district) => ({
+          value: district.DistrictID,
+          label: district.DistrictName,
+        }));
+        setDistrictsGhn(formatData);
+      });
+  };
+
   useEffect(() => {
     fetchListClubData();
+    FetchAllProvice();
   }, []);
 
   const handleBooking = (club) => {
@@ -73,9 +107,6 @@ function ListClub() {
   );
 
   const handleOnSubmit = (value) => {
-    console.log(value);
-    console.log(listClub);
-
     const containsString = (mainStr, subStr) => {
       return mainStr.toLowerCase().indexOf(subStr.toLowerCase()) !== -1;
     };
@@ -85,8 +116,10 @@ function ListClub() {
         .filter(
           (item) => !value.search || containsString(item.clubName, value.search)
         )
-        .filter((item) => !value.district || item.district === value.district)
-        .filter((item) => !value.city || item.province === value.city)
+        .filter(
+          (item) => !selectedDistrict || item.district === selectedDistrict
+        )
+        .filter((item) => !selectedCity || item.province === selectedCity)
     );
   };
 
@@ -121,7 +154,7 @@ function ListClub() {
                     style={{ width: 200 }}
                     className="list-club-location-provinces"
                     onChange={handleCityChange}
-                    options={optionsCities}
+                    options={provinceGhn}
                     placeholder="Chọn Thành phố/Tỉnh"
                   />
                 </Form.Item>
@@ -137,7 +170,7 @@ function ListClub() {
                     style={{ width: 200 }}
                     onChange={handleDistrictChange}
                     disabled={!selectedCity}
-                    options={optionsDistrict}
+                    options={districtGhn}
                     placeholder="Chọn Quận/Huyện"
                   />
                 </Form.Item>
