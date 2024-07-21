@@ -104,13 +104,16 @@ const ConfirmRegistration = ({ visible, onClose, id }) => {
 
   useEffect(() => {
     const getAContest = async () => {
-      try {
-        const response = await api.get(`/contest/${id}`);
-        setContest(response.data);
-        setPrice(response.data.participationPrice);
-        walletClubOwner(response.data.clubId);
-      } catch (error) {
-        message.error("Không thể lấy thông tin giải đấu.");
+      if (id != null) {
+        try {
+          console.log(id);
+          const response = await api.get(`/contest/${id}`);
+          setContest(response.data);
+          setPrice(response.data.participationPrice);
+          walletClubOwner(response.data.clubId);
+        } catch (error) {
+          message.error("Không thể lấy thông tin giải đấu.");
+        }
       }
     };
 

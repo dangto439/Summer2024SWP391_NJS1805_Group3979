@@ -1,10 +1,24 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Box, Button, Typography, Divider, Pagination } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  Divider,
+  Pagination,
+  InputBase,
+  IconButton,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  useTheme,
+} from "@mui/material";
 import { useLocation, Link } from "react-router-dom";
 import api from "../../config/axios";
 import ConfirmRegistration from "../register-contest";
+import { tokens } from "../../theme";
 
-const ListContest = ({ searchQuery, sortCriteria, sortOrder }) => {
+const ListContest = () => {
   const [contests, setContests] = useState([]);
   const [filteredContests, setFilteredContests] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -12,6 +26,24 @@ const ListContest = ({ searchQuery, sortCriteria, sortOrder }) => {
   const location = useLocation();
   const today = useMemo(() => new Date().setHours(0, 0, 0, 0), []);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
+  const [sortCriteria, setSortCriteria] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSortCriteriaChange = (event) => {
+    setSortCriteria(event.target.value);
+  };
+
+  const handleSortOrderChange = (event) => {
+    setSortOrder(event.target.value);
+  };
 
   useEffect(() => {
     const fetchContests = async () => {
@@ -254,6 +286,44 @@ const ListContest = ({ searchQuery, sortCriteria, sortOrder }) => {
       </Box>
 
       <Box flex="1" position="sticky" maxHeight="100vh" overflow="auto">
+        <Box
+          display="flex"
+          backgroundColor={colors.greenAccent[900]}
+          borderRadius="3px"
+        >
+          <InputBase
+            sx={{ ml: 2, flex: 1, width: "300px" }}
+            placeholder="Search"
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
+          <IconButton type="button" sx={{ p: 1 }}>
+            {/* <SearchIcon /> */}
+          </IconButton>
+        </Box>
+        <FormControl sx={{ minWidth: 120, mr: 2 }}>
+          <InputLabel>Sắp xếp theo</InputLabel>
+          <Select
+            value={sortCriteria}
+            onChange={handleSortCriteriaChange}
+            displayEmpty
+          >
+            <MenuItem value="name">Tên</MenuItem>
+            <MenuItem value="startDate">Ngày</MenuItem>
+            <MenuItem value="capacity">Số Lượng</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl sx={{ minWidth: 120 }}>
+          <InputLabel>Thứ tự</InputLabel>
+          <Select
+            value={sortOrder}
+            onChange={handleSortOrderChange}
+            displayEmpty
+          >
+            <MenuItem value="asc">Tăng dần</MenuItem>
+            <MenuItem value="desc">Giảm dần</MenuItem>
+          </Select>
+        </FormControl>
         <Typography
           variant="h6"
           color="primary"
