@@ -5,7 +5,16 @@ import api from "../../config/axios";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/features/counterSlice";
-import { Button, Form, Input, message, Modal, Space, Table } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  Modal,
+  Space,
+  Table,
+} from "antd";
 import moment from "moment";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { MdAttachMoney } from "react-icons/md";
@@ -67,10 +76,15 @@ function Wallet() {
   };
 
   const handleInputChange = (e) => {
-    // const formattedValue = formatCurrency(e.target.value);
+    const formattedValue = formatCurrency(e.target.value);
+    // setAmount(formattedValue);
+    console.log(formattedValue);
     setAmount(e.target.value);
   };
-
+  const onChange = (value) => {
+    console.log("changed", value);
+    setAmount(value);
+  };
   const handleRecharge = (e) => {
     // e.preventDefault();
     // Handle form submission
@@ -286,15 +300,17 @@ function Wallet() {
                 name="amount"
                 rules={[{ required: true, message: "Vui lòng nhập số tiền!" }]}
               >
-                <Input
-                  onChange={handleInputChange}
-                  type="number"
+                <InputNumber
+                  style={{ width: 450 }}
+                  defaultValue={10000}
                   min={10000}
-                  name="amount"
-                  id="amount"
-                  placeholder="Số tiền nạp vào 10.000đ - 1.000.000đ"
-                  className="form-input-login"
-                  size="large"
+                  max={50000000}
+                  step={1000}
+                  formatter={(value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
+                  parser={(value) => value?.replace(/,/g, "")}
+                  onChange={onChange}
                 />
               </Form.Item>
               <Button
@@ -362,14 +378,17 @@ function Wallet() {
                 name="amount"
                 rules={[{ required: true, message: "Vui lòng nhập số tiền!" }]}
               >
-                <Input
-                  type="number"
+                <InputNumber
+                  style={{ width: 470 }}
+                  defaultValue={10000}
                   min={10000}
-                  name="amount"
-                  id="amount"
-                  placeholder="Số tiền chuyển 10.000đ - 1.000.000đ"
-                  className="form-input-login"
-                  size="large"
+                  max={50000000}
+                  step={1000}
+                  formatter={(value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
+                  parser={(value) => value?.replace(/,/g, "")}
+                  onChange={onChange}
                 />
               </Form.Item>
               <Button
