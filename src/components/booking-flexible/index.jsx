@@ -68,11 +68,12 @@ const BookingFlexible = ({ club }) => {
             rules={[
               {
                 required: true,
-                message: "Hãy chọn lượng thời gian ít nhất 10 tiếng",
+                message:
+                  "Hãy chọn số tiếng bạn muôn ít nhất 5 tiếng tối đa 50 tiếng",
               },
             ]}
           >
-            <InputNumber size="middle" min={10} onChange={onChange} />
+            <InputNumber size="middle" min={5} max={50} onChange={onChange} />
           </Form.Item>
 
           <Form.Item label="Nhập mã khuyến mãi:" name="promotionCode">
