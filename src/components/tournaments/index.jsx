@@ -6,12 +6,15 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import api from "../../config/axios";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/features/counterSlice";
 
 const Tournaments = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState([]);
   const navigate = useNavigate();
+  const user = useSelector(selectUser);
 
   const handleCreateATournament = () => {
     navigate("/dashboard/tournaments/new");
@@ -82,7 +85,7 @@ const Tournaments = () => {
 
   useEffect(() => {
     const fetchContest = async () => {
-      const response = await api.get("/contest/current-account");
+      const response = await api.get(`/contest/current-account/${user.id}`);
       const updatedRows = await Promise.all(
         response.data.map(async (item) => {
           const club = await api.get(`/club/${item.clubId}`);
