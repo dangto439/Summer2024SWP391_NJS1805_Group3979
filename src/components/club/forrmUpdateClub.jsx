@@ -12,7 +12,6 @@ const UpdateClubForm = ({
   darkMode,
 }) => {
   const [form] = Form.useForm();
-  // const [selectProvince, setSelectProvince] = useState("");
   const [provinceGhn, setProvinceGhn] = useState([]);
   const [districtGhn, setDistrictsGhn] = useState([]);
 

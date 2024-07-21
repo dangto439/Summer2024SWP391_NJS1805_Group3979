@@ -145,7 +145,7 @@ const ClubForms = ({ open, onClose, onSubmit, fetFunction, mode, clubid }) => {
     resolver: yupResolver(schema),
   });
 
-  const [districts, setDistricts] = useState([]);
+  // const [districts, setDistricts] = useState([]);
   const [selectedCity, setSelectCity] = useState([]);
   const [fileList, setFileList] = useState([]);
   const [previewImage, setPreviewImage] = useState("");
