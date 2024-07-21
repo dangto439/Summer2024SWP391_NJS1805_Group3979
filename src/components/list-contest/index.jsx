@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, Typography, Divider, Pagination } from "@mui/material";
-import { useLocation, Link, Outlet } from "react-router-dom";
+import { useLocation, Link, Outlet, useOutletContext } from "react-router-dom";
 import api from "../../config/axios";
 
 const ListContest = () => {
+  const { searchQuery } = useOutletContext();
   const [contests, setContests] = useState([]);
   const [filteredContests, setFilteredContests] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,18 +33,27 @@ const ListContest = () => {
         (contest) => new Date(contest.startDate) <= today
       );
 
+      let filtered = [];
+
       if (
         location.pathname === "/contest" ||
         location.pathname === "/contest/dangdienra"
       ) {
-        setFilteredContests(contestsStart);
+        filtered = contestsStart;
       } else if (location.pathname === "/contest/sapdienra") {
-        setFilteredContests(contestsNotStart);
+        filtered = contestsNotStart;
       }
+
+      if (searchQuery) {
+        filtered = filtered.filter((contest) =>
+          contest.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+      setFilteredContests(filtered);
     };
 
     filterContests();
-  }, [location.pathname, contests, today]);
+  }, [location.pathname, contests, today, searchQuery]);
 
   const hotContests = [
     {
@@ -188,9 +198,9 @@ const ListContest = () => {
     ));
   };
 
-  const handlePageChange = (event, value) => {
-    setCurrentPage(value);
-  };
+  // const handlePageChange = (event, value) => {
+  //   setCurrentPage(value);
+  // };
 
   return (
     <Box display="flex" p={2}>
@@ -200,7 +210,8 @@ const ListContest = () => {
           <Pagination
             count={Math.ceil((filteredContests?.length || 0) / itemsPerPage)}
             page={currentPage}
-            onChange={handlePageChange}
+            // onChange={handlePageChange}
+            onChange={(event, page) => setCurrentPage(page)}
           />
         </Box>
       </Box>

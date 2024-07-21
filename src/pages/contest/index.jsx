@@ -15,10 +15,10 @@ import {
   useLocation,
   Outlet,
 } from "react-router-dom";
-import ListContest from "../../components/list-contest";
-import ScheduleContest from "../../components/scheduler-contest";
 import SearchIcon from "@mui/icons-material/Search";
 import { tokens } from "../../theme";
+import ListContest from "../../components/list-contest";
+import ScheduleContest from "../../components/scheduler-contest";
 import ContestDetail from "../../components/contest-detail";
 import RegisterContest from "../../components/register-contest";
 
@@ -41,6 +41,7 @@ const Contest = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const location = useLocation();
+  const [searchQuery, setSearchQuery] = useState("");
 
   const Breadcrumb = () => {
     const pathnames = location.pathname.split("/").filter((x) => x);
@@ -67,6 +68,10 @@ const Contest = () => {
     );
   };
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
   return (
     <Box p={15} ml={10}>
       {Breadcrumb()}
@@ -85,6 +90,8 @@ const Contest = () => {
           <InputBase
             sx={{ ml: 2, flex: 1, width: "300px" }}
             placeholder="Search"
+            value={searchQuery}
+            onChange={handleSearchChange}
           />
           <IconButton type="button" sx={{ p: 1 }}>
             <SearchIcon />
@@ -132,10 +139,10 @@ const Contest = () => {
       </Box>
 
       <Routes>
-        <Route path="/" element={<ListContest />} />
+        <Route path="/" element={<ListContest searchQuery={searchQuery} />} />
       </Routes>
 
-      <Outlet />
+      <Outlet context={{ searchQuery }} />
     </Box>
   );
 };
