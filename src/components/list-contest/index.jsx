@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Box, Button, Typography, Divider, Pagination } from "@mui/material";
-import { useLocation, Link, Outlet, useOutletContext } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import api from "../../config/axios";
 import ConfirmRegistration from "../register-contest";
 
-const ListContest = () => {
-  const { searchQuery } = useOutletContext();
+const ListContest = ({ searchQuery, sortCriteria, sortOrder }) => {
   const [contests, setContests] = useState([]);
   const [filteredContests, setFilteredContests] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 2;
   const location = useLocation();
-  const today = new Date();
+  const today = useMemo(() => new Date().setHours(0, 0, 0, 0), []);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
@@ -27,15 +26,14 @@ const ListContest = () => {
   }, []);
 
   useEffect(() => {
-    const filterContests = () => {
+    const filterAndSortContests = () => {
+      let filtered = [];
       const contestsNotStart = contests.filter(
-        (contest) => new Date(contest.startDate) > today
+        (contest) => new Date(contest.startDate).setHours(0, 0, 0, 0) > today
       );
       const contestsStart = contests.filter(
-        (contest) => new Date(contest.startDate) <= today
+        (contest) => new Date(contest.startDate).setHours(0, 0, 0, 0) <= today
       );
-
-      let filtered = [];
 
       if (
         location.pathname === "/contest" ||
@@ -51,11 +49,41 @@ const ListContest = () => {
           contest.name.toLowerCase().includes(searchQuery.toLowerCase())
         );
       }
+
+      // Sort
+      if (sortCriteria) {
+        filtered.sort((a, b) => {
+          switch (sortCriteria) {
+            case "name":
+              return sortOrder === "asc"
+                ? a.name.localeCompare(b.name)
+                : b.name.localeCompare(a.name);
+            case "startDate":
+              return sortOrder === "asc"
+                ? new Date(a.startDate) - new Date(b.startDate)
+                : new Date(b.startDate) - new Date(a.startDate);
+            case "capacity":
+              return sortOrder === "asc"
+                ? a.capacity - b.capacity
+                : b.capacity - a.capacity;
+            default:
+              return 0;
+          }
+        });
+      }
+
       setFilteredContests(filtered);
     };
 
-    filterContests();
-  }, [location.pathname, contests, today, searchQuery]);
+    filterAndSortContests();
+  }, [
+    contests,
+    searchQuery,
+    sortCriteria,
+    sortOrder,
+    location.pathname,
+    today,
+  ]);
 
   const hotContests = [
     {
@@ -126,8 +154,7 @@ const ListContest = () => {
           </Typography>
           <Divider sx={{ flexGrow: 1 }} />
         </Box>
-
-        <Box display="flex" mt={2}>
+        <Box display="flex" alignItems="flex-start" mt={2}>
           <img
             src={contest.urlBanner}
             alt={contest.name}
@@ -161,7 +188,6 @@ const ListContest = () => {
                 <Button
                   onClick={showModal}
                   component={Link}
-                  // to={`/contest/sapdienra/thamgia/${contest.contestId}`}
                   variant="contained"
                   sx={{ backgroundColor: "#B84848" }}
                 >
@@ -214,10 +240,6 @@ const ListContest = () => {
     ));
   };
 
-  // const handlePageChange = (event, value) => {
-  //   setCurrentPage(value);
-  // };
-
   return (
     <Box display="flex" p={2}>
       <Box flex="2" mr={10}>
@@ -226,7 +248,6 @@ const ListContest = () => {
           <Pagination
             count={Math.ceil((filteredContests?.length || 0) / itemsPerPage)}
             page={currentPage}
-            // onChange={handlePageChange}
             onChange={(event, page) => setCurrentPage(page)}
           />
         </Box>
@@ -246,9 +267,6 @@ const ListContest = () => {
           CUỘC THI ĐANG ĐƯỢC CHÚ Ý
         </Typography>
         {renderHotContests()}
-      </Box>
-      <Box>
-        <Outlet />
       </Box>
     </Box>
   );

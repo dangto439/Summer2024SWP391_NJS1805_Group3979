@@ -1,26 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Box,
   Breadcrumbs,
   Button,
+  FormControl,
   IconButton,
   InputBase,
+  InputLabel,
   Link,
+  MenuItem,
+  Select,
   useTheme,
 } from "@mui/material";
-import {
-  Link as RouterLink,
-  Route,
-  Routes,
-  useLocation,
-  Outlet,
-} from "react-router-dom";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import { tokens } from "../../theme";
 import ListContest from "../../components/list-contest";
-import ScheduleContest from "../../components/scheduler-contest";
-import ContestDetail from "../../components/contest-detail";
-import RegisterContest from "../../components/register-contest";
+// import ScheduleContest from "../../components/scheduler-contest";
+// import ContestDetail from "../../components/contest-detail";
+// import RegisterContest from "../../components/register-contest";
 
 import "@syncfusion/ej2-base/styles/material.css";
 import "@syncfusion/ej2-buttons/styles/material.css";
@@ -42,6 +40,20 @@ const Contest = () => {
   const colors = tokens(theme.palette.mode);
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortCriteria, setSortCriteria] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc");
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSortCriteriaChange = (event) => {
+    setSortCriteria(event.target.value);
+  };
+
+  const handleSortOrderChange = (event) => {
+    setSortOrder(event.target.value);
+  };
 
   const Breadcrumb = () => {
     const pathnames = location.pathname.split("/").filter((x) => x);
@@ -68,14 +80,9 @@ const Contest = () => {
     );
   };
 
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-  };
-
   return (
     <Box p={15} ml={10}>
       {Breadcrumb()}
-
       <Box
         display="flex"
         justifyContent="space-between"
@@ -97,13 +104,35 @@ const Contest = () => {
             <SearchIcon />
           </IconButton>
         </Box>
-        <Box display="flex">
+        <Box display="flex" alignItems="center">
+          <FormControl sx={{ minWidth: 120, mr: 2 }}>
+            <InputLabel>Sắp xếp theo</InputLabel>
+            <Select
+              value={sortCriteria}
+              onChange={handleSortCriteriaChange}
+              displayEmpty
+            >
+              <MenuItem value="name">Tên</MenuItem>
+              <MenuItem value="startDate">Ngày</MenuItem>
+              <MenuItem value="capacity">Số Lượng</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl sx={{ minWidth: 120 }}>
+            <InputLabel>Thứ tự</InputLabel>
+            <Select
+              value={sortOrder}
+              onChange={handleSortOrderChange}
+              displayEmpty
+            >
+              <MenuItem value="asc">Tăng dần</MenuItem>
+              <MenuItem value="desc">Giảm dần</MenuItem>
+            </Select>
+          </FormControl>
           <Button
             component={RouterLink}
-            to="dangdienra"
+            to="/contest"
             sx={{
               borderBottom:
-                location.pathname.startsWith("/contest/dangdienra") ||
                 location.pathname === "/contest"
                   ? `2px solid ${colors.greenAccent[500]}`
                   : "none",
@@ -111,7 +140,6 @@ const Contest = () => {
           >
             Đang diễn ra
           </Button>
-
           <Button
             component={RouterLink}
             to="/contest/sapdienra"
@@ -125,7 +153,7 @@ const Contest = () => {
           </Button>
           <Button
             component={RouterLink}
-            to="thang"
+            to="/contest/thang"
             sx={{
               borderBottom:
                 location.pathname === "/contest/thang"
@@ -138,11 +166,11 @@ const Contest = () => {
         </Box>
       </Box>
 
-      <Routes>
-        <Route path="/" element={<ListContest searchQuery={searchQuery} />} />
-      </Routes>
-
-      <Outlet context={{ searchQuery }} />
+      <ListContest
+        searchQuery={searchQuery}
+        sortCriteria={sortCriteria}
+        sortOrder={sortOrder}
+      />
     </Box>
   );
 };
