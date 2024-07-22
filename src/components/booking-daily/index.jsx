@@ -226,7 +226,6 @@ function BookingDaily({ club }) {
               onChange={handleDateChange}
               disabledDate={disabledDate}
               placeholder="Chọn ngày..."
-              defaultValue={moment()}
             />
           </Col>
           <Col span={24} className="booking-daily-summary">
