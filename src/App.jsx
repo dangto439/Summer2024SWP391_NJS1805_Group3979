@@ -98,6 +98,10 @@ function App() {
           element: <Intro />,
         },
         {
+          path: "/club-detail/:clubId",
+          element: <ClubDetail />,
+        },
+        {
           path: "/list-club",
           element: <ListClub />,
         },
@@ -192,10 +196,7 @@ function App() {
         },
       ],
     },
-    {
-      path: "/club-detail/:clubId",
-      element: <ClubDetail />,
-    },
+
     {
       path: "/login",
       element: <Login />,

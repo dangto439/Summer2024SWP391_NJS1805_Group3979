@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Link, useNavigate } from "react-router-dom";
 import {
   UserOutlined,
@@ -20,6 +21,7 @@ function Header({ balanceChange }) {
   const user = useSelector(selectUser);
   const navigate = useNavigate();
   const [balance, setBalance] = useState(0);
+  const [inputSearch, setInputSearch] = useState("");
 
   const handleLogOut = () => {
     dispatch(logout());
@@ -73,10 +75,8 @@ function Header({ balanceChange }) {
         api.get("/profile"),
         api.get(`/wallet/${user.id}`),
       ]);
-      //const response = await api.get("/profile");
       const profileData = response.data;
       setRole(profileData.role);
-      // setName(profileData.name);
       setBalance(responseprice.data.balance);
     } catch (error) {
       console.error("Error fetching profile data:", error);
@@ -93,6 +93,25 @@ function Header({ balanceChange }) {
   useEffect(() => {
     fetchProfileData();
   }, []);
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearchHeader();
+    }
+  };
+
+  // const handleSearchHeader = () => {
+  //   console.log(inputSearch);
+  //   // Thêm logic tìm kiếm ở đây, ví dụ:
+  //   // navigate(`/search?query=${inputSearch}`);
+  //   navigate("/list-club");
+  // };
+
+  const handleSearchHeader = () => {
+    sessionStorage.setItem("search", "true");
+    console.log(inputSearch);
+    navigate(`/list-club?search=${inputSearch}`);
+  };
 
   return (
     <header className="header">
@@ -127,18 +146,17 @@ function Header({ balanceChange }) {
             <Link to="/policy">Quy định</Link>
           </li>
 
-          {/* <li
-            onClick={() => {
-              setTab(5);
-            }}
-            className={`header__link ${tab == 5 && "active"}`}
-          >
-            <Link to="/contact">Liên hệ</Link>
-          </li> */}
-
-          {(role == "CLUB_OWNER" || role == "ADMIN") && user != null ? (
+          {(role === "CLUB_OWNER" || role === "ADMIN") && user != null ? (
             <li className="header__link">
               <Link to="/dashboard">Quản lý</Link>
+            </li>
+          ) : (
+            ""
+          )}
+
+          {role === "CLUB_STAFF" && user != null ? (
+            <li className="header__link">
+              <Link to="/checkin">Kiểm Tra Code</Link>
             </li>
           ) : (
             ""
@@ -149,8 +167,13 @@ function Header({ balanceChange }) {
               type="text"
               placeholder="Nhập tên sân cần tìm"
               className="search-input"
+              onChange={(e) => setInputSearch(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
-            <SearchOutlined className="search-icon" />
+            <SearchOutlined
+              className="search-icon"
+              onClick={handleSearchHeader}
+            />
           </div>
         </ul>
       </div>
