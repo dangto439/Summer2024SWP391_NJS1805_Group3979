@@ -307,7 +307,7 @@ function Wallet() {
                   max={50000000}
                   step={1000}
                   formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
                   }
                   parser={(value) => value?.replace(/,/g, "")}
                   onChange={onChange}
@@ -318,7 +318,7 @@ function Wallet() {
                 type="primary"
                 className="submit-button"
               >
-                Thanh Toán
+                Nạp
               </Button>
               <Button
                 onClick={() => {
@@ -385,7 +385,7 @@ function Wallet() {
                   max={50000000}
                   step={1000}
                   formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
                   }
                   parser={(value) => value?.replace(/,/g, "")}
                   onChange={onChange}
@@ -397,7 +397,7 @@ function Wallet() {
                 type="primary"
                 className="submit-button"
               >
-                Hoàn Tất
+                Chuyển
               </Button>
               <Button
                 onClick={() => {
