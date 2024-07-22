@@ -1,5 +1,11 @@
 /* eslint-disable react/prop-types */
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  RouterProvider,
+  createBrowserRouter,
+  Route,
+  Routes,
+  Outlet,
+} from "react-router-dom";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import ForgetPassword from "./pages/forgot-password";
@@ -11,7 +17,7 @@ import HomePage from "./pages/home";
 import Dashboard from "./components/dashboard";
 import { useSelector } from "react-redux";
 import { selectUser } from "./redux/features/counterSlice";
-import { Navigate } from "react-router-dom/dist";
+import { Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Profile from "./components/profile";
 import Intro from "./pages/intro";
@@ -31,14 +37,21 @@ import Contest from "./pages/contest";
 import ListContest from "../src/components/list-contest";
 import ScheduleContest from "./components/scheduler-contest";
 import Checkin from "./pages/check-in";
-import Tournament from "../src/components/tournament";
+import Tournament from "../src/components/tournaments/gamebycustomer";
 import Wallet from "./pages/wallet";
+import ContestDetail from "../src/components/contest-detail";
+import RegisterContest from "../src/components/register-contest";
+// import Game from "../src/components/tournaments/game";
+import Game from "../src/components/tournaments/gamebyowner";
 import Policy from "./pages/policy";
 import ClubOwnerDasboard from "./components/clubowner";
 import BookingManager from "./components/booking-manager-clubowner";
 import PromotionManager from "./components/promotion-manager";
 import Bill from "./pages/bill";
 import ClubAdmin from "./components/club-admin";
+import Tournaments from "./components/tournaments";
+import NewTournament from "./components/tournaments/newtournament";
+import TournamentDetail from "./components/tournaments/tournamentsdetail";
 
 function App() {
   const user = useSelector(selectUser);
@@ -121,6 +134,7 @@ function App() {
           path: "/wallet",
           element: <Wallet />,
         },
+
         {
           path: "/bill",
           element: (
@@ -140,12 +154,6 @@ function App() {
             {
               path: "dangdienra",
               element: <ListContest />,
-              children: [
-                {
-                  path: "chitiet2/:id",
-                  element: <Tournament />,
-                },
-              ],
             },
             {
               path: "sapdienra",
@@ -155,8 +163,21 @@ function App() {
               path: "thang",
               element: <ScheduleContest />,
             },
+            {
+              path: "dangdienra/chitiet2/:id",
+              element: <Tournament />,
+            },
+            {
+              path: "sapdienra/chitiet/:id",
+              element: <ContestDetail />,
+            },
+            {
+              path: "sapdienra/thamgia/:id",
+              element: <RegisterContest />,
+            },
           ],
         },
+
         {
           path: "/checkin",
           element: (
@@ -197,8 +218,8 @@ function App() {
       ],
     },
     {
-      path: "/club-detail/:clubId",
-      element: <ClubDetail />,
+      path: "/game",
+      element: <Game />,
     },
     {
       path: "/login",
@@ -270,16 +291,10 @@ function App() {
           path: "staff/allstaff",
           element: <Staff />,
         },
-
         {
           path: "court/:clubId",
           element: <Court />,
         },
-        // {
-        //   path: "booking/clubid1",
-        //   element: <Staff />,
-        // },
-
         {
           path: "bookingmanager/:clubId",
           element: <BookingManager />,
@@ -289,10 +304,24 @@ function App() {
           element: <PromotionManager />,
         },
 
-        // {
-        //   path: "manage-account",
-        //   element: <ManageAccount />,
-        // },
+        {
+          path: "manage-account",
+          element: <ManageAccount />,
+        },
+        {
+          path: "tournaments",
+          element: <Tournaments />,
+          children: [
+            {
+              path: "new",
+              element: <NewTournament />,
+            },
+            {
+              path: "detail/:id",
+              element: <TournamentDetail />,
+            },
+          ],
+        },
       ],
     },
   ]);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   ScheduleComponent,
   Day,
@@ -15,6 +15,7 @@ import * as gregorian from "cldr-data/main/vi/ca-gregorian.json";
 import * as numbers from "cldr-data/main/vi/numbers.json";
 import * as timeZoneNames from "cldr-data/main/vi/timeZoneNames.json";
 import * as numberingSystems from "cldr-data/supplemental/numberingSystems.json";
+import api from "../../config/axios";
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
 
@@ -36,16 +37,28 @@ L10n.load({
   },
 });
 
-const ScheduleContest = ({ contests }) => {
-  // Kiểm tra contests có phải là mảng hay không
+const ScheduleContest = () => {
+  const [contests, setContests] = useState([]);
+
+  useEffect(() => {
+    const fetchContests = async () => {
+      try {
+        const response = await api.get("/contest");
+        setContests(response.data);
+      } catch (error) {
+        console.error("Error fetching contests: ", error);
+      }
+    };
+
+    fetchContests();
+  }, []);
+
   const scheduleData = Array.isArray(contests)
     ? contests.map((contest) => ({
-        Id: contest.id,
+        Id: contest.contestId,
         Subject: contest.name,
-        StartTime: new Date(`${contest.date}T${contest.startime}`),
-        EndTime: new Date(`${contest.date}T${contest.endtime}`),
-        Location: contest.location,
-        Description: contest.description,
+        StartTime: new Date(contest.startDate),
+        EndTime: new Date(contest.endDate),
       }))
     : [];
 

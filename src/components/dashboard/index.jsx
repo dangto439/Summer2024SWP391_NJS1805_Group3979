@@ -9,6 +9,10 @@ import Club from "../club/index";
 import Court from "../court/index";
 import api from "../../config/axios";
 import { useEffect, useState } from "react";
+import Tournaments from "../tournaments";
+import NewTournament from "../tournaments/newtournament";
+import TournamentDetail from "../tournaments/tournamentsdetail";
+import GamebyOwner from "../tournaments/gamebyowner";
 import ClubOwnerDasboard from "../clubowner";
 import BookingManager from "../booking-manager-clubowner";
 import PromotionManager from "../promotion-manager";
@@ -68,6 +72,18 @@ function Dashboard() {
                 />
               ))}
 
+              <Route path="tournaments" element={<Tournaments />} />
+              <Route path="tournaments/new" element={<NewTournament />} />
+              {/* <Route
+                path="tournaments/detail/:id"
+                element={<TournamentDetail />}
+              /> */}
+              <Route
+                path="tournaments/detail/:id"
+                element={<TournamentDetail />}
+              >
+                <Route index element={<GamebyOwner />} />
+              </Route>
               {clubs.map((club) => (
                 <Route
                   key={club.clubId}

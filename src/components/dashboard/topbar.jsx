@@ -4,8 +4,6 @@ import { ColorModeContext, tokens } from "../../theme";
 import InputBase from "@mui/material/InputBase";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlineIcon from "@mui/icons-material/DarkModeOutlined";
-import NotificationsOutlineIcon from "@mui/icons-material/NotificationsOutlined";
-import SettingsOutlineIcon from "@mui/icons-material/SettingsOutlined";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import { Dropdown } from "antd";
@@ -70,7 +68,6 @@ function Topbar() {
         </IconButton>
       </Box>
 
-      {/* Icons */}
       <Box display="flex">
         <IconButton onClick={colorMode.toggleColorMode}>
           {theme.palette.mode === "dark" ? (
@@ -80,19 +77,8 @@ function Topbar() {
           )}
         </IconButton>
 
-        {/* <IconButton>
-          <NotificationsOutlineIcon />
-        </IconButton>
-
         <IconButton>
-          <SettingsOutlineIcon />
-        </IconButton> */}
-
-        <IconButton>
-          <Dropdown
-            menu={menuProps}
-            // icon={}
-          >
+          <Dropdown menu={menuProps}>
             <PersonOutlineIcon />
           </Dropdown>
         </IconButton>

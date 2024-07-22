@@ -184,6 +184,16 @@ function BookingDaily({ club }) {
     };
 
     try {
+      if (
+        bookingData.promotionCode &&
+        bookingData.promotionCode.trim() !== ""
+      ) {
+        try {
+          await handleCheckPromotion(bookingData.promotionCode, club.clubId);
+        } catch (e) {
+          return;
+        }
+      }
       navigate("/bill", {
         state: {
           type: "DAILY",
@@ -213,6 +223,17 @@ function BookingDaily({ club }) {
 
   const handleSelectChange = (value) => {
     setSelectedFlexibleId(value);
+  };
+
+  const handleCheckPromotion = async (promotionCode, clubId) => {
+    try {
+      await api.get(
+        `/promotion/check?clubId=${clubId}&promotionCode=${promotionCode}`
+      );
+    } catch (e) {
+      message.error(e.response.data);
+      throw e;
+    }
   };
 
   return (
