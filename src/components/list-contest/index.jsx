@@ -30,6 +30,7 @@ const ListContest = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [registrationCounts, setRegistrationCounts] = useState({});
+  const [hotContests, setHotContests] = useState("");
 
   const [sortCriteria, setSortCriteria] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
@@ -153,25 +154,37 @@ const ListContest = () => {
     today,
   ]);
 
-  const hotContests = [
-    {
-      imgSrc: "https://via.placeholder.com/50",
-      alt: "Tin tức 1",
-      content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    },
-    {
-      imgSrc: "https://via.placeholder.com/50",
-      alt: "Tin tức 2",
-      content:
-        "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    },
-    {
-      imgSrc: "https://via.placeholder.com/50",
-      alt: "Tin tức 3",
-      content:
-        "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    },
-  ];
+  // const hotContests = [
+  //   {
+  //     imgSrc: "https://via.placeholder.com/50",
+  //     alt: "Tin tức 1",
+  //     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  //   },
+  //   {
+  //     imgSrc: "https://via.placeholder.com/50",
+  //     alt: "Tin tức 2",
+  //     content:
+  //       "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  //   },
+  //   {
+  //     imgSrc: "https://via.placeholder.com/50",
+  //     alt: "Tin tức 3",
+  //     content:
+  //       "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+  //   },
+  // ];
+
+  useEffect(() => {
+    const fetchHotContest = async () => {
+      try {
+        const response = await api.get(`/contests/outstanding`);
+        setHotContests(response.data);
+      } catch (error) {
+        console.error("Error fetching hot contest: ", error);
+      }
+    };
+    fetchHotContest();
+  }, [contests]);
 
   const months = [
     "Tháng 1",
@@ -299,12 +312,12 @@ const ListContest = () => {
         borderRadius={1}
       >
         <img
-          src={news.imgSrc}
-          alt={news.alt}
+          src={news.urlBanner}
+          alt={news.name}
           style={{ marginRight: "10px" }}
           height="100px"
         />
-        <Typography variant="body1">{news.content}</Typography>
+        <Typography variant="body1">{news.firstPrize}</Typography>
       </Box>
     ));
   };
