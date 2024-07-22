@@ -33,57 +33,11 @@ function ClubOwnerDasboard() {
   const [bookingDataChart, setBookingDataChart] = useState([]);
   const [priceDataChart, setPrriceDataChart] = useState([]);
 
-  const data = [
-    {
-      name: "Tháng  1",
-      pricein: 4000,
-      priceout: 2400,
-      amt: 2400,
-    },
-    {
-      name: "Tháng  2",
-      pricein: 3000,
-      priceout: 1398,
-      amt: 2210,
-    },
-    {
-      name: "Tháng  3",
-      pricein: 2000,
-      priceout: 9800,
-      amt: 2290,
-    },
-    {
-      name: "Tháng  4",
-      pricein: 2780,
-      priceout: 3908,
-      amt: 2000,
-    },
-    {
-      name: "Tháng  5",
-      pricein: 1890,
-      priceout: 4800,
-      amt: 2181,
-    },
-    {
-      name: "Tháng  6",
-      pricein: 2390,
-      priceout: 3800,
-      amt: 2500,
-    },
-    {
-      name: "Tháng  7",
-      pricein: 3490,
-      priceout: 4300,
-      amt: 2100,
-    },
-  ];
-
   const fetchData = async () => {
     try {
       const [
         totalPriceResponse,
         transactionResponse,
-        bookingResponse,
         clubsResponse,
         CoursResponse,
         bookingDataChartResponse,
@@ -92,7 +46,6 @@ function ClubOwnerDasboard() {
       ] = await Promise.all([
         api.get(`/wallet/${user.id}`),
         api.get(`get-transactions/${user.id}`),
-        api.get(`/get-all-account`), //cần chỉnh để lấy số lượng booking trên sân
         api.get(`/current-clubs`), //lấy số lượng sân hiện tại của account
         api.get(`/courts/amount`),
         api.get(`/dashboard-club-chart-account/${user.id}`),
