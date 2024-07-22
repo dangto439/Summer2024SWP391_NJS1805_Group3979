@@ -85,7 +85,7 @@ const Tournaments = () => {
 
   useEffect(() => {
     const fetchContest = async () => {
-      const response = await api.get(`/contest/current-account/${user.id}`);
+      const response = await api.get(`/contests/current-account`);
       const updatedRows = await Promise.all(
         response.data.map(async (item) => {
           const club = await api.get(`/club/${item.clubId}`);
