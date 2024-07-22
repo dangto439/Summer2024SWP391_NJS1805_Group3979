@@ -123,6 +123,19 @@ function BookingFixed({ club }) {
         ),
         onOk: async () => {
           try {
+            if (
+              bookingData.promotionCode &&
+              bookingData.promotionCode.trim() !== ""
+            ) {
+              try {
+                await handleCheckPromotion(
+                  bookingData.promotionCode,
+                  club.clubId
+                );
+              } catch (e) {
+                return;
+              }
+            }
             //chuyển qua bill để thực hiện tiếp quá trình
             navigate("/bill", {
               state: {
@@ -162,6 +175,17 @@ function BookingFixed({ club }) {
 
   const handleCourtOptionChange = (e) => {
     setSelectedCourtOption(e.target.value);
+  };
+
+  const handleCheckPromotion = async (promotionCode, clubId) => {
+    try {
+      await api.get(
+        `/promotion/check?clubId=${clubId}&promotionCode=${promotionCode}`
+      );
+    } catch (e) {
+      message.error(e.response.data);
+      throw e;
+    }
   };
 
   return (

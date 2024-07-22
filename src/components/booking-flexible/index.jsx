@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import "./index.scss";
-import { Button, Col, Form, Input, InputNumber, Row } from "antd";
+import { Button, Col, Form, Input, InputNumber, message, Row } from "antd";
 import moment from "moment";
 import api from "../../config/axios";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +20,14 @@ const BookingFlexible = ({ club }) => {
       amountTime: values.amountTime,
     };
 
+    if (values.promotionCode && values.promotionCode.trim() !== "") {
+      try {
+        await handleCheckPromotion(values.promotionCode, club.clubId);
+      } catch (e) {
+        return;
+      }
+    }
+
     navigate("/bill", {
       state: {
         type: "FLEXIBLE",
@@ -31,6 +39,17 @@ const BookingFlexible = ({ club }) => {
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
+  };
+
+  const handleCheckPromotion = async (promotionCode, clubId) => {
+    try {
+      await api.get(
+        `/promotion/check?clubId=${clubId}&promotionCode=${promotionCode}`
+      );
+    } catch (e) {
+      message.error(e.response.data);
+      throw e;
+    }
   };
 
   return (
