@@ -71,7 +71,7 @@ function AdminDasboard() {
         api.get(`/get-all-account`),
         api.get(`/clubs`),
         api.get(`/get-all-court`),
-        api.get(`/dashboard-admin-area-chart/${year}`),
+        api.get(`/dashboard-club-area-chart?walletId=1&year=${year}`),
         api.get(`/dashboard-admin-area-chart/${year}/${month}`),
         api.get(`/dashboard-admin-bar-chart/${year}`),
         api.get(`/dashboard-admin-tiny-chart/${year}`),

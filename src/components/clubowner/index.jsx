@@ -102,9 +102,18 @@ function ClubOwnerDasboard() {
         ), //tiền ra
       ]);
 
+      const totalSumAmount = bookingDataChartResponse.data.reduce(
+        (accumulator, currentValue) => {
+          return accumulator + currentValue.sumamount;
+        },
+        0
+      );
+
+      console.log(totalSumAmount);
+
       setTotalPrice(totalPriceResponse.data.balance);
       setTransaction(transactionResponse.data);
-      setBookingNumber(bookingResponse.data.length);
+      setBookingNumber(totalSumAmount);
       setClubNumber(clubsResponse.data.length);
       setCourtNumber(CoursResponse.data);
       const confirmDataBookingChart = bookingDataChartResponse.data.map(
@@ -210,8 +219,6 @@ function ClubOwnerDasboard() {
               />
             </BarChart>
           </ResponsiveContainer>
-        </div>
-        <div className="charts">
           <ResponsiveContainer width="100%" height={500}>
             <BarChart
               width={500}
