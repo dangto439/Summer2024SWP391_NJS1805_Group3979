@@ -86,14 +86,22 @@ const Tournaments = () => {
   useEffect(() => {
     const fetchContest = async () => {
       const response = await api.get(`/contests/current-account`);
+
+      // Filter out items with status 'INACTIVE'
+      const activeContests = response.data.filter(
+        (item) => item.status !== "INACTIVE"
+      );
+
       const updatedRows = await Promise.all(
-        response.data.map(async (item) => {
+        activeContests.map(async (item) => {
           const club = await api.get(`/club/${item.clubId}`);
           return { ...item, clubName: club.data.clubName };
         })
       );
+
       setRows(updatedRows);
     };
+
     fetchContest();
   }, []);
 
