@@ -120,7 +120,7 @@ function Payment() {
             <>
               Ngân hàng giao dịch: {vnp_BankCode} <br />
               Ngày thanh toán: {vnp_PayDate} <br />
-              Số tiền thanh toán: {formatCurrency(vnp_Amount)}
+              Số tiền thanh toán: {formatCurrency(vnp_Amount / 100)}
             </>
           }
           extra={[
