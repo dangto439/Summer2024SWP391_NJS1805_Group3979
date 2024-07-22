@@ -235,7 +235,7 @@ function BookingDaily({ club }) {
             <p>Tổng Tiền: {formatCurrency(totalPrice)}</p>
             <img src={club.urlImages} />
             <img
-              src="https://firebasestorage.googleapis.com/v0/b/badminton-booking-platform.appspot.com/o/z5545153816126_834da2b1757f9fca8d39197a7ac64f93.jpg?alt=media&token=50c69782-7782-42c9-877d-c07a1e906abb"
+              src="https://firebasestorage.googleapis.com/v0/b/badminton-booking-platform.appspot.com/o/Screenshot%202024-07-23%20005012.png?alt=media&token=a923242e-9ea5-4280-8eca-96776d859369"
               alt=""
             />
             {check && (

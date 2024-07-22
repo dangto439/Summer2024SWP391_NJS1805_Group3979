@@ -334,15 +334,11 @@ function Wallet() {
               >
                 <InputNumber
                   style={{ width: 450 }}
-                  defaultValue={10000}
                   min={10000}
                   max={50000000}
-                  step={1000}
-                  formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-                  }
-                  parser={(value) => value?.replace(/,/g, "")}
                   onChange={onChange}
+                  placeholder="Nhập số tiền cần nạp"
+                  size="large"
                 />
               </Form.Item>
               <Button
@@ -412,15 +408,11 @@ function Wallet() {
               >
                 <InputNumber
                   style={{ width: 470 }}
-                  defaultValue={10000}
                   min={10000}
                   max={50000000}
-                  step={1000}
-                  formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-                  }
-                  parser={(value) => value?.replace(/,/g, "")}
+                  placeholder="Nhập số tiền cần chuyển"
                   onChange={onChange}
+                  size="large"
                 />
               </Form.Item>
               <Button
