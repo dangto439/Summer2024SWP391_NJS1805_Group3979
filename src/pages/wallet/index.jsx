@@ -37,6 +37,9 @@ function Wallet() {
   const [formRecharge] = useForm();
   const [formTransfer] = useForm();
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
+
   // const formatCurrency = (value) => {
   //   if (!value) return value;
   //   // Remove all non-digit characters
@@ -206,12 +209,41 @@ function Wallet() {
     fetchData();
   }, []);
 
+  const handlePageChange = (page, pageSize) => {
+    setCurrentPage(page);
+    setPageSize(pageSize);
+  };
+
   const columns = [
+    {
+      title: "STT",
+      key: "index",
+      render: (text, record, index) => (currentPage - 1) * pageSize + index + 1,
+    },
     {
       title: "Loại giao dịch",
       dataIndex: "type",
       key: "type",
       render: (text) => formatType(text),
+      filters: [
+        {
+          text: "Chuyển tiền",
+          value: "TRANSFER",
+        },
+        {
+          text: "Hoàn tiền",
+          value: "REFUND",
+        },
+        {
+          text: "Hủy bỏ",
+          value: "CANCEL",
+        },
+        {
+          text: "Nạp tiền",
+          value: "DEPOST",
+        },
+      ],
+      onFilter: (value, record) => record.type.includes(value),
     },
     {
       title: "Thời gian",
@@ -461,7 +493,13 @@ function Wallet() {
         <Table
           columns={columns}
           dataSource={transaction}
-          pagination={{ pageSize: 20, position: ["bottomCenter"] }}
+          pagination={{
+            pageSize: pageSize,
+            current: currentPage,
+            total: transaction.length,
+            onChange: handlePageChange,
+            position: ["bottomCenter"],
+          }}
         />
       </div>
     </div>

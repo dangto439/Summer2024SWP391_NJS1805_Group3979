@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import "./index.scss";
-import { Await, useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import RoomIcon from "@mui/icons-material/Room";
 import { useEffect, useState } from "react";
 import api from "../../config/axios";
@@ -13,12 +14,25 @@ function ListClub() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5); // Number of clubs per page
   const navigate = useNavigate();
+  const location = useLocation();
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [input, setInput] = useState("");
   const [data, setData] = useState([]);
   const [provinceGhn, setProvinceGhn] = useState([]);
   const [districtGhn, setDistrictsGhn] = useState([]);
+  const session = sessionStorage.getItem("search");
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const searchQuery = queryParams.get("search");
+    if (searchQuery) {
+      // setInput(searchQuery);
+      handleSearchAPI(searchQuery);
+      console.log(searchQuery);
+      // console.log(input);
+    }
+  }, [location.search]);
 
   const handleCityChange = (event) => {
     const resProv = provinceGhn.find((item) => item.value === event);
@@ -59,7 +73,6 @@ function ListClub() {
           label: province.ProvinceName,
         }));
         setProvinceGhn(formatData);
-        // console.log(provinceGhn);
       });
   };
 
@@ -85,7 +98,10 @@ function ListClub() {
   };
 
   useEffect(() => {
-    fetchListClubData();
+    if (session != "true") {
+      fetchListClubData();
+    }
+    sessionStorage.removeItem("search");
     FetchAllProvice();
   }, []);
 
@@ -106,21 +122,37 @@ function ListClub() {
     currentPage * pageSize
   );
 
-  const handleOnSubmit = (value) => {
-    const containsString = (mainStr, subStr) => {
-      return mainStr.toLowerCase().indexOf(subStr.toLowerCase()) !== -1;
-    };
+  const containsString = (mainStr, subStr) => {
+    return mainStr.toLowerCase().indexOf(subStr.toLowerCase()) !== -1;
+  };
 
+  const handleSearchAPI = async (value) => {
+    try {
+      const response = await api.get(`/club/name?name=${value}`);
+      console.log("API Response Data:", response.data); // Kiểm tra dữ liệu từ API
+      setData(response.data);
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSearch = (searchQuery) => {
+    console.log(searchQuery);
     setData(
       listClub
         .filter(
-          (item) => !value.search || containsString(item.clubName, value.search)
+          (item) => !searchQuery || containsString(item.clubName, searchQuery)
         )
         .filter(
           (item) => !selectedDistrict || item.district === selectedDistrict
         )
         .filter((item) => !selectedCity || item.province === selectedCity)
     );
+  };
+
+  const handleOnSubmit = (value) => {
+    handleSearch(value.search);
   };
 
   return (

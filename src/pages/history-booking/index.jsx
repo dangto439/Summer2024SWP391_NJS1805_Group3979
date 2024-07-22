@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 const HistoryBooking = () => {
   const [booking, setBooking] = useState([]);
   const [bookingDetails, setBookingDetails] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20); // Number of items per page
 
   const fetchHistoryBooking = async () => {
     const response = await api.get("/bookings/current-account");
@@ -47,6 +49,8 @@ const HistoryBooking = () => {
         `booking/booking-detail/${bookingDetailId}`
       );
       toast.success("Hủy thành công!");
+      // Update booking details after cancellation
+      fetchHistoryBookingDetail(response.data.bookingId);
     } catch (error) {
       console.log(error);
       toast.error(error.response.data);
@@ -78,7 +82,7 @@ const HistoryBooking = () => {
 
   const formatBookingDetailStatus = (value) => {
     if (value === "UNFINISHED") {
-      return "Chưa hoành thành";
+      return "Chưa hoàn thành";
     } else if (value === "FINISHED") {
       return "Hoàn thành";
     } else return "Đã hủy";
@@ -86,11 +90,11 @@ const HistoryBooking = () => {
 
   const expandedRowRender = (bookingId) => {
     const columns = [
-      {
-        title: "Id",
-        dataIndex: "bookingDetailId",
-        key: "bookingDetailId",
-      },
+      // {
+      //   title: "Id",
+      //   dataIndex: "bookingDetailId",
+      //   key: "bookingDetailId",
+      // },
       {
         title: "Ngày chơi",
         dataIndex: "playingDate",
@@ -106,7 +110,7 @@ const HistoryBooking = () => {
         key: "courtName",
       },
       {
-        title: "Mã checking",
+        title: "Mã đặt sân",
         dataIndex: "checkInCode",
         key: "checkInCode",
       },
@@ -122,12 +126,29 @@ const HistoryBooking = () => {
         title: "Giờ bắt đầu",
         dataIndex: "timeSlot",
         key: "timeSlot",
+        sorter: (a, b) => a.timeSlot - b.timeSlot,
+        sortDirections: ["descend", "ascend"],
       },
       {
         title: "Trạng thái",
         dataIndex: "status",
         key: "status",
         render: (status) => formatBookingDetailStatus(status),
+        filters: [
+          {
+            text: "Hoàn thành",
+            value: "FINISHED",
+          },
+          {
+            text: "Đã huỷ",
+            value: "CANCEL",
+          },
+          {
+            text: "Chưa hoàn thành",
+            value: "UNFINISHED",
+          },
+        ],
+        onFilter: (value, record) => record.status.includes(value),
       },
       {
         title: "",
@@ -161,11 +182,16 @@ const HistoryBooking = () => {
     );
   };
 
+  const handlePageChange = (page, pageSize) => {
+    setCurrentPage(page);
+    setPageSize(pageSize);
+  };
+
   const columns = [
     {
       title: "STT",
       key: "index",
-      render: (text, record, index) => index + 1,
+      render: (text, record, index) => (currentPage - 1) * pageSize + index + 1,
     },
     {
       title: "Tên CLB",
@@ -177,6 +203,21 @@ const HistoryBooking = () => {
       dataIndex: "bookingType",
       key: "bookingType",
       render: (text) => formatBookingType(text),
+      filters: [
+        {
+          text: "Linh hoạt",
+          value: "FLEXIBLE",
+        },
+        {
+          text: "Ngày",
+          value: "DAILY",
+        },
+        {
+          text: "Cố định",
+          value: "FIXED",
+        },
+      ],
+      onFilter: (value, record) => record.bookingType.includes(value),
     },
     {
       title: "Tổng giờ",
@@ -199,6 +240,21 @@ const HistoryBooking = () => {
       dataIndex: "bookingStatus",
       key: "bookingStatus",
       render: (status) => formatBookingStatus(status),
+      filters: [
+        {
+          text: "Đã huỷ",
+          value: "CANCEL",
+        },
+        {
+          text: "Đã xác nhận",
+          value: "CONFIRMED",
+        },
+        {
+          text: "Đang xử lý",
+          value: "PENDING",
+        },
+      ],
+      onFilter: (value, record) => record.bookingStatus.includes(value),
     },
     {
       title: "Tổng tiền",
@@ -222,7 +278,13 @@ const HistoryBooking = () => {
         key={booking}
         columns={columns}
         dataSource={booking}
-        pagination={{ pageSize: 20, position: ["bottomCenter"] }}
+        pagination={{
+          pageSize: pageSize,
+          current: currentPage,
+          total: booking.length,
+          onChange: handlePageChange,
+          position: ["bottomCenter"],
+        }}
         expandable={{
           expandedRowRender: (record) => expandedRowRender(record.bookingId),
           onExpand: (expanded, record) => {
