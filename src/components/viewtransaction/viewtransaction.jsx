@@ -9,9 +9,28 @@ function ViewTransaction({ data }) {
     setDataSource(data);
   }, [data]);
 
+  const formatTypeMoney = (value) => {
+    if (value === "TRANSFER") {
+      return "Chuyển tiền";
+    } else if (value === "REFUND") {
+      return "Hoàn tiền";
+    } else if (value === "CANCEL") {
+      return "Huỷ";
+    } else if (value === "PENDING") {
+      return "Đang xử lý";
+    } else return "Nạp tiền";
+  };
+
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(value);
+  };
+
   const columns = [
     {
-      title: "Transaction Id",
+      title: "Mã giao dịch",
       dataIndex: "transactionId",
       key: "transactionId",
     },
@@ -19,6 +38,7 @@ function ViewTransaction({ data }) {
       title: "Số tiền",
       dataIndex: "amount",
       key: "amount",
+      render: (record) => formatCurrency(record),
     },
     {
       title: "Ghi chú",
@@ -54,13 +74,13 @@ function ViewTransaction({ data }) {
         }
         return (
           <Tag color={color} key={type}>
-            {type.toUpperCase()}
+            {formatTypeMoney(type)}
           </Tag>
         );
       },
     },
     {
-      title: "Mã booking",
+      title: "Mã đặt lịch",
       dataIndex: "bookingId",
       key: "bookingId",
     },

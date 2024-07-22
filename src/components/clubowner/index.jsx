@@ -135,6 +135,13 @@ function ClubOwnerDasboard() {
     }
   };
 
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(value);
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -161,7 +168,7 @@ function ClubOwnerDasboard() {
         </div>
         <div className="card blue">
           <div className="card_inner ">
-            <h3>Số lượng booking</h3>
+            <h3>Số lượng đặt sân</h3>
             <MdSupervisorAccount className="card_icon" />
           </div>
           <h1>{bookingNumber}</h1>
@@ -171,7 +178,7 @@ function ClubOwnerDasboard() {
             <h3>Tổng tiền</h3>
             <AiOutlineDollarCircle className="card_icon" />
           </div>
-          <h1>{totalPrice} VND</h1>
+          <h1>{formatCurrency(totalPrice)}</h1>
         </div>
         <div className="charts">
           <ResponsiveContainer width="100%" height={500}>
@@ -192,12 +199,12 @@ function ClubOwnerDasboard() {
               <Tooltip />
               <Legend />
               <Bar
-                dataKey="tienra"
+                dataKey="Tổng tiền vào"
                 fill="#8884d8"
                 activeBar={<Rectangle fill="pink" stroke="blue" />}
               />
               <Bar
-                dataKey="tienvao"
+                dataKey="Tổng tiền ra"
                 fill="#82ca9d"
                 activeBar={<Rectangle fill="gold" stroke="purple" />}
               />
@@ -223,7 +230,7 @@ function ClubOwnerDasboard() {
               <Tooltip />
               <Legend />
               <Bar
-                dataKey="soluongbooking"
+                dataKey="Số lượng đặt lịch"
                 fill="#8884d8"
                 activeBar={<Rectangle fill="pink" stroke="blue" />}
               />

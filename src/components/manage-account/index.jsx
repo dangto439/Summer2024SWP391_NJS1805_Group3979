@@ -4,6 +4,7 @@ import api from "../../config/axios";
 import { FcKey, FcLock } from "react-icons/fc";
 import "./index.scss";
 import UpdateAccount from "../updateaccount";
+import { render } from "@fullcalendar/core/preact.js";
 
 function ManageAccount() {
   const [dataSource, setDataSource] = useState([]);
@@ -83,6 +84,22 @@ function ManageAccount() {
     setFilteredData(filtered);
   };
 
+  const formartStatusAccount = (value) => {
+    if (value === "INACTIVE") {
+      return "Chưa kích hoạt";
+    } else return "Đã kích hoạt";
+  };
+
+  const formatRoleAccount = (value) => {
+    if (value === "CLUB_OWNER") {
+      return "Chủ CLB";
+    } else if (value === "STAFF") {
+      return "Nhân viên CLB";
+    } else {
+      return "Khách hàng";
+    }
+  };
+
   const columns = [
     {
       title: "Ảnh đại diện",
@@ -115,6 +132,7 @@ function ManageAccount() {
         { text: "CLUB_STAFF", value: "CLUB_STAFF" },
       ],
       onFilter: (value, record) => record.role === value,
+      render: (record) => formatRoleAccount(record),
     },
     {
       title: "Trạng thái",
@@ -125,14 +143,16 @@ function ManageAccount() {
         { text: "INACTIVE", value: "INACTIVE" },
       ],
       onFilter: (value, record) => record.accountStatus === value,
+      render: (record) => formartStatusAccount(record),
     },
+
     {
       title: "Cập nhật",
       dataIndex: "accountId",
       key: "accountId",
       render: (accountId) => (
         <Button type="primary" onClick={() => handleUpdateClick(accountId)}>
-          Update
+          Cập nhật
         </Button>
       ),
     },
@@ -199,7 +219,7 @@ function ManageAccount() {
       <div className="button_cancel_form">
         {isUpdateVisible && (
           <Button type="primary" danger onClick={handleCancelForm}>
-            đóng
+            Đóng
           </Button>
         )}
       </div>

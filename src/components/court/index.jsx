@@ -37,6 +37,12 @@ const Club = ({ clubId }) => {
     }
   };
 
+  const formatStatusClub = (value) => {
+    if (value === "INACTIVE") {
+      return "Chưa kích hoạt";
+    } else return "Đã kích hoạt";
+  };
+
   const columns = [
     {
       field: "courtId",
@@ -58,6 +64,7 @@ const Club = ({ clubId }) => {
       type: "number",
       headerAlign: "center",
       align: "center",
+      renderCell: (params) => <div>{formatStatusClub(params.value)}</div>,
     },
     {
       field: "update",

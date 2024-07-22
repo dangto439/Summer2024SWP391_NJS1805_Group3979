@@ -240,7 +240,7 @@ function Wallet() {
         },
         {
           text: "Nạp tiền",
-          value: "DEPOST",
+          value: "DEPOSIT",
         },
       ],
       onFilter: (value, record) => record.type.includes(value),
@@ -330,11 +330,20 @@ function Wallet() {
             <div className="form-group-recharge">
               <Form.Item
                 name="amount"
-                rules={[{ required: true, message: "Vui lòng nhập số tiền!" }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập số tiền!" },
+                  {
+                    validator: (_, value) =>
+                      value >= 10000
+                        ? Promise.resolve()
+                        : Promise.reject(
+                            new Error("Số tiền phải lớn hơn 10.000đ!")
+                          ),
+                  },
+                ]}
               >
                 <InputNumber
                   style={{ width: 450 }}
-                  min={10000}
                   max={50000000}
                   onChange={onChange}
                   placeholder="Nhập số tiền cần nạp"
@@ -404,11 +413,20 @@ function Wallet() {
 
               <Form.Item
                 name="amount"
-                rules={[{ required: true, message: "Vui lòng nhập số tiền!" }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập số tiền!" },
+                  {
+                    validator: (_, value) =>
+                      value >= 10000
+                        ? Promise.resolve()
+                        : Promise.reject(
+                            new Error("Số tiền phải lớn hơn 10.000đ!")
+                          ),
+                  },
+                ]}
               >
                 <InputNumber
-                  style={{ width: 470 }}
-                  min={10000}
+                  style={{ width: 475 }}
                   max={50000000}
                   placeholder="Nhập số tiền cần chuyển"
                   onChange={onChange}
