@@ -185,21 +185,17 @@ function App() {
             // </PrivateRoute>
           ),
         },
-        {
-          path: "/club-detail/:clubId",
-          element: (
-            // <PrivateRoute>
-            <ClubDetail />
-            // </PrivateRoute>
-          ),
-        },
+
         {
           path: "/payment",
           element: <Payment />,
         },
       ],
     },
-
+    {
+      path: "/club-detail/:clubId",
+      element: <ClubDetail />,
+    },
     {
       path: "/login",
       element: <Login />,
