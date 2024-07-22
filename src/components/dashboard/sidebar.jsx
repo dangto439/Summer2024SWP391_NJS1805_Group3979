@@ -363,7 +363,7 @@ const MySidebar = () => {
             </Collapse>
             <Item
               title="Giải đấu"
-              to="pie"
+              to="tournaments"
               icon={<FcParallelTasks />}
               selected={selected}
               setSelected={setSelected}
