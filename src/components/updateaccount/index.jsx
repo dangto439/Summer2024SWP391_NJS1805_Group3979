@@ -6,28 +6,6 @@ import { UploadOutlined } from "@ant-design/icons";
 import uploadFile from "../../utils/upload";
 
 const UpdateAccount = ({ id }) => {
-  // const props = {
-  //   name: "file",
-  //   beforeUpload: async (file) => {
-  //     const url = await uploadFile(file);
-  //     setFormData((prevFormData) => ({
-  //       ...prevFormData,
-  //       avatar: url,
-  //     }));
-  //     return false;
-  //   },
-  //   onChange(info) {
-  //     if (info.file.status !== "uploading") {
-  //       //console.log(info.file, info.fileList);
-  //     }
-  //     if (info.file.status === "done") {
-  //       message.success(`${info.file.name} tải ảnh lên thành công!`);
-  //     } else if (info.file.status === "error") {
-  //       message.error(`${info.file.name} tải ảnh lên thất bại!`);
-  //     }
-  //   },
-  // };
-
   const props = {
     name: "file",
     action: async (file) => {
@@ -49,15 +27,29 @@ const UpdateAccount = ({ id }) => {
   };
 
   const [formData, setFormData] = useState({
-    account_status: "",
-    avatar: "",
-    email: "",
-    gender: "",
-    name: "",
+    accountId: 0,
     phone: "",
-    password: "",
+    email: "",
+    name: "",
     role: "",
+    gender: "",
+    supervisorID: 0,
+    accountStatus: "",
+    avatar: "",
+    signupDate: "",
+    password: "",
   });
+
+  const handleUpdateAccount = async (values) => {
+    try {
+      console.log(values);
+      const response = await api.put(`/update-account-admin`, values);
+      console.log(response.data);
+      message.success("Cập nhật thành công");
+    } catch (error) {
+      message.error("Cập nhật thất bại", error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -69,13 +61,27 @@ const UpdateAccount = ({ id }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    handleUpdateAccount(formData);
   };
 
   async function fetchAccounts() {
     try {
       const response = await api.get(`/account/${id}`);
-      setFormData(response.data);
+      const data = response.data;
+      const formData = {
+        accountId: data.id,
+        phone: data.phone,
+        email: data.email,
+        name: data.name,
+        role: data.role,
+        gender: data.gender,
+        supervisorID: data.supervisorID,
+        accountStatus: data.accountStatus,
+        avatar: data.avatar,
+        signupDate: data.signupDate,
+        password: "",
+      };
+      setFormData(formData);
     } catch (error) {
       console.error("Error fetching account data:", error);
     }
@@ -177,10 +183,10 @@ const UpdateAccount = ({ id }) => {
             </select>
           </div>
           <div className="form-group">
-            <label htmlFor="account_status">Trạng thái</label>
+            <label htmlFor="accountStatus">Trạng thái</label>
             <select
-              id="account_status"
-              name="account_status"
+              id="accountStatus"
+              name="accountStatus"
               value={formData.account_status}
               onChange={handleChange}
             >

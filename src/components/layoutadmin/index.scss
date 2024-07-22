@@ -1,4 +1,4 @@
-.grid-container {
+.grid-container-admin {
     display: grid;
     grid-template-areas:
       "header"
@@ -6,7 +6,7 @@
     grid-template-columns: 250px 1fr;
     grid-template-rows: auto 1fr;
     height: 100vh;
-    background-color: #232528;
+    background-color: #141B2D;
   
     // header {
     //   grid-area: header;
@@ -22,7 +22,7 @@
   
     main {
       grid-area: main;
-      padding: 10px 20px 0px 20px; //tren phai duoi trai
+      padding: 10px 10px 0px 20px; //tren trai duoi phai
       background-color: #232528;
       overflow-y: auto;
     }

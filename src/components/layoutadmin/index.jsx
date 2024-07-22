@@ -5,7 +5,7 @@ import "./index.scss";
 
 function LayoutAdmin() {
   return (
-    <div className="grid-container">
+    <div className="grid-container-admin">
       <div>
         <AdminSidebar />
       </div>

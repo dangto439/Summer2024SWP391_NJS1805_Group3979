@@ -6,15 +6,15 @@ import api from "../../../config/axios";
 
 const handleConfirm = (id, rows, setRows, linkapi, fetfunction) => {
   confirmAlert({
-    title: "Confirm to delete",
-    message: "Are you sure you want to delete this account?",
+    title: "Xác nhận xóa",
+    message: "Bạn có chắc muốn xóa không?",
     buttons: [
       {
-        label: "Yes",
+        label: "Có",
         onClick: () => handleDelete(id, linkapi, fetfunction),
       },
       {
-        label: "No",
+        label: "Không",
         onClick: () => {},
       },
     ],

@@ -81,7 +81,7 @@ function NewTournament() {
         clubId: parseInt(hostClubId),
       };
       const response = await api.post("/contest", formData);
-      navigate(`/dashboard/tournaments/${response.data.id}`);
+      navigate(`/dashboard/tournaments/detail/${response.data.contestId}`);
     } catch (error) {
       console.error("Error saving tournament:", error);
     }

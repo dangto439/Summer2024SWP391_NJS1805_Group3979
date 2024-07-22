@@ -49,6 +49,7 @@ function ManageAccount() {
 
   const handleCancelForm = () => {
     setIsUpdateVisible(false);
+    fetchAccounts();
   };
 
   const handleDeleteAccount = async (email) => {

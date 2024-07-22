@@ -19,6 +19,9 @@ function Profile() {
       title: "Bạn chắc chứ?",
       icon: <ExclamationCircleFilled />,
       content: "Thay đổi thông tin của bạn",
+      okText: "Thay đổi",
+      cancelText: "Huỷ",
+
       onOk() {
         handleOk();
       },
@@ -48,16 +51,16 @@ function Profile() {
     fetchProfileData();
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatarUrl(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       setAvatarUrl(reader.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
   const fetchProfileData = async () => {
     try {
@@ -82,10 +85,16 @@ function Profile() {
 
   const handleUpdateProfile = async (values) => {
     try {
-      const response = await uploadFile(values.avatar.file.originFileObj);
-      values.avatar = response;
+      if (values.avatar && values.avatar.file) {
+        const response = await uploadFile(values.avatar.file.originFileObj);
+        values.avatar = response;
+      } else {
+        values.avatar = avatarUrl;
+      }
       const account = await api.put("/profile", values);
       fetchProfileData();
+      formProfile.resetFields(["avatar"]);
+      toast.success("Cập nhật thông tin thành công!");
     } catch (error) {
       toast.error("Cập nhật thông tin thất bại!");
     }
@@ -95,10 +104,18 @@ function Profile() {
     action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
     onChange({ file, fileList }) {
       if (file.status !== "uploading") {
-        console.log(file, fileList);
+        handlePreviewImg(file);
       }
     },
     defaultFileList: [],
+  };
+
+  const handlePreviewImg = async (e) => {
+    setAvatarUrl(
+      "https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
+    );
+    const img = await uploadFile(e.originFileObj);
+    setAvatarUrl(img);
   };
 
   return (
@@ -121,8 +138,8 @@ function Profile() {
             />
           </div>
           <Form.Item name="avatar" className="profile-pic-form">
-            <Upload {...props}>
-              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            <Upload onChange={(e) => handlePreviewImg(e)} {...props}>
+              <Button icon={<UploadOutlined />}>Nhấn để tải ảnh lên</Button>
             </Upload>
           </Form.Item>
         </div>
@@ -210,6 +227,9 @@ function Profile() {
             open={isResetPassword}
             onOk={handleResetPassword}
             onCancel={handleCancelResetPassword}
+            cancelText="Huỷ"
+            okText="Lưu"
+            centered
           >
             <Form
               form={formPassword}

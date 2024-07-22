@@ -1,10 +1,21 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
-import { Button, Col, Row, DatePicker, Table, message, Input } from "antd";
+import {
+  Button,
+  Col,
+  Row,
+  DatePicker,
+  Table,
+  message,
+  Input,
+  Select,
+} from "antd";
 import moment from "moment";
 import api from "../../config/axios";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import "./index.scss";
+import { Option } from "antd/es/mentions";
+import { useNavigate } from "react-router-dom";
 
 function BookingDaily({ club }) {
   const [selectedDate, setSelectedDate] = useState(
@@ -16,6 +27,17 @@ function BookingDaily({ club }) {
   const [totalPrice, setTotalPrice] = useState(0);
   const [columns, setColumns] = useState([]);
   const [promotionCode, setPromotionCode] = useState("");
+  const [flexibleBooking, setFlexibleBooking] = useState([]);
+  const [selectedFlexibleId, setSelectedFlexibleId] = useState(0);
+  const navigate = useNavigate();
+  const [check, setCheck] = useState(false);
+
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(value);
+  };
 
   useEffect(() => {
     const fetchCourtsData = async () => {
@@ -23,7 +45,8 @@ function BookingDaily({ club }) {
 
       try {
         const courtsResponse = await api.get(`/courts/${club.clubId}`);
-        const courts = courtsResponse.data;
+        let courts = courtsResponse.data;
+        courts = courts.filter((court) => court.courtStatus !== "INACTIVE");
 
         const slotsPromises = courts.map((court) =>
           api.get(
@@ -52,14 +75,18 @@ function BookingDaily({ club }) {
           });
           return row;
         });
-
         setDataSource(formattedData);
-
         const generatedColumns = [
+          {
+            title: "Giờ chơi",
+            dataIndex: "time",
+            key: "time",
+          },
           ...courts.map((court) => ({
             title: court.courtName,
             dataIndex: `court_${court.courtId}`,
-            key: court.courtId,
+            key: `court_${court.courtId}`,
+            align: "center",
             render: (slot) =>
               slot ? (
                 <Button
@@ -75,10 +102,8 @@ function BookingDaily({ club }) {
                       : ""
                   }
                   disabled={slot.courtSlotStatus === "INACTIVE"}
-                  onClick={() => handleSlotSelect(slot)}
-                >
-                  {formatTime(slot.slotId)}
-                </Button>
+                  onClick={(event) => handleSlotSelect(slot, event)} // Pass the event
+                ></Button>
               ) : null,
           })),
         ];
@@ -90,6 +115,7 @@ function BookingDaily({ club }) {
     };
 
     fetchCourtsData();
+    fetchflexible();
   }, [club.clubId, selectedDate, selectedSlots]);
 
   const handleDateChange = (date, dateString) => {
@@ -99,15 +125,24 @@ function BookingDaily({ club }) {
     setTotalPrice(0);
   };
 
-  const handleSlotSelect = (slot) => {
+  const handleSlotSelect = (slot, event) => {
     const isSelected = selectedSlots.some(
       (selectedSlot) => selectedSlot.courtSlotId === slot.courtSlotId
     );
+
     const updatedSlots = isSelected
       ? selectedSlots.filter(
           (selectedSlot) => selectedSlot.courtSlotId !== slot.courtSlotId
         )
       : [...selectedSlots, slot];
+
+    // Directly modify the class for immediate feedback
+    const button = event.currentTarget;
+    if (isSelected) {
+      button.classList.remove("selected-slot");
+    } else {
+      button.classList.add("selected-slot");
+    }
 
     setSelectedSlots(updatedSlots);
     calculateTotal(updatedSlots);
@@ -121,13 +156,15 @@ function BookingDaily({ club }) {
     setTotalPrice(price);
   };
 
-  const handleWallet = async (values) => {
-    try {
-      const response = await api.post(`/vnpay?amount=${values}`);
-      const paymentLink = response.data;
-      window.location.href = paymentLink;
-    } catch (error) {
-      toast.error("Không thể thanh toán!");
+  const fetchflexible = async () => {
+    const response = await api.get(`booking/flexible`);
+    if (response.data.length > 0) {
+      const filteredData = response.data.filter(
+        (value) => value.clubId === club.clubId
+      );
+
+      setFlexibleBooking(filteredData);
+      setCheck(true);
     }
   };
 
@@ -143,18 +180,31 @@ function BookingDaily({ club }) {
         courtSlotId: slot.courtSlotId,
       })),
       promotionCode: promotionCode,
+      flexibleId: selectedFlexibleId,
     };
 
     try {
-      //console.log(bookingData);
-      const booking = await api.post("/booking/daily", bookingData);
-
-      handleWallet(booking.data.totalPrice); // tự tạo transaction pending (booking)
-
-      //cap nhat transaction (tc-> DEPOSIT/ CANCEL) //Put
+      if (
+        bookingData.promotionCode &&
+        bookingData.promotionCode.trim() !== ""
+      ) {
+        try {
+          await handleCheckPromotion(bookingData.promotionCode, club.clubId);
+        } catch (e) {
+          return;
+        }
+      }
+      navigate("/bill", {
+        state: {
+          type: "DAILY",
+          booking: bookingData,
+          club: club.clubId,
+        },
+      });
+      // console.log(bookingData);
     } catch (error) {
       console.error("Error submitting booking:", error);
-      message.error("Đặt sân thất bại. Vui lòng thử lại.");
+      message.error("Đặt sân thất bại. Vui lòng thử lại!");
     }
   };
 
@@ -171,26 +221,61 @@ function BookingDaily({ club }) {
     setPromotionCode(e.target.value);
   };
 
+  const handleSelectChange = (value) => {
+    setSelectedFlexibleId(value);
+  };
+
+  const handleCheckPromotion = async (promotionCode, clubId) => {
+    try {
+      await api.get(
+        `/promotion/check?clubId=${clubId}&promotionCode=${promotionCode}`
+      );
+    } catch (e) {
+      message.error(e.response.data);
+      throw e;
+    }
+  };
+
   return (
     <Row className="booking-daily">
-      <Col span={7} className="booking-daily-sidebar">
+      <Col span={6} className="booking-daily-sidebar">
         <Row>
           <Col span={24} className="booking-daily-datepicker-container">
             <DatePicker
+              size="large"
               className="booking-daily-datepicker-format"
               onChange={handleDateChange}
               disabledDate={disabledDate}
+              placeholder="Chọn ngày..."
             />
           </Col>
           <Col span={24} className="booking-daily-summary">
             <h1>{club.clubName}</h1>
-            <h1>Ngày: {selectedDate}</h1>
-            <h1>Tổng giờ: {totalHours} giờ</h1>
-            <h1>Tổng Tiền: {totalPrice} VND</h1>
+            <p>Ngày: {selectedDate}</p>
+            <p>Tổng giờ: {totalHours} giờ</p>
+            <p>Tổng Tiền: {formatCurrency(totalPrice)}</p>
+            <img src={club.urlImages} />
             <img
               src="https://firebasestorage.googleapis.com/v0/b/badminton-booking-platform.appspot.com/o/z5545153816126_834da2b1757f9fca8d39197a7ac64f93.jpg?alt=media&token=50c69782-7782-42c9-877d-c07a1e906abb"
               alt=""
             />
+            {check && (
+              <Select
+                className="booking-daily-select"
+                onChange={handleSelectChange}
+                defaultValue={0}
+                size="large"
+                placeholder="Chọn hình thức thanh toán"
+              >
+                <Option value={0}>Đặt bằng tiền trong ví</Option>
+                {flexibleBooking.map((booking) => (
+                  <Option key={booking.bookingId} value={booking.bookingId}>
+                    Đặt lịch linh hoạt - {booking.clubName}
+                  </Option>
+                ))}
+              </Select>
+            )}
+
             <Input
               placeholder="Nhập mã khuyến mãi"
               variant="borderless"
@@ -200,18 +285,20 @@ function BookingDaily({ club }) {
             <Button
               className="booking-daily-submit-button"
               onClick={handleSubmit}
+              size="large"
             >
-              THANH TOÁN
+              Thanh Toán
             </Button>
           </Col>
         </Row>
       </Col>
-      <Col span={17} className="booking-daily-main">
+      <Col span={18} className="booking-daily-main">
         <Table
           columns={columns}
           dataSource={dataSource}
           pagination={false}
           rowKey="time"
+          bordered="true"
         />
       </Col>
     </Row>

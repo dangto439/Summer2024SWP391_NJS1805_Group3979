@@ -17,17 +17,18 @@ import {
   Keyboard,
   Autoplay,
 } from "swiper/modules";
-import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import api from "../../config/axios";
 
 export default function CarouselClub() {
   const [listClub, setListClub] = useState([]);
+  const [listClubOutstanding, setListClubOutstanding] = useState([]);
   const navigate = useNavigate();
   const fetchListClubData = async () => {
     try {
-      const response = await api.get("/clubs");
-      // console.log(response.data);
+      const response = await api.get("/clubs/10");
+      const responseOutstanding = await api.get("/clubs/outstanding");
+      setListClubOutstanding(responseOutstanding.data);
       setListClub(response.data);
     } catch (error) {
       console.error(error);
@@ -51,10 +52,9 @@ export default function CarouselClub() {
       <div className="carousel-club-header">
         <h1 className="carousel-club-title">DANH SÁCH CÁC SÂN CẦU LÔNG MỚI</h1>
       </div>
-
       <Swiper
         autoplay={{
-          delay: 4000,
+          delay: 5000,
           disableOnInteraction: false,
         }}
         slidesPerView={2}
@@ -74,8 +74,16 @@ export default function CarouselClub() {
                   <div className="carousel-club-image">
                     <img
                       onClick={() => handleShowDetailClub(club)}
-                      src={club.urlImages}
+                      src={
+                        club.urlImages ||
+                        "https://media.istockphoto.com/id/1396814518/vector/image-coming-soon-no-photo-no-thumbnail-image-available-vector-illustration.jpg?s=612x612&w=0&k=20&c=hnh2OZgQGhf0b46-J2z7aHbIWwq8HNlSDaNp2wn_iko="
+                      }
                       alt={club.clubName}
+                      onError={(e) => {
+                        e.target.onerror = null; // disable the error handling after first error
+                        e.target.src =
+                          "https://media.istockphoto.com/id/1396814518/vector/image-coming-soon-no-photo-no-thumbnail-image-available-vector-illustration.jpg?s=612x612&w=0&k=20&c=hnh2OZgQGhf0b46-J2z7aHbIWwq8HNlSDaNp2wn_iko=";
+                      }}
                     />
                   </div>
                   <div className="carousel-club-details">
@@ -87,8 +95,8 @@ export default function CarouselClub() {
                       {club.clubAddress}, {club.district}, {club.province}
                     </p>
                     <p>
-                      <i className="carousel-club-clock"></i> {club.openTime} -{" "}
-                      {club.closeTime}
+                      <i className="carousel-club-clock"></i> {club.openTime}:00
+                      - {club.closeTime}:00
                     </p>
                     <p>
                       <i className="carousel-club-phone"></i> Hotline:{" "}
@@ -100,7 +108,7 @@ export default function CarouselClub() {
 
                     <div className="buttons">
                       <button
-                        className="booking-button"
+                        className="booking-button-carousel"
                         onClick={() => handleBooking(club)}
                       >
                         Đặt lịch
@@ -121,7 +129,7 @@ export default function CarouselClub() {
       </div>
       <Swiper
         autoplay={{
-          delay: 4000,
+          delay: 8000,
           disableOnInteraction: false,
         }}
         slidesPerView={2}
@@ -134,15 +142,23 @@ export default function CarouselClub() {
         className="mySwiper"
       >
         <div className="carousel-club">
-          {listClub.map((club) => (
+          {listClubOutstanding.map((club) => (
             <>
               <SwiperSlide>
                 <div key={club.clubId} className="carousel-club-card">
                   <div className="carousel-club-image">
                     <img
                       onClick={() => handleShowDetailClub(club)}
-                      src={club.urlImages}
+                      src={
+                        club.urlImages ||
+                        "https://media.istockphoto.com/id/1396814518/vector/image-coming-soon-no-photo-no-thumbnail-image-available-vector-illustration.jpg?s=612x612&w=0&k=20&c=hnh2OZgQGhf0b46-J2z7aHbIWwq8HNlSDaNp2wn_iko="
+                      }
                       alt={club.clubName}
+                      onError={(e) => {
+                        e.target.onerror = null; // disable the error handling after first error
+                        e.target.src =
+                          "https://media.istockphoto.com/id/1396814518/vector/image-coming-soon-no-photo-no-thumbnail-image-available-vector-illustration.jpg?s=612x612&w=0&k=20&c=hnh2OZgQGhf0b46-J2z7aHbIWwq8HNlSDaNp2wn_iko=";
+                      }}
                     />
                   </div>
                   <div className="carousel-club-details">
@@ -154,8 +170,8 @@ export default function CarouselClub() {
                       {club.clubAddress}, {club.district}, {club.province}
                     </p>
                     <p>
-                      <i className="carousel-club-clock"></i> {club.openTime} -{" "}
-                      {club.closeTime}
+                      <i className="carousel-club-clock"></i> {club.openTime}:00
+                      - {club.closeTime}:00
                     </p>
                     <p>
                       <i className="carousel-club-phone"></i> Hotline:{" "}
@@ -165,7 +181,7 @@ export default function CarouselClub() {
                       {club.description}
                     </p>
 
-                    <div className="buttons">
+                    <div className="carousel-buttons">
                       <button
                         className="booking-button"
                         onClick={() => handleBooking(club)}

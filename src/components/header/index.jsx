@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Link, useNavigate } from "react-router-dom";
 import {
   UserOutlined,
@@ -6,7 +7,6 @@ import {
   PoweroffOutlined,
   SearchOutlined,
   WalletOutlined,
-  PlusOutlined,
 } from "@ant-design/icons";
 import "./index.scss";
 import { useEffect, useState } from "react";
@@ -16,10 +16,12 @@ import { logout, selectUser } from "../../redux/features/counterSlice";
 import { toast } from "react-toastify";
 import api from "../../config/axios";
 
-function Header() {
+function Header({ balanceChange }) {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const navigate = useNavigate();
+  const [balance, setBalance] = useState(0);
+  const [inputSearch, setInputSearch] = useState("");
 
   const handleLogOut = () => {
     dispatch(logout());
@@ -66,36 +68,63 @@ function Header() {
     onClick,
   };
 
-  const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const fetchProfileData = async () => {
     try {
-      const response = await api.get("/profile");
+      const [response, responseprice] = await Promise.all([
+        api.get("/profile"),
+        api.get(`/wallet/${user.id}`),
+      ]);
       const profileData = response.data;
       setRole(profileData.role);
-      console.log(role);
-      setName(profileData.name);
+      setBalance(responseprice.data.balance);
     } catch (error) {
       console.error("Error fetching profile data:", error);
     }
   };
 
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(value);
+  };
+
   useEffect(() => {
     fetchProfileData();
   }, []);
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearchHeader();
+    }
+  };
+
+  // const handleSearchHeader = () => {
+  //   console.log(inputSearch);
+  //   // Thêm logic tìm kiếm ở đây, ví dụ:
+  //   // navigate(`/search?query=${inputSearch}`);
+  //   navigate("/list-club");
+  // };
+
+  const handleSearchHeader = () => {
+    sessionStorage.setItem("search", "true");
+    console.log(inputSearch);
+    navigate(`/list-club?search=${inputSearch}`);
+  };
+
   return (
     <header className="header">
       <div className="header__logo">
         <Link to="/">
           <img
-
             src="https://firebasestorage.googleapis.com/v0/b/badminton-booking-platform.appspot.com/o/Screenshot%202024-06-27%20213810.png?alt=media&token=8aa9ac61-4427-4b4e-b778-6d0567aba4dc"
-
             alt="logo"
           />
         </Link>
       </div>
-      <nav className="header__nav">
+
+      <div className="header__nav">
         <ul>
           <li className="header__link">
             <Link to="/">Trang chủ</Link>
@@ -113,18 +142,21 @@ function Header() {
             <Link to="/contest">Lịch thi đấu</Link>
           </li>
 
-          {/* <li
-            onClick={() => {
-              setTab(5);
-            }}
-            className={`header__link ${tab == 5 && "active"}`}
-          >
-            <Link to="/contact">Liên hệ</Link>
-          </li> */}
+          <li className="header__link">
+            <Link to="/policy">Quy định</Link>
+          </li>
 
-          {(role == "CLUB_OWNER" || role == "ADMIN") && user != null ? (
+          {(role === "CLUB_OWNER" || role === "ADMIN") && user != null ? (
             <li className="header__link">
               <Link to="/dashboard">Quản lý</Link>
+            </li>
+          ) : (
+            ""
+          )}
+
+          {role === "CLUB_STAFF" && user != null ? (
+            <li className="header__link">
+              <Link to="/checkin">Kiểm Tra Code</Link>
             </li>
           ) : (
             ""
@@ -135,11 +167,16 @@ function Header() {
               type="text"
               placeholder="Nhập tên sân cần tìm"
               className="search-input"
+              onChange={(e) => setInputSearch(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
-            <SearchOutlined className="search-icon" />
+            <SearchOutlined
+              className="search-icon"
+              onClick={handleSearchHeader}
+            />
           </div>
         </ul>
-      </nav>
+      </div>
 
       <div className="header__button">
         {user == null ? (
@@ -160,18 +197,19 @@ function Header() {
             <div className="header__wallet">
               <ul className="">
                 <li>
-                  <WalletOutlined /> Số dư ví:
-                </li>
-                <li>
-                  <Link to="/wallet" className="button-pay">
-                    <PlusOutlined /> Nạp tiền
+                  <Link to="/wallet">
+                    <WalletOutlined /> Số dư ví: {formatCurrency(balanceChange)}
                   </Link>
                 </li>
               </ul>
             </div>
             <div className="header__menu">
-              <Dropdown.Button menu={menuProps} icon={<BarsOutlined />}>
-                {name}
+              <Dropdown.Button
+                size="large"
+                menu={menuProps}
+                icon={<BarsOutlined />}
+              >
+                {user.name}
               </Dropdown.Button>
             </div>
           </div>

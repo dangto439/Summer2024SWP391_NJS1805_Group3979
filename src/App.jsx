@@ -43,13 +43,22 @@ import ContestDetail from "../src/components/contest-detail";
 import RegisterContest from "../src/components/register-contest";
 // import Game from "../src/components/tournaments/game";
 import Game from "../src/components/tournaments/gamebyowner";
+import Policy from "./pages/policy";
+import ClubOwnerDasboard from "./components/clubowner";
+import BookingManager from "./components/booking-manager-clubowner";
+import PromotionManager from "./components/promotion-manager";
+import Bill from "./pages/bill";
+import ClubAdmin from "./components/club-admin";
+import Tournaments from "./components/tournaments";
+import NewTournament from "./components/tournaments/newtournament";
+import TournamentDetail from "./components/tournaments/tournamentsdetail";
 
 function App() {
   const user = useSelector(selectUser);
 
   const AuthRoute = ({ children }) => {
     if (user == null) {
-      toast.error("bạn cần đăng nhập tài khoản admin trước");
+      toast.error("Bạn cần đăng nhập tài khoản admin trước");
       return <Navigate to="/login" />;
     } else if (user.role != "ADMIN") {
       toast.error("Bạn không phải là Admin!");
@@ -58,9 +67,31 @@ function App() {
     return children;
   };
 
+  const ClubOwnerRoute = ({ children }) => {
+    if (user == null) {
+      toast.error("Bạn cần đăng nhập tài khoản chủ CLB trước");
+      return <Navigate to="/login" />;
+    } else if (user.role != "CLUB_OWNER") {
+      toast.error("Bạn không phải là chủ CLB!");
+      return <Navigate to="/login" />;
+    }
+    return children;
+  };
+
   const PrivateRoute = ({ children }) => {
     if (user == null) {
       toast.error("Bạn cần đăng nhập");
+      return <Navigate to="/login" />;
+    }
+    return children;
+  };
+
+  const ClubStafRoute = ({ children }) => {
+    if (user == null) {
+      toast.error("Bạn cần đăng nhập tài khoản chủ nhân viên trước");
+      return <Navigate to="/login" />;
+    } else if (user.role != "CLUB_STAFF") {
+      toast.error("Bạn không phải là nhân viên");
       return <Navigate to="/login" />;
     }
     return children;
@@ -80,8 +111,16 @@ function App() {
           element: <Intro />,
         },
         {
+          path: "/club-detail/:clubId",
+          element: <ClubDetail />,
+        },
+        {
           path: "/list-club",
           element: <ListClub />,
+        },
+        {
+          path: "/policy",
+          element: <Policy />,
         },
         {
           path: "/contact",
@@ -96,6 +135,14 @@ function App() {
           element: <Wallet />,
         },
 
+        {
+          path: "/bill",
+          element: (
+            <PrivateRoute>
+              <Bill />
+            </PrivateRoute>
+          ),
+        },
         {
           path: "/contest/*",
           element: (
@@ -133,11 +180,19 @@ function App() {
 
         {
           path: "/checkin",
-          element: <Checkin />,
+          element: (
+            <ClubStafRoute>
+              <Checkin />
+            </ClubStafRoute>
+          ),
         },
         {
           path: "/booking/:clubId",
-          element: <Booking />,
+          element: (
+            <PrivateRoute>
+              <Booking />
+            </PrivateRoute>
+          ),
         },
         {
           path: "/profile",
@@ -155,14 +210,7 @@ function App() {
             // </PrivateRoute>
           ),
         },
-        {
-          path: "/club-detail/:clubId",
-          element: (
-            // <PrivateRoute>
-            <ClubDetail />
-            // </PrivateRoute>
-          ),
-        },
+
         {
           path: "/payment",
           element: <Payment />,
@@ -207,7 +255,7 @@ function App() {
         },
         {
           path: "club",
-          element: <Club />,
+          element: <ClubAdmin />,
         },
         {
           path: "setting",
@@ -220,15 +268,23 @@ function App() {
       ],
     },
     {
-      path: "/dashboard/*",
-      element: <Dashboard />,
+      path: "/dashboard/",
+      element: (
+        <ClubOwnerRoute>
+          <Dashboard />
+        </ClubOwnerRoute>
+      ),
       children: [
+        {
+          path: "",
+          element: <ClubOwnerDasboard />,
+        },
         {
           path: "club",
           element: <Club />,
         },
         {
-          path: "staff/clubid1",
+          path: "staff/:clubId",
           element: <Staff />,
         },
         {
@@ -236,17 +292,35 @@ function App() {
           element: <Staff />,
         },
         {
-          path: "court/clubid1",
+          path: "court/:clubId",
           element: <Court />,
         },
         {
-          path: "profile",
-          element: <Profile />,
+          path: "bookingmanager/:clubId",
+          element: <BookingManager />,
+        },
+        {
+          path: "promotionmanager/:clubId",
+          element: <PromotionManager />,
         },
 
         {
           path: "manage-account",
           element: <ManageAccount />,
+        },
+        {
+          path: "tournaments",
+          element: <Tournaments />,
+          children: [
+            {
+              path: "new",
+              element: <NewTournament />,
+            },
+            {
+              path: "detail/:id",
+              element: <TournamentDetail />,
+            },
+          ],
         },
       ],
     },

@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { Menu, MenuItem } from "react-pro-sidebar";
-import { FcBusinessman, FcCalendar, FcHome } from "react-icons/fc";
+import {
+  FcBusinessman,
+  FcCalendar,
+  FcHome,
+  FcParallelTasks,
+  FcTodoList,
+} from "react-icons/fc";
 import { GiTennisCourt } from "react-icons/gi";
 
 import {
@@ -13,11 +19,11 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { tokens } from "../../theme";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutline";
+// import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
+// import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
+// import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutline";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
+// import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import PlaceIcon from "@mui/icons-material/Place";
@@ -52,6 +58,7 @@ const MySidebar = () => {
   const [openStaffs, setOpenStaffs] = useState(false);
   const [openCourts, setOpenClubs] = useState(false);
   const [openBooking, setOpenBooking] = useState(false);
+  const [openPromotion, setOpenPromotion] = useState(false);
   const [clubs, setClubs] = useState([]);
 
   useEffect(() => {
@@ -68,6 +75,10 @@ const MySidebar = () => {
 
   const handleBookingClick = () => {
     setOpenBooking(!openBooking);
+  };
+
+  const handlePromotionClick = () => {
+    setOpenPromotion(!openPromotion);
   };
 
   const fetchProfileData = async () => {
@@ -165,7 +176,7 @@ const MySidebar = () => {
                   alignContent="center"
                   fontSize="25px"
                 >
-                  Chủ Club
+                  Chủ câu lạc bộ
                 </Typography>
                 {/* <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
@@ -217,7 +228,7 @@ const MySidebar = () => {
               Quản lý
             </Typography>
             <Item
-              title="Club"
+              title="Câu lạc bộ"
               to="club"
               icon={<PlaceIcon />}
               selected={selected}
@@ -299,56 +310,61 @@ const MySidebar = () => {
             </MenuItem>
             <Collapse in={openBooking} timeout="auto" unmountOnExit>
               <Box component="div" disablePadding>
-                <Box sx={{ pl: 4 }}>
+                {/* <Box sx={{ pl: 4 }}>
                   <Item
                     title="ClubID1"
                     to="booking/clubid1"
                     selected={selected}
                     setSelected={setSelected}
                   />
-                </Box>
+                </Box> */}
+                {clubs.map((club) => (
+                  <Box key={club.clubId} sx={{ pl: 4 }}>
+                    <Item
+                      title={club.clubName}
+                      to={`bookingmanager/${club.clubId}`}
+                      selected={selected}
+                      setSelected={setSelected}
+                    />
+                  </Box>
+                ))}
               </Box>
             </Collapse>
-            <Typography
-              variant="h8"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 0 20px" }}
-              fontSize="15px"
+            {/* <Item
+              title="Mã khuyến mãi"
+              to={`promotionmanager`}
+              icon={<FcTodoList />}
+              selected={selected}
+              setSelected={setSelected}
+            /> */}
+            <MenuItem
+              onClick={handlePromotionClick}
+              style={{ color: colors.grey[100] }}
+              icon={<FcTodoList />}
             >
-              Trang
-            </Typography>
+              <Typography display="flex">
+                Mã khuyến mãi
+                {openPromotion ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              </Typography>
+            </MenuItem>
+            <Collapse in={openPromotion} timeout="auto" unmountOnExit>
+              <Box component="div" disablePadding>
+                {clubs.map((club) => (
+                  <Box key={club.clubId} sx={{ pl: 4 }}>
+                    <Item
+                      title={club.clubName}
+                      to={`promotionmanager/${club.clubId}`}
+                      selected={selected}
+                      setSelected={setSelected}
+                    />
+                  </Box>
+                ))}
+              </Box>
+            </Collapse>
             <Item
-              title="Hồ sơ"
-              to="profile"
-              icon={<AccountBoxOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Lịch"
-              to="calendar"
-              icon={<CalendarTodayOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Biểu đồ cột"
-              to="bar"
-              icon={<BarChartOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Biểu đồ tròn"
-              to="pie"
-              icon={<PieChartOutlineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Cuoc thi"
+              title="Giải đấu"
               to="tournaments"
-              icon={<PieChartOutlineOutlinedIcon />}
+              icon={<FcParallelTasks />}
               selected={selected}
               setSelected={setSelected}
             />

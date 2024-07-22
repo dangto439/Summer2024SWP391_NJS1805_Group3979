@@ -7,6 +7,8 @@ import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import DeleteButton from "../global/deletebutton";
 import api from "../../config/axios.js";
 import Forms from "./forms.jsx";
+import { message } from "antd";
+import UpdateClubForm from "./forrmUpdateClub.jsx";
 const Club = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -14,12 +16,37 @@ const Club = () => {
   const [isFormOpen, setFormOpen] = useState(false);
   const [mode, setMode] = useState("");
   const [selectedClubId, setSelectedClubId] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedClubData, setSelectedClubData] = useState(null);
 
-  const handleUpdate = (id) => {
-    setMode("update");
+  const showModal = (clubData) => {
+    setSelectedClubData(clubData);
+    setIsModalOpen(true);
+  };
+  const handleOk = async (updatedClub) => {
+    // Handle form submission here
+    // console.log(updatedClub);
+    try {
+      await handleUpdateClub(updatedClub.clubId, updatedClub);
+      message.success("Cập nhật thành công!");
+    } catch (error) {
+      message.error("Cập nhật thát bại!");
+    }
+
+    setIsModalOpen(false);
+    fetchallClubs();
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleUpdate = async (id) => {
+    // const clubData = rows.find((row) => row.id === id);
+    const clubData = await fetchAClub(id);
+    // console.log(clubData);
+    // setMode("update");
     setSelectedClubId(id);
-    console.log(id);
-    setFormOpen(true);
+    showModal(clubData);
   };
 
   const handleCreate = () => {
@@ -61,21 +88,6 @@ const Club = () => {
       headerAlign: "left",
       align: "left",
     },
-    // {
-    //   field: "age",
-    //   headerName: "Số lượng sân",
-    //   type: "number",
-    //   headerAlign: "left",
-    //   align: "left",
-    // },
-    // {
-    //   field: "age",
-    //   headerName: "Thời gian hoạt động",
-    //   type: "number",
-    //   headerAlign: "left",
-    //   align: "left",
-    // },
-
     {
       field: "description",
       headerName: "Mô tả",
@@ -148,6 +160,13 @@ const Club = () => {
     }
   };
 
+  const fetchAClub = async (id) => {
+    const response = await api.get(`/club/${id}`);
+    return response.data;
+  };
+  const handleUpdateClub = async (id, updatedClub) => {
+    await api.put(`/club/${id}`, updatedClub);
+  };
   useEffect(() => {
     fetchallClubs();
   }, []);
@@ -155,9 +174,9 @@ const Club = () => {
   return (
     <Box m="20px" className="team-container">
       <Header
-        title="Quản lý club"
+        title="Quản lý Clb"
         subtitle=""
-        buttonText="Tạo club mới"
+        buttonText="Tạo clb mới"
         onButtonClick={handleCreate}
       />
       <Box
@@ -201,7 +220,13 @@ const Club = () => {
         onSubmit={handleFormSubmit}
         fetFunction={fetchallClubs}
         mode={mode}
-        id={selectedClubId}
+        clubid={selectedClubId}
+      />
+      <UpdateClubForm
+        isModalOpen={isModalOpen}
+        handleOk={handleOk}
+        handleCancel={handleCancel}
+        clubData={selectedClubData}
       />
     </Box>
   );

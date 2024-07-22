@@ -1,21 +1,25 @@
-  .list-club {
+.list-club {
   display: flex;
   // flex-wrap: wrap;
   flex-direction: column;
-  width: auto;
+  width: 100%;
   // margin-left: 350px;
   // position: static;
-  
-  position: static  ;
-  
+  // overflow: hidden;
+  // position: relative ;
 
-  h1{
+  h1 {
     font-size: 30px;
     font-weight: 500px;
     padding: 10px 10px;
-    margin-bottom: 0;
-    color: #1D8D1D;
+    // margin-bottom: 0;
+    color: #1d8d1d;
   }
+}
+
+.pagination-club {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .list-club-outstanding {
@@ -34,6 +38,7 @@
 }
 
 .list-club-outstanding-info {
+  height: fit-content;
   border: 1px solid #ccc;
   border-radius: 10px;
   padding: 20px;
@@ -41,44 +46,63 @@
   font-size: 20px;
   width: 30%;
   margin-right: 20px;
+
+  h2 {
+    font-weight: bold;
+  }
 }
 
-.list-club-outstanding-info-card{
+.list-club-outstanding-info-card {
   display: flex;
   // width: 10%;
   flex-direction: row;
-  h2{
+  h2 {
     font-size: 18px;
     text-align: left;
     cursor: pointer;
   }
-  p{
+  p {
     text-align: left;
   }
-}
-
-.list-club-outstanding-image{
-  // width: 20%;
-  // object-fit: cover; 
-  padding-right: 8px;
-  img{
-    cursor: pointer;
-    width: 100%;
-    height: 120px;
+  transition: all 0.3s;
+  &:hover {
+    transform: scale(1.03);
   }
-
 }
 
-.list-club-main-image{
+.list-club-outstanding-image {
+  // width: 20%;
+  // object-fit: cover;
+  padding-right: 8px;
+  img {
+    cursor: pointer;
+    min-width: 250px;
+    height: 140px;
+
+    border-radius: 8px;
+  }
+}
+
+.list-club-main-image {
   width: 70%;
-  // height: 800px;
+  display: flex;
+  flex-direction: column;
   padding-left: 20px;
   padding-right: 20px;
-  img{
+  justify-content: center;
+
+  img {
+    border-radius: 10px;
     width: 100%;
-      // height: 220px;
+    height: 800px;
+    // height: 220px;
   }
-  
+  .list-club-all {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 .list-club-card {
@@ -88,15 +112,17 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 10px;
   margin-top: 10px;
-  margin-left: 50px;
   display: flex;
-  // justify-content:  ;
-  flex-direction: row;
   align-items: center;
   background-color: #eaf1f0c4;
-  width: 60%;
+  width: 70%;
+  min-height: 250px;
+  transition: all 0.3s;
+  &:hover {
+    transform: scale(1.05);
+  }
 
-.list-club-image {
+  .list-club-image {
     img {
       width: 220px;
       height: 220px;
@@ -104,154 +130,132 @@
       border-radius: 10px;
       cursor: pointer;
     }
-}
+  }
 
-.list-club-details {
+  .list-club-details {
     margin-top: 20px;
-    // text-align: center;
-    // text-align: left;
-
-  h2 {
+    width: 100%;
+    h2 {
       font-size: 20px;
-      color: #007BFF;
+      color: #007bff;
       margin-bottom: 10px;
       text-align: left;
-      margin-left: 30px;
+      margin-left: 40px;
       cursor: pointer;
-  }
+    }
 
-  p {
+    p {
       margin: 5px 0;
-      margin-left: 10px;
+      margin-left: 20px;
       text-align: left;
-    i {
+
+      i {
         margin-right: 5px;
         color: #888;
-       
       }
+    }
+
+    .list-club-description {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #555;
+      // text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+  .buttons {
+    display: flex;
+    justify-content: center;
   }
 
-.list-club-description {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #555;
+  button {
+    padding: 10px 30px;
+    border: unset;
+    border-radius: 8px;
+    color: #212121;
+    z-index: 1;
+    background: #49cd66;
+    position: relative;
+    font-weight: 600;
+    font-size: 17px;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    transition: all 250ms;
+    cursor: pointer;
+    // overflow: hidden;
+  }
+
+  button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    border-radius: 8px;
+    background-color: #65c766;
+    z-index: -1;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+    transition: all 250ms;
+  }
+
+  button:hover {
+    color: #e8e8e8;
+  }
+
+  button:hover::before {
+    width: 100%;
   }
 }
 
-// .buttons button {
-//     padding: 5px 20px;
-//     // margin-right: 10px;
-//     border: none;
-//     border-radius: 5px;
-//     cursor: pointer;
-//     // text-align: center;
-//     gap: 0px;   
-// }
-
-// .booking-button {
-//     background-color: #e74c3c;
-//     color: #fff;
-//     margin-left: 380px;
-//     .booking-button:hover{
-//       background-color: #06e721;
-//     }
-// }
-// button {
-//   margin-left: 200px;
-//   font-size: 14px;
-//   border-radius: 8px;
-//   letter-spacing: 2px;
-//   // text-transform: uppercase;
-//   display: inline-block;
-//   text-align: center;
-//   font-weight: bold;
-//   padding: 0.7em 2em;
-//   border: 3px solid #307949;
-//   border-radius: 2px;
-//   position: relative;
-//   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.1);
-//   color: #000000;
-//   text-decoration: none;
-//   transition: 0.3s ease all;
-//   z-index: 1;
-// }
-
-// button:before {
-//   transition: 0.5s all ease;
-//   position: absolute;
-//   top: 0;
-//   left: 50%;
-//   right: 50%;
-//   bottom: 0;
-//   opacity: 0;
-//   content: '';
-//   background-color: #65C766;
-//   z-index: -1;
-// }
-
-// button:hover, button:focus {
-//   color: white;
-// }
-
-// button:hover:before, button:focus:before {
-//   transition: 0.5s all ease;
-//   left: 0;
-//   right: 0;
-//   opacity: 1;
-// }
-
-// button:active {
-//   transform: scale(0.9);
-// }
-button {
-  padding: 10px 30px;
-  border: unset;
-  border-radius: 8px;
-  color: #212121;
-  z-index: 1;
-  margin-left: 450px;
-  background: #49cd66;
-  position: relative;
-  font-weight: 500;
-  font-size: 17px;
-  -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-  box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-  transition: all 250ms;
-  cursor: pointer;
-  overflow: hidden;
- }
- 
- button::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 0;
-  border-radius: 8px;
-  background-color: #65C766;
-  z-index: -1;
-  -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-  box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-  transition: all 250ms
- }
- 
- button:hover {
-  color: #e8e8e8;
- }
- 
- button:hover::before {
-  width: 100%;
- }
+.list-club-search {
+  margin-top: 40px;
+  margin-left: 0;
+  // border: 1px solid rgb(117, 113, 113);
+  text-align: center;
+  border-radius: 10px;
 }
 
-.list-club-search-form{
-  display: flex;
+.list-club-search-form {
+  // display: flex;
   // flex-direction: row;
- }
-
-.form-search{
-  display: flex;
-  gap: 10px;
+}
+.submit-search-button {
+}
+.form-search-button {
+  text-align: center;
   justify-content: center;
+}
+
+.form-search {
+  display: flex;
+  gap: 30px;
+  // align-items: center;
+
+  label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+
+  input[type="select"] {
+    width: 100%;
+    padding: 0px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 8px 20px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
 }

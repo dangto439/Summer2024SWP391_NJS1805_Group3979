@@ -8,7 +8,7 @@ import { useLocation } from "react-router-dom";
 import DeleteButton from "../global/deletebutton";
 import api from "../../config/axios";
 
-const Staff = () => {
+const Staff = ({ clubId }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState([]);
@@ -25,7 +25,6 @@ const Staff = () => {
 
   const handleFormSubmit = () => {
     handleFormClose();
-    fetchStaffs();
   };
 
   const allColumns = [
@@ -99,8 +98,14 @@ const Staff = () => {
   }, [location]);
 
   const fetchStaffs = async () => {
+    var response;
     try {
-      const response = await api.get("/staff");
+      if (clubId === "allstaff") {
+        response = await api.get("/staff"); //lấy toàn bộ staff
+      } else {
+        response = await api.get(`/staff/${clubId}`);
+      }
+
       const staffs = response.data;
 
       const filterStaffs = staffs.filter(
@@ -115,14 +120,14 @@ const Staff = () => {
 
   useEffect(() => {
     fetchStaffs();
-  });
+  }, [clubId]);
 
   return (
     <Box m="20px" className="team-container">
       <Header
         title="Quản lý nhân viên"
         subtitle=""
-        buttonText="Tạo tài khoản mới"
+        buttonText="Thêm nhân viên mới"
         onButtonClick={handleAddNewStaffAccount}
       />
       <Box
@@ -168,6 +173,7 @@ const Staff = () => {
         open={isFormOpen}
         onClose={handleFormClose}
         onSubmit={handleFormSubmit}
+        fetfunction={fetchStaffs}
       />
     </Box>
   );

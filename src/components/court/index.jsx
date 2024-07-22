@@ -4,60 +4,64 @@ import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme.js";
 import Header from "../dashboard/Header.jsx";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
-import DeleteButton from "../global/deletebutton/index.jsx";
-import Forms from "./forms.jsx";
-const Club = () => {
+
+// import Forms from "./forms.jsx";
+import api from "../../config/axios.js";
+import { message } from "antd";
+const Club = ({ clubId }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [rows, setRows] = useState([]);
-  const [isFormOpen, setFormOpen] = useState(false);
-  const [mode, setMode] = useState("");
-  const [selectedCourtId, setSelectedCourtId] = useState("");
+  // const [isFormOpen, setFormOpen] = useState(false);
+  // const [mode, setMode] = useState("");
+  // const [selectedCourtId, setSelectedCourtId] = useState("");
 
-  const handleUpdate = (id) => {
-    setMode("update");
-    setSelectedCourtId(id);
-    setFormOpen(true);
+  // const handleUpdate = (id) => {
+  //   setMode("update");
+  //   setSelectedCourtId(id);
+  //   setFormOpen(true);
+  // };
+
+  const handleCreate = async () => {
+    await api.post(`/court/${clubId}`);
+    fetchCourts();
   };
 
-  const handleCreate = () => {
-    setMode("create");
-    setSelectedCourtId(null);
-    setFormOpen(true);
-  };
-  const handleFormClose = () => {
-    setFormOpen(false);
-  };
-
-  const handleFormSubmit = () => {
-    handleFormClose();
+  const handleUpdate = async (courtId) => {
+    try {
+      await api.put(`/court/change-status/${courtId}`);
+      fetchCourts();
+      message.success("Cập nhật trạng sân thành công");
+    } catch (error) {
+      message.error("Cập nhật trạng thái sấn thất bại");
+    }
   };
 
   const columns = [
     {
-      field: "courtid",
+      field: "courtId",
       headerName: "Mã Sân",
-      headerAlign: "left",
-      align: "left",
+      headerAlign: "center",
+      align: "center",
     },
     {
       field: "courtName",
       headerName: "Tên Sân",
       flex: 1,
       cellClassName: "name-column--cell",
-      headerAlign: "left",
-      align: "left",
+      headerAlign: "center",
+      align: "center",
     },
     {
       field: "courtStatus",
       headerName: "Trạng thái",
       type: "number",
-      headerAlign: "left",
-      align: "left",
+      headerAlign: "center",
+      align: "center",
     },
     {
       field: "update",
-      headerName: "Cập Nhật",
+      headerName: "Cập Nhật Trạng Thái Sân",
       flex: 1,
       headerAlign: "center",
       align: "center",
@@ -70,22 +74,13 @@ const Club = () => {
         </IconButton>
       ),
     },
-    {
-      field: "delete",
-      headerName: "Xóa",
-      flex: 1,
-      headerAlign: "center",
-      align: "center",
-      renderCell: (params) => (
-        <DeleteButton id={params.id} rows={rows} setRows={setRows} />
-      ),
-    },
   ];
 
   const fetchCourts = async () => {
     try {
       // nội dung fetch
-      setRows(rows);
+      const response = await api.get(`/courts/${clubId}`);
+      setRows(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -93,7 +88,7 @@ const Club = () => {
 
   useEffect(() => {
     fetchCourts();
-  }, []);
+  }, [clubId]);
 
   return (
     <Box m="20px" className="team-container">
@@ -143,14 +138,14 @@ const Club = () => {
         />
       </Box>
 
-      <Forms
+      {/* <Forms
         open={isFormOpen}
         onClose={handleFormClose}
         onSubmit={handleFormSubmit}
         fetFunction={fetchCourts}
         mode={mode}
         id={selectedCourtId}
-      />
+      /> */}
     </Box>
   );
 };

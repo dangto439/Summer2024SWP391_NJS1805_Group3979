@@ -8,7 +8,7 @@ import "./index.scss";
 
 function Footer() {
   return (
-    <div className="fui-footer-3">
+    <footer className="fui-footer-3">
       <div className="footer-category-wrap">
         <div className="footer-category">
           <a href="/" title="DatSan79" className="footer-logo">
@@ -53,18 +53,8 @@ function Footer() {
               </a>
             </li>
             <li className="footer-link-item">
-              <a href="#" title="Marketers" className="footer-link">
-                Marketers
-              </a>
-            </li>
-            <li className="footer-link-item">
-              <a href="#" title="Small Business" className="footer-link">
-                Small Business
-              </a>
-            </li>
-            <li className="footer-link-item">
-              <a href="#" title="Website Builder" className="footer-link">
-                Website Builder
+              <a href="policy" className="footer-link">
+                Quy định
               </a>
             </li>
           </ul>
@@ -132,7 +122,7 @@ function Footer() {
           </li>
         </ul>
       </div> */}
-    </div>
+    </footer>
   );
 }
 

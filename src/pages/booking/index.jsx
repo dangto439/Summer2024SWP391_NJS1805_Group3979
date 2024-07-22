@@ -1,12 +1,12 @@
 import { Menu, Switch } from "antd";
-import BookingDaily from "../../components/bookingdaily";
 import { useEffect, useState } from "react";
-import { MailOutlined } from "@ant-design/icons";
-import BookingFixed from "../../components/bookingfixed";
-import BookingFlexible from "../../components/bookingFlexible";
+import { ScheduleOutlined } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../config/axios";
+import BookingDaily from "../../components/booking-daily";
+import BookingFlexible from "../../components/booking-flexible";
+import BookingFixed from "../../components/booking-fixed";
 
 function Booking() {
   const { clubId } = useParams();
@@ -26,11 +26,12 @@ function Booking() {
   useEffect(() => {
     getClubById();
   }, [clubId]);
+
   const items = [
     {
-      key: "sub1",
+      key: "1",
       label: "Chọn loại hình đặt sân",
-      icon: <MailOutlined />,
+      icon: <ScheduleOutlined />,
       children: [
         {
           key: "1",
