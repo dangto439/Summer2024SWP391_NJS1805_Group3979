@@ -25,7 +25,6 @@ const Staff = ({ clubId }) => {
 
   const handleFormSubmit = () => {
     handleFormClose();
-    fetchStaffs();
   };
 
   const allColumns = [
@@ -174,6 +173,7 @@ const Staff = ({ clubId }) => {
         open={isFormOpen}
         onClose={handleFormClose}
         onSubmit={handleFormSubmit}
+        fetfunction={fetchStaffs}
       />
     </Box>
   );

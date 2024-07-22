@@ -16,6 +16,7 @@ import {
   FormHelperText,
 } from "@mui/material";
 import api from "../../config/axios";
+import { message } from "antd";
 
 const schema = yup.object().shape({
   clubId: yup.string().required("Vui lòng chọn Clb"),
@@ -35,7 +36,7 @@ const schema = yup.object().shape({
   // password: yup.string().required("Password is required"),
 });
 
-const AddStaffForm = ({ open, onClose, onSubmit }) => {
+const AddStaffForm = ({ open, onClose, onSubmit, fetfunction }) => {
   const {
     control,
     handleSubmit,
@@ -53,6 +54,7 @@ const AddStaffForm = ({ open, onClose, onSubmit }) => {
     onSubmit(response);
     handleAddNewStaff(response);
     // console.log(response);
+    fetfunction();
   };
 
   const [clubs, setClubs] = useState([]);
@@ -70,7 +72,7 @@ const AddStaffForm = ({ open, onClose, onSubmit }) => {
     try {
       await api.post("/staff", values);
     } catch (error) {
-      console.error("Error fetching clubs:", error);
+      message.error(error.response.data);
     }
   };
 

@@ -35,7 +35,7 @@ const PromotionManager = ({ clubId }) => {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     promotionCode: "",
-    discount: "0%",
+    discount: "",
     startDate: dayjs(),
     endDate: dayjs().add(1, "day"),
     status: "ACTIVE",
@@ -48,9 +48,14 @@ const PromotionManager = ({ clubId }) => {
     const { name, value } = e.target;
     if (name === "discount") {
       const numericValue = value.replace(/\D/g, "");
+      const formattedValue = new Intl.NumberFormat("vi-VN", {
+        style: "currency",
+        currency: "VND",
+      }).format(numericValue);
+      // console.log(formattedValue);
       setFormData({
         ...formData,
-        [name]: numericValue + "%",
+        [name]: `${formattedValue}`,
       });
     } else {
       setFormData({
@@ -76,7 +81,7 @@ const PromotionManager = ({ clubId }) => {
     }
     const formattedData = {
       ...formData,
-      discount: parseFloat(formData.discount.replace("%", "")),
+      discount: parseFloat(formData.discount.replace(/[^\d]/g, "")),
       startDate: formData.startDate.format("YYYY-MM-DD"),
       endDate: formData.endDate.format("YYYY-MM-DD"),
     };
@@ -87,7 +92,8 @@ const PromotionManager = ({ clubId }) => {
       setRows((prevRows) => [...prevRows, response.data]);
       handleClose();
     } catch (error) {
-      console.error("Tạo phiếu giảm giá thất bại", error);
+      handleClose();
+      message.error("Tạo phiếu giảm giá thất bại", error);
     }
   };
 
@@ -108,10 +114,20 @@ const PromotionManager = ({ clubId }) => {
     },
     {
       field: "discount",
-      headerName: "Giá giảm (%)",
+      headerName: "Giá giảm",
       flex: 1,
       headerAlign: "center",
       align: "center",
+      valueFormatter: (params) => {
+        const numericValue =
+          typeof params.value === "string"
+            ? parseFloat(params.value.replace(/[^\d]/g, ""))
+            : params.value;
+        return new Intl.NumberFormat("vi-VN", {
+          style: "currency",
+          currency: "VND",
+        }).format(numericValue);
+      },
     },
     {
       field: "startDate",
