@@ -8,7 +8,15 @@ import MenuItem from "@mui/material/MenuItem";
 import CloseIcon from "@mui/icons-material/Close";
 import api from "../../config/axios";
 
-const Form = ({ isOpen, onClose, onSubmit, mode, seedId, getTeamNames }) => {
+const Form = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  mode,
+  seedId,
+  getTeamNames,
+  clubId,
+}) => {
   const [scores1, setScores1] = useState([0, 0, 0]);
   const [scores2, setScores2] = useState([0, 0, 0]);
   const [winner, setWinner] = useState(null);
@@ -20,7 +28,16 @@ const Form = ({ isOpen, onClose, onSubmit, mode, seedId, getTeamNames }) => {
   const [team1, setTeam1] = useState("");
   const [team2, setTeam2] = useState("");
 
+  const getCurrentDate = () => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
   useEffect(() => {
+    console.log(seedId);
     if (seedId) {
       const [team1Name, team2Name] = getTeamNames(seedId);
       setTeam1(team1Name);
@@ -32,24 +49,48 @@ const Form = ({ isOpen, onClose, onSubmit, mode, seedId, getTeamNames }) => {
   }, [seedId, getTeamNames]);
 
   useEffect(() => {
-    if (courtId) {
-      handleGetCourtSlots(courtId);
+    if (courtId && playingDate) {
+      handleGetCourtSlots(courtId, playingDate);
     }
   }, [courtId]);
 
+  const handleGetScore = async () => {
+    try {
+      const response = await api.get(`/score/${seedId}`);
+      if (response.data) {
+        setScores1(response.data.firstPlayerSetScore || [0, 0, 0]);
+        setScores2(response.data.secondPlayerSetScore || [0, 0, 0]);
+      }
+    } catch (error) {
+      console.error("Failed to get score:", error);
+    }
+  };
+
   const handleGetCourts = async () => {
     try {
-      const response = await api.get(`/courts/${seedId}`);
-      setCourtOptions(response.data || []);
+      const response = await api.get(`/courts/${clubId}`);
+      const formattedData = response.data.map((item) => ({
+        value: item.courtId,
+        name: item.courtName,
+      }));
+      setCourtOptions(formattedData);
     } catch (error) {
       console.error("Failed to get courts:", error);
     }
   };
 
-  const handleGetCourtSlots = async (courtId) => {
+  const handleGetCourtSlots = async (courtId, date) => {
     try {
-      const response = await api.get(`/court-slot/${courtId}`);
-      setCourtSlotOptions(response.data || []);
+      const response = await api.get(
+        `/court-slot/status?date=${date}&courtId=${courtId}`
+      );
+      const formattedData = response.data
+        .filter((item) => item.courtSlotStatus === "ACTIVE")
+        .map((item) => ({
+          value: item.courtSlotId,
+          name: item.slotId,
+        }));
+      setCourtSlotOptions(formattedData);
     } catch (error) {
       console.error("Failed to get court slots:", error);
     }
@@ -86,7 +127,7 @@ const Form = ({ isOpen, onClose, onSubmit, mode, seedId, getTeamNames }) => {
     } else if (team2Wins > team1Wins) {
       setWinner(team2);
     } else {
-      setWinner("Tie");
+      setWinner("Hòa");
     }
   };
 
@@ -103,11 +144,15 @@ const Form = ({ isOpen, onClose, onSubmit, mode, seedId, getTeamNames }) => {
     }
   };
 
+  const handleChangeDate = (e) => {
+    setPlayingDate(e);
+  };
+
   const handleGetTime = async () => {
     try {
       const response = await api.get(`/contest/game/${seedId}`);
       setPlayingDate(response.data.playingDate || "");
-      // setCourtSlotId(response.data.courtSlotId || "");
+      setCourtSlotId(response.data.courtSlotId || "");
     } catch (error) {
       console.error("Failed to get time:", error);
     }
@@ -115,21 +160,32 @@ const Form = ({ isOpen, onClose, onSubmit, mode, seedId, getTeamNames }) => {
 
   const handleSubmitScore = async () => {
     try {
-      const scoreData1 = {
-        gameId: seedId,
-        firstPlayerSetScore: scores1,
-        secondPlayerSetScore: scores2,
-      };
-      const scoreData2 = {
-        firstPlayerSetScore: scores1,
-        secondPlayerSetScore: scores2,
-      };
+      const scoreData = [
+        {
+          gameId: seedId,
+          firstPlayerSetScore: scores1[0],
+          secondPlayerSetScore: scores2[0],
+        },
+        {
+          gameId: seedId,
+          firstPlayerSetScore: scores1[1],
+          secondPlayerSetScore: scores2[1],
+        },
+        {
+          gameId: seedId,
+          firstPlayerSetScore: scores1[2],
+          secondPlayerSetScore: scores2[2],
+        },
+      ];
 
       const response = await api.get(`/score/${seedId}`);
       if (response.data) {
-        await api.put(`/score/${seedId}`, scoreData2);
+        console.log("this is put");
+        await api.put(`/score/${seedId}`, scoreData);
       } else {
-        await api.post(`/score`, scoreData1);
+        console.log("this is post");
+
+        await api.post(`/score`, scoreData);
       }
       onSubmit();
     } catch (error) {
@@ -137,17 +193,31 @@ const Form = ({ isOpen, onClose, onSubmit, mode, seedId, getTeamNames }) => {
     }
   };
 
-  const handleGetScore = async () => {
-    try {
-      const response = await api.get(`/score/${seedId}`);
-      if (response.data) {
-        setScores1(response.data.firstPlayerSetScore || [0, 0, 0]);
-        setScores2(response.data.secondPlayerSetScore || [0, 0, 0]);
-      }
-    } catch (error) {
-      console.error("Failed to get score:", error);
-    }
-  };
+  //   try {
+  //     const scoreData = scores1.map((score1, i) => ({
+  //       firstPlayerSetScore: score1,
+  //       secondPlayerSetScore: scores2[i],
+  //     }));
+
+  //     console.log("Submitting score data:", scoreData);
+
+  //     const response = await api.put(`/score/${seedId}`, { scores: scoreData });
+  //     console.log("Score data submitted successfully:", response.data);
+
+  //     onSubmit();
+  //   } catch (error) {
+  //     if (error.response) {
+  //       console.error("Error response data:", error.response.data);
+  //       console.error("Error response status:", error.response.status);
+  //       console.error("Error response headers:", error.response.headers);
+  //     } else if (error.request) {
+  //       console.error("Error request data:", error.request);
+  //     } else {
+  //       console.error("Error message:", error.message);
+  //     }
+  //     console.error("Error config:", error.config);
+  //   }
+  // };
 
   const handleSubmit = () => {
     if (mode === "Time") {
@@ -155,6 +225,57 @@ const Form = ({ isOpen, onClose, onSubmit, mode, seedId, getTeamNames }) => {
     } else if (mode === "Score") {
       handleSubmitScore();
     }
+  };
+
+  const renderScore = () => {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          margin: "auto",
+        }}
+      >
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography>{team1}</Typography>
+          <Typography>{team2}</Typography>
+        </Box>
+        {[0, 1, 2].map((index) => (
+          <Box
+            key={index}
+            sx={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Typography>Trận {index + 1}:</Typography>
+              <TextField
+                type="number"
+                value={scores1[index]}
+                onChange={(e) => handleScoreChange(1, index, e.target.value)}
+                sx={{
+                  width: "80px",
+                  margin: "8px",
+                  backgroundColor: "#3B937E",
+                }}
+              />
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Typography>Trận {index + 1}:</Typography>
+              <TextField
+                type="number"
+                value={scores2[index]}
+                onChange={(e) => handleScoreChange(2, index, e.target.value)}
+                sx={{
+                  width: "80px",
+                  margin: "8px",
+                  backgroundColor: "#3B937E",
+                }}
+              />
+            </Box>
+          </Box>
+        ))}
+      </Box>
+    );
   };
 
   return (
@@ -236,23 +357,33 @@ const Form = ({ isOpen, onClose, onSubmit, mode, seedId, getTeamNames }) => {
             <TextField
               type="date"
               value={playingDate}
-              onChange={(e) => setPlayingDate(e.target.value)}
+              onChange={(e) => handleChangeDate(e.target.value)}
               style={{
-                marginLeft: "8px",
                 width: "300px",
-                margin: "0 8px",
-                backgroundColor: "white",
+                margin: "auto",
+                backgroundColor: "#97CEC1",
+                display: "flex",
+                justifyContent: "center",
+              }}
+              inputProps={{
+                min: getCurrentDate(),
               }}
             />
             <Typography>Chọn Sân:</Typography>
             <Select
               value={courtId}
               onChange={(e) => setCourtId(e.target.value)}
-              style={{ width: "300px", margin: "0 8px" }}
+              style={{
+                width: "300px",
+                margin: "auto",
+                backgroundColor: "#97CEC1",
+                display: "flex",
+                justifyContent: "center",
+              }}
             >
-              {courtOptions.map((court) => (
-                <MenuItem key={court.id} value={court.id}>
-                  {court.name}
+              {courtOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.name}
                 </MenuItem>
               ))}
             </Select>
@@ -260,15 +391,26 @@ const Form = ({ isOpen, onClose, onSubmit, mode, seedId, getTeamNames }) => {
             <Select
               value={courtSlotId}
               onChange={(e) => setCourtSlotId(e.target.value)}
-              style={{ width: "300px", margin: "0 8px" }}
+              style={{
+                width: "300px",
+                margin: "auto",
+                backgroundColor: "#97CEC1",
+                display: "flex",
+                justifyContent: "center",
+              }}
             >
-              {courtSlotOptions.map((slot) => (
-                <MenuItem key={slot.id} value={slot.id}>
-                  {slot.time}
+              {courtSlotOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.name}
                 </MenuItem>
               ))}
             </Select>
-            <Button variant="contained" color="primary" onClick={handleSubmit}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSubmit}
+              sx={{ marginTop: "20px" }}
+            >
               Sét thời gian
             </Button>
           </Box>
@@ -288,96 +430,15 @@ const Form = ({ isOpen, onClose, onSubmit, mode, seedId, getTeamNames }) => {
                 mb: 2,
               }}
             >
-              <Box sx={{ flex: 1 }}>
-                <Typography>{team1}</Typography>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Typography>Trận 1:</Typography>
-                  <TextField
-                    type="number"
-                    value={scores1[0]}
-                    onChange={(e) => handleScoreChange(1, 0, e.target.value)}
-                    style={{
-                      width: "80px",
-                      margin: "8px 0",
-                      backgroundColor: "#3B937E",
-                    }}
-                  />
-                </Box>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Typography>Trận 2:</Typography>
-                  <TextField
-                    type="number"
-                    value={scores1[1]}
-                    onChange={(e) => handleScoreChange(1, 1, e.target.value)}
-                    style={{
-                      width: "80px",
-                      margin: "8px 0",
-                      backgroundColor: "#3B937E",
-                    }}
-                  />
-                </Box>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Typography>Trận 3:</Typography>
-                  <TextField
-                    type="number"
-                    value={scores1[2]}
-                    onChange={(e) => handleScoreChange(1, 2, e.target.value)}
-                    style={{
-                      width: "80px",
-                      margin: "8px 0",
-                      backgroundColor: "#3B937E",
-                    }}
-                  />
-                </Box>
-              </Box>
-              <Box sx={{ flex: 1 }}>
-                <Typography>{team2}</Typography>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Typography>Trận 1:</Typography>
-                  <TextField
-                    type="number"
-                    value={scores2[0]}
-                    onChange={(e) => handleScoreChange(2, 0, e.target.value)}
-                    style={{
-                      width: "80px",
-                      margin: "8px 0",
-                      backgroundColor: "#3B937E",
-                    }}
-                  />
-                </Box>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Typography>Trận 2:</Typography>
-                  <TextField
-                    type="number"
-                    value={scores2[1]}
-                    onChange={(e) => handleScoreChange(2, 1, e.target.value)}
-                    style={{
-                      width: "80px",
-                      margin: "8px 0",
-                      backgroundColor: "#3B937E",
-                    }}
-                  />
-                </Box>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Typography>Trận 3:</Typography>
-                  <TextField
-                    type="number"
-                    value={scores2[2]}
-                    onChange={(e) => handleScoreChange(2, 2, e.target.value)}
-                    style={{
-                      width: "80px",
-                      margin: "8px 0",
-                      backgroundColor: "#3B937E",
-                    }}
-                  />
-                </Box>
-              </Box>
+              {renderScore()}
             </Box>
+
             <Typography>Người Chiến Thắng: </Typography>
             <Typography>
               {winner ? winner : "Chưa có người chiến thắng"}
             </Typography>
           </Box>
+
           <Box
             sx={{
               display: "flex",
@@ -386,7 +447,7 @@ const Form = ({ isOpen, onClose, onSubmit, mode, seedId, getTeamNames }) => {
             }}
           >
             <Button variant="contained" color="primary" onClick={handleSubmit}>
-              Cập nhật score
+              Cập nhật điểm
             </Button>
           </Box>
         </>

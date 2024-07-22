@@ -12,24 +12,17 @@ import Form from "./form";
 import api from "../../config/axios";
 import { Box, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
-
-const fetchGames = async (contestId) => {
-  const response = await api.get(`/contest/games/${contestId}`);
-  return response.data;
-};
+import { useParams } from "react-router-dom";
 
 const fetchPlayingTime = async (gameId) => {
   const response = await api.get(`/contest/game/${gameId}`);
-  return response.data.playingDate;
+  const timeSlot = response.data.timeSlot;
+  const playingDate = response.data.playingDate;
+  return playingDate + " " + timeSlot + ":00";
 };
 
 const fetchScores = async (gameId) => {
   const response = await api.get(`/score/${gameId}`);
-  return response.data;
-};
-
-const fetchContestDetails = async (contestId) => {
-  const response = await api.get(`/contest/${contestId}`);
   return response.data;
 };
 
@@ -112,12 +105,39 @@ const GamebyOwner = () => {
   const [selectedSeedId, setSelectedSeedId] = useState("");
   const [hoveredSeed, setHoveredSeed] = useState(null);
   const [rounds, setRounds] = useState([]);
+  const [clubId, setClubId] = useState([]);
   const [totalRounds, setTotalRounds] = useState(0);
-  const contestId = sessionStorage.getItem("contestId");
-  sessionStorage.removeItem("contestId");
+  // const contestId = sessionStorage.getItem("contestId");
+  // sessionStorage.removeItem("contestId");
+
+  const { id: contestId } = useParams();
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  useEffect(() => {
+    if (contestId != null) {
+      fetchClubId();
+      fetchGames();
+      fetchContestDetails();
+    }
+  }, []);
+
+  const fetchGames = async (contestId) => {
+    console.log(contestId);
+    const response = await api.get(`/contest/games/${contestId}`);
+    return response.data;
+  };
+
+  const fetchContestDetails = async (contestId) => {
+    const response = await api.get(`/contest/${contestId}`);
+    return response.data;
+  };
+
+  const fetchClubId = async () => {
+    const response = await api.get(`/contest/${contestId}`);
+    setClubId(response.data.clubId);
+  };
 
   useEffect(() => {
     const loadData = async () => {
@@ -131,12 +151,12 @@ const GamebyOwner = () => {
       const timePromises = games.map((game) => fetchPlayingTime(game.gameId));
       const scorePromises = games.map((game) => fetchScores(game.gameId));
 
-      const playingDates = await Promise.all(timePromises);
+      const playingTime = await Promise.all(timePromises);
       const scores = await Promise.all(scorePromises);
 
       const updatedRounds = generateRounds(
         games,
-        playingDates,
+        playingTime,
         scores,
         totalMatches
       );
@@ -173,7 +193,25 @@ const GamebyOwner = () => {
     setIsOpen(false);
   };
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = async () => {
+    const [contestDetails, games] = await Promise.all([
+      fetchContestDetails(contestId),
+      fetchGames(contestId),
+    ]);
+    const totalMatches = contestDetails.capacity - 1;
+    const timePromises = games.map((game) => fetchPlayingTime(game.gameId));
+    const scorePromises = games.map((game) => fetchScores(game.gameId));
+    const playingDates = await Promise.all(timePromises);
+    const scores = await Promise.all(scorePromises);
+
+    const updatedRounds = generateRounds(
+      games,
+      playingDates,
+      scores,
+      totalMatches
+    );
+    setRounds(updatedRounds);
+    setTotalRounds(Math.ceil(Math.log2(totalMatches + 1)));
     handleFormClose();
   };
 
@@ -341,6 +379,7 @@ const GamebyOwner = () => {
           mode={mode}
           seedId={selectedSeedId}
           getTeamNames={getTeamNames}
+          clubId={clubId}
         />
       )}
     </Box>

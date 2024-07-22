@@ -33,7 +33,7 @@ const ConfirmRegistration = ({ visible, onClose, id }) => {
         await tranfer(data);
         navigate("/wallet");
       } catch (error) {
-        message.error("Bạn đã đăng ký cuộc thi này rồi");
+        console.log(error);
       }
 
       setConfirmed(true);
@@ -72,10 +72,11 @@ const ConfirmRegistration = ({ visible, onClose, id }) => {
 
   const registration = async () => {
     try {
-      console.log(id);
+      // console.log(id);
       await api.post(`/registration?contestId=${id}`);
     } catch (error) {
-      throw new Error("lưu thông tin thất bại");
+      console.log(error);
+      message.error(error.response.data);
     }
   };
 

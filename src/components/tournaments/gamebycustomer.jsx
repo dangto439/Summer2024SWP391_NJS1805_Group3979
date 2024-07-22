@@ -9,6 +9,7 @@ import {
 
 import api from "../../config/axios";
 import { Box } from "@mui/material";
+import { useParams } from "react-router-dom";
 
 const fetchGames = async (contestId) => {
   const response = await api.get(`/contest/games/${contestId}`);
@@ -106,7 +107,7 @@ const generateRounds = (data, timeData, scoreData, totalMatches) => {
 const GamebyCustomer = () => {
   const [rounds, setRounds] = useState([]);
   const [totalRounds, setTotalRounds] = useState(0);
-  const contestId = 8;
+  const { id: contestId } = useParams();
 
   useEffect(() => {
     const loadData = async () => {
