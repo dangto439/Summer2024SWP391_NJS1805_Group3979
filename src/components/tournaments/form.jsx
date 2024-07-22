@@ -178,15 +178,16 @@ const Form = ({
         },
       ];
 
-      // const response = await api.get(`/score/${seedId}`);
-      // if (response.data) {
-      //   console.log("this is put");
-      //   await api.put(`/score/${seedId}`, scoreData);
-      // } else {
-      //   console.log("this is post");
+      const response = await api.get(`/score/${seedId}`);
+      if (response.data && response.data.length > 0) {
+        console.log(response.data);
+        console.log("this is put");
+        await api.put(`/score/${seedId}`, scoreData);
+      } else {
+        console.log("this is post");
 
-      await api.post(`/score`, scoreData);
-      // }
+        await api.post(`/score`, scoreData);
+      }
       onSubmit();
     } catch (error) {
       console.error("Failed to submit score:", error);
