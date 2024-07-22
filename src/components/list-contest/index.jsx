@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Box,
   Button,
@@ -17,6 +17,7 @@ import { useLocation, Link } from "react-router-dom";
 import api from "../../config/axios";
 import ConfirmRegistration from "../register-contest";
 import { tokens } from "../../theme";
+import SearchIcon from "@mui/icons-material/Search";
 
 const ListContest = () => {
   const [contests, setContests] = useState([]);
@@ -28,6 +29,7 @@ const ListContest = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [registrationCounts, setRegistrationCounts] = useState({});
 
   const [sortCriteria, setSortCriteria] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
@@ -56,6 +58,40 @@ const ListContest = () => {
     };
     fetchContests();
   }, []);
+
+  // useEffect(() => {
+  //   const fetchRegistrationCount = async (contestId) => {
+  //     try {
+  //       const response = await api.get(`/registration-count/${contestId}`);
+  //       setRegistrationCount(response.data);
+  //       return registrationCount;
+  //     } catch (error) {
+  //       console.error("Error fetching data: ", error);
+  //     }
+  //   };
+  //   fetchRegistrationCount();
+  // }, [registrationCount]);
+
+  useEffect(() => {
+    const fetchRegistrationCounts = async () => {
+      try {
+        const counts = {};
+        for (const contest of contests) {
+          const response = await api.get(
+            `/registration-count/${contest.contestId}`
+          );
+          counts[contest.contestId] = response.data;
+        }
+        setRegistrationCounts(counts);
+      } catch (error) {
+        console.error("Error fetching registration counts: ", error);
+      }
+    };
+
+    if (contests.length > 0) {
+      fetchRegistrationCounts();
+    }
+  }, [contests]);
 
   useEffect(() => {
     const filterAndSortContests = () => {
@@ -205,7 +241,8 @@ const ListContest = () => {
               <br />
               <strong>Phần thưởng nhì:</strong> {contest.secondPrize}
               <br />
-              <strong>Số lượng:</strong> {contest.capacity}
+              <strong>Số lượng: </strong>
+              {registrationCounts[contest.contestId] || 0} / {contest.capacity}
             </Typography>
             {location.pathname === "/contest/sapdienra" && (
               <Box mt={2} display="flex" justifyContent="flex-start">
@@ -273,19 +310,8 @@ const ListContest = () => {
   };
 
   return (
-    <Box display="flex" p={2}>
-      <Box flex="2" mr={10}>
-        <Box mt={3}>{renderContests()}</Box>
-        <Box display="flex" justifyContent="center" mt={3}>
-          <Pagination
-            count={Math.ceil((filteredContests?.length || 0) / itemsPerPage)}
-            page={currentPage}
-            onChange={(event, page) => setCurrentPage(page)}
-          />
-        </Box>
-      </Box>
-
-      <Box flex="1" position="sticky" maxHeight="100vh" overflow="auto">
+    <Box>
+      <Box display="flex" justifyContent="space-between" p={2}>
         <Box
           display="flex"
           backgroundColor={colors.greenAccent[900]}
@@ -298,45 +324,70 @@ const ListContest = () => {
             onChange={handleSearchChange}
           />
           <IconButton type="button" sx={{ p: 1 }}>
-            {/* <SearchIcon /> */}
+            <SearchIcon />
           </IconButton>
         </Box>
-        <FormControl sx={{ minWidth: 120, mr: 2 }}>
-          <InputLabel>Sắp xếp theo</InputLabel>
-          <Select
-            value={sortCriteria}
-            onChange={handleSortCriteriaChange}
-            displayEmpty
-          >
-            <MenuItem value="name">Tên</MenuItem>
-            <MenuItem value="startDate">Ngày</MenuItem>
-            <MenuItem value="capacity">Số Lượng</MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl sx={{ minWidth: 120 }}>
-          <InputLabel>Thứ tự</InputLabel>
-          <Select
-            value={sortOrder}
-            onChange={handleSortOrderChange}
-            displayEmpty
-          >
-            <MenuItem value="asc">Tăng dần</MenuItem>
-            <MenuItem value="desc">Giảm dần</MenuItem>
-          </Select>
-        </FormControl>
-        <Typography
-          variant="h6"
-          color="primary"
-          sx={{
-            textAlign: "center",
-            borderBottom: "2px solid #78B9A9",
-            marginBottom: "15px",
-            paddingBottom: "10px",
-          }}
+
+        <Box>
+          <FormControl sx={{ minWidth: 120, mr: 2 }}>
+            <InputLabel>Sắp xếp theo</InputLabel>
+            <Select
+              value={sortCriteria}
+              onChange={handleSortCriteriaChange}
+              displayEmpty
+            >
+              <MenuItem value="name">Tên</MenuItem>
+              <MenuItem value="startDate">Ngày</MenuItem>
+              <MenuItem value="capacity">Số Lượng</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl sx={{ minWidth: 120 }}>
+            <InputLabel>Thứ tự</InputLabel>
+            <Select
+              value={sortOrder}
+              onChange={handleSortOrderChange}
+              displayEmpty
+            >
+              <MenuItem value="asc">Tăng dần</MenuItem>
+              <MenuItem value="desc">Giảm dần</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+      </Box>
+
+      <Box display="flex" justifyContent="space-between" p={2}>
+        <Box flex="2" mr={10} mt={5}>
+          <Box mt={3}>{renderContests()}</Box>
+          <Box display="flex" justifyContent="center" mt={3}>
+            <Pagination
+              count={Math.ceil((filteredContests?.length || 0) / itemsPerPage)}
+              page={currentPage}
+              onChange={(event, page) => setCurrentPage(page)}
+            />
+          </Box>
+        </Box>
+
+        <Box
+          flex="1"
+          position="sticky"
+          maxHeight="100vh"
+          overflow="auto"
+          mt={5}
         >
-          CUỘC THI ĐANG ĐƯỢC CHÚ Ý
-        </Typography>
-        {renderHotContests()}
+          <Typography
+            variant="h6"
+            color="primary"
+            sx={{
+              textAlign: "center",
+              borderBottom: "2px solid #78B9A9",
+              marginBottom: "15px",
+              paddingBottom: "10px",
+            }}
+          >
+            CUỘC THI ĐANG ĐƯỢC CHÚ Ý
+          </Typography>
+          {renderHotContests()}
+        </Box>
       </Box>
     </Box>
   );

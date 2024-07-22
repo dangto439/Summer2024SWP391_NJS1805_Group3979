@@ -21,7 +21,6 @@ import {
 } from "react-router-dom";
 import ListContest from "../../components/list-contest";
 import ScheduleContest from "../../components/scheduler-contest";
-import SearchIcon from "@mui/icons-material/Search";
 import { tokens } from "../../theme";
 import ContestDetail from "../../components/contest-detail";
 import RegisterContest from "../../components/register-contest";
@@ -75,12 +74,7 @@ const Contest = () => {
     <Box p={15} ml={10}>
       {Breadcrumb()}
 
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        p={5}
-      >
+      <Box display="flex" justifyContent="right" p={5}>
         <Box display="flex">
           <Button
             component={RouterLink}
