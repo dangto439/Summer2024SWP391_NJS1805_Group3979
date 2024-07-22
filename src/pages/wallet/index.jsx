@@ -242,6 +242,10 @@ function Wallet() {
           text: "Nạp tiền",
           value: "DEPOSIT",
         },
+        {
+          text: "Đang xử lý",
+          value: "PENDING",
+        },
       ],
       onFilter: (value, record) => record.type.includes(value),
     },
