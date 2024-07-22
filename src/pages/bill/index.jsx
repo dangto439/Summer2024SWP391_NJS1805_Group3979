@@ -141,8 +141,12 @@ function Bill() {
           <label>Loại lịch:</label>
           <div className="bill-value">{formatType(type)}</div>
         </div>
-        <label className="label">Chi tiết đặt lịch:</label>
         <div className="bill-section">
+          {" "}
+          <label className="label">Chi tiết đặt lịch:</label>
+        </div>
+
+        <div className="bill-table">
           {type === "FLEXIBLE" && (
             <div className="bill-section">
               <table className="booking-details">
@@ -191,29 +195,29 @@ function Bill() {
         </div>
         <div className="bill-section">
           {type === "DAILY" && (
-            <div className="bill-section">
-              <table className="booking-details">
-                <thead>
-                  <tr>
-                    <th>Câu lạc bộ</th>
-                    <th>Tên sân</th>
-                    <th>Ngày chơi</th>
-                    <th>Giá</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {result.bookingDetailResponseList &&
-                    result.bookingDetailResponseList.map((detail) => (
-                      <tr key={detail.bookingDetailId}>
-                        <td>{result.clubName}</td>
-                        <td>{detail.courtName}</td>
-                        <td>{detail.playingDate}</td>
-                        <td>{formatCurrency(detail.price)}</td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
+            // <div className="bill-section">
+            <table className="booking-details">
+              <thead>
+                <tr>
+                  <th>Câu lạc bộ</th>
+                  <th>Tên sân</th>
+                  <th>Ngày chơi</th>
+                  <th>Giá</th>
+                </tr>
+              </thead>
+              <tbody>
+                {result.bookingDetailResponseList &&
+                  result.bookingDetailResponseList.map((detail) => (
+                    <tr key={detail.bookingDetailId}>
+                      <td>{result.clubName}</td>
+                      <td>{detail.courtName}</td>
+                      <td>{detail.playingDate}</td>
+                      <td>{formatCurrency(detail.price)}</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+            // </div>
           )}
         </div>
         <div className="bill-section">
