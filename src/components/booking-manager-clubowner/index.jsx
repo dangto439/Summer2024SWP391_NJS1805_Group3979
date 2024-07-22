@@ -12,13 +12,13 @@ const BookingManager = ({ clubId }) => {
   const [rows, setRows] = useState([]);
 
   const columns = [
-    {
-      field: "bookingId",
-      headerName: "Mã booking",
-      flex: 1,
-      headerAlign: "center",
-      align: "center",
-    },
+    // {
+    //   field: "bookingId",
+    //   headerName: "Mã booking",
+    //   flex: 1,
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
     {
       field: "bookingDate",
       headerName: "Ngày đặt sân",

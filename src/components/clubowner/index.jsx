@@ -62,7 +62,6 @@ function ClubOwnerDasboard() {
         0
       );
 
-      console.log(totalSumAmount);
 
       setTotalPrice(totalPriceResponse.data.balance);
       setTransaction(transactionResponse.data);
@@ -72,7 +71,7 @@ function ClubOwnerDasboard() {
       const confirmDataBookingChart = bookingDataChartResponse.data.map(
         (item) => ({
           name: `Thang ${item.month}`,
-          soluongbooking: item.sumamount,
+          soluongdatlich: item.sumamount,
         })
       );
       setBookingDataChart(confirmDataBookingChart);
@@ -161,12 +160,12 @@ function ClubOwnerDasboard() {
               <Tooltip />
               <Legend />
               <Bar
-                dataKey="Tổng tiền vào"
+                dataKey="tienvao"
                 fill="#8884d8"
                 activeBar={<Rectangle fill="pink" stroke="blue" />}
               />
               <Bar
-                dataKey="Tổng tiền ra"
+                dataKey="tienra"
                 fill="#82ca9d"
                 activeBar={<Rectangle fill="gold" stroke="purple" />}
               />
@@ -190,7 +189,7 @@ function ClubOwnerDasboard() {
               <Tooltip />
               <Legend />
               <Bar
-                dataKey="Số lượng đặt lịch"
+                dataKey="soluongdatlich"
                 fill="#8884d8"
                 activeBar={<Rectangle fill="pink" stroke="blue" />}
               />
