@@ -14,9 +14,7 @@ import { Link as RouterLink, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../config/axios";
 
-
 const Checkin = () => {
-  const { staffId } = useParams();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [searchTerm, setSearchTerm] = useState("");
@@ -70,8 +68,8 @@ const Checkin = () => {
   useEffect(() => {
     const fetchClubId = async () => {
       try {
-        const response = await api.get(`/staff?staffId=${staffId}`);
-        setClubId(response.data.clubId);
+        const response = await api.get(`/account/${staffId}`);
+        setClubId(response.data.club.clubId);
       } catch (error) {
         console.error("Error fetching ClubId: ", error);
       }
@@ -107,7 +105,6 @@ const Checkin = () => {
           <Box
             component={RouterLink}
             to={`/club-detail/${clubId}`}
-            // to={`/club-detail/7`}
             display="flex"
           >
             <Button>Trang chủ sân</Button>
