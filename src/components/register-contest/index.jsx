@@ -29,11 +29,14 @@ const ConfirmRegistration = ({ visible, onClose, id }) => {
       };
       // console.log(data);
       try {
-        await registration();
-        await tranfer(data);
-        navigate("/wallet");
+        const check = await registration();
+        if (check) {
+          await tranfer(data);
+          navigate("/wallet");
+        }
       } catch (error) {
         console.log(error);
+        message.error("this is loi");
       }
 
       setConfirmed(true);
@@ -74,9 +77,11 @@ const ConfirmRegistration = ({ visible, onClose, id }) => {
     try {
       // console.log(id);
       await api.post(`/registration?contestId=${id}`);
+      return true;
     } catch (error) {
       console.log(error);
       message.error(error.response.data);
+      return false;
     }
   };
 
