@@ -218,7 +218,7 @@ const GamebyCustomer = () => {
               }}
             >
               <SeedTeam style={{ color: colors.redAccent[600] }}>
-                {seed.teams[0]?.name || "NO TEAM"}
+                {seed.teams[0]?.name || "Chưa có nhóm"}
               </SeedTeam>
               <span
                 style={{
@@ -242,7 +242,7 @@ const GamebyCustomer = () => {
               }}
             >
               <SeedTeam style={{ color: colors.greenAccent[500] }}>
-                {seed.teams[1]?.name || "NO TEAM"}
+                {seed.teams[1]?.name || "Chưa có nhóm"}
               </SeedTeam>
               <span
                 style={{
