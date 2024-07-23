@@ -11,40 +11,18 @@ import {
 import { tokens } from "../../theme";
 import SearchIcon from "@mui/icons-material/Search";
 import { Link as RouterLink, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import api from "../../config/axios";
+
 
 const Checkin = () => {
   const { staffId } = useParams();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [searchTerm, setSearchTerm] = useState("");
-
-  const testData = [
-    {
-      PlayingDate: "2024-07-01",
-      CourtName: "CourtName A",
-      Slot: "08:00:00",
-      CustomerName: "Nguyễn Văn A",
-      CustomerPhone: "0123123123",
-      CheckinCode: "123XXX",
-    },
-    {
-      PlayingDate: "2024-07-02",
-      CourtName: "CourtName B",
-      Slot: "08:00:00",
-      CustomerName: "Nguyễn Văn B",
-      CustomerPhone: "0123123123",
-      CheckinCode: "456XXX",
-    },
-    {
-      PlayingDate: "2024-07-01",
-      CourtName: "CourtName C",
-      Slot: "09:00:00",
-      CustomerName: "Nguyễn Văn C",
-      CustomerPhone: "0123123123",
-      CheckinCode: "678XXX",
-    },
-  ];
+  const [bookingDetails, setBookingDetails] = useState(null);
+  const [clubId, setClubId] = useState();
+  const { id: staffId } = useParams();
 
   const Breadcrumb = () => {
     const pathnames = location.pathname.split("/").filter((x) => x);
@@ -54,7 +32,7 @@ const Checkin = () => {
         sx={{ mb: "20px", mt: "20px", fontSize: "18px" }}
       >
         <Link component={RouterLink} to="/" color="inherit">
-          Home
+          Trang chủ
         </Link>
         {pathnames.map((value, index) => {
           const to = `/${pathnames.slice(0, index + 1).join("/")}`;
@@ -74,13 +52,32 @@ const Checkin = () => {
     );
   };
 
-  const handleSearch = (event) => {
+  const handleSearch = async (event) => {
     setSearchTerm(event.target.value);
+    if (event.target.value) {
+      try {
+        const response = await api.get(
+          `/booking/booking-detail-response/${event.target.value}`
+        );
+        setBookingDetails(response.data);
+      } catch (error) {
+        console.error("Error fetching booking details: ", error);
+      }
+    } else {
+      setBookingDetails(null);
+    }
   };
-
-  const filteredData = testData.filter(
-    (data) => data.CheckinCode.toLowerCase() === searchTerm.toLowerCase()
-  );
+  useEffect(() => {
+    const fetchClubId = async () => {
+      try {
+        const response = await api.get(`/staff?staffId=${staffId}`);
+        setClubId(response.data.clubId);
+      } catch (error) {
+        console.error("Error fetching ClubId: ", error);
+      }
+    };
+    fetchClubId();
+  }, []);
 
   return (
     <Box p={15} ml={10}>
@@ -98,7 +95,7 @@ const Checkin = () => {
         >
           <InputBase
             sx={{ ml: 2, flex: 1, width: "500px", height: "50px" }}
-            placeholder="Check in code"
+            placeholder="Mã đặt sân"
             onChange={handleSearch}
             value={searchTerm}
           />
@@ -107,74 +104,75 @@ const Checkin = () => {
           </IconButton>
         </Box>
         <Box display="flex">
-          <Button>San Cau long cua nhan vien do</Button>
+          <Box
+            component={RouterLink}
+            to={`/club-detail/${clubId}`}
+            // to={`/club-detail/7`}
+            display="flex"
+          >
+            <Button>Trang chủ sân</Button>
+          </Box>
         </Box>
       </Box>
-      {searchTerm && (
+      {searchTerm && bookingDetails && (
         <Box display="flex" flexDirection="column" alignItems="center">
-          {filteredData.map((data, index) => (
-            <Box
-              key={index}
-              p={5}
-              m={3}
-              borderRadius="5px"
-              width="50%"
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              backgroundColor={colors.greenAccent[900]}
-            >
-              <Box>
-                <Box display="flex" alignItems="baseline" mb={2}>
-                  <Typography sx={{ fontWeight: "bold", mr: 2 }}>
-                    Mã check-in:
-                  </Typography>
-                  <Typography>{data.CheckinCode}</Typography>
-                </Box>
-                <Box display="flex" alignItems="baseline" mb={2}>
-                  <Typography sx={{ fontWeight: "bold", mr: 2 }}>
-                    Ngày chơi:
-                  </Typography>
-                  <Typography>{data.PlayingDate}</Typography>
-                </Box>
-                <Box display="flex" alignItems="baseline" mb={2}>
-                  <Typography sx={{ fontWeight: "bold", mr: 2 }}>
-                    Tên sân:
-                  </Typography>
-                  <Typography>{data.CourtName}</Typography>
-                </Box>
-                <Box display="flex" alignItems="baseline" mb={2}>
-                  <Typography sx={{ fontWeight: "bold", mr: 2 }}>
-                    Thời gian:
-                  </Typography>
-                  <Typography>{data.Slot}</Typography>
-                </Box>
-                <Box display="flex" alignItems="baseline" mb={2}>
-                  <Typography sx={{ fontWeight: "bold", mr: 2 }}>
-                    Tên khách hàng:
-                  </Typography>
-                  <Typography>{data.CustomerName}</Typography>
-                </Box>
-                <Box display="flex" alignItems="baseline" mb={2}>
-                  <Typography sx={{ fontWeight: "bold", mr: 2 }}>
-                    Số điện thoại:
-                  </Typography>
-                  <Typography>{data.CustomerPhone}</Typography>
-                </Box>
+          <Box
+            p={5}
+            m={3}
+            borderRadius="5px"
+            width="50%"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            backgroundColor={colors.greenAccent[900]}
+          >
+            <Box>
+              <Box display="flex" alignItems="baseline" mb={2}>
+                <Typography variant="h5" sx={{ fontWeight: "bold", mr: 2 }}>
+                  Mã đặt sân:
+                </Typography>
+                <Typography variant="h5">
+                  {bookingDetails.checkInCode}
+                </Typography>
               </Box>
-              <Button
-                variant="contained"
-                sx={{
-                  ml: 2,
-                  height: "40px",
-                  color: "white",
-                  backgroundColor: colors.greenAccent[400],
-                }}
-              >
-                Hoàn tất
-              </Button>
+              <Box display="flex" alignItems="baseline" mb={2}>
+                <Typography variant="h6" sx={{ fontWeight: "bold", mr: 2 }}>
+                  Tên khách hàng:
+                </Typography>
+                <Typography variant="h6">
+                  {bookingDetails.customerName}
+                </Typography>
+              </Box>
+              <Box display="flex" alignItems="baseline" mb={2}>
+                <Typography variant="h6" sx={{ fontWeight: "bold", mr: 2 }}>
+                  Số điện thoại:
+                </Typography>
+                <Typography variant="h6">{bookingDetails.phone}</Typography>
+              </Box>
+              <Box display="flex" alignItems="baseline" mb={2}>
+                <Typography variant="h6" sx={{ fontWeight: "bold", mr: 2 }}>
+                  Ngày chơi:
+                </Typography>
+                <Typography variant="h6">
+                  {bookingDetails.playingDate}
+                </Typography>
+              </Box>
+              <Box display="flex" alignItems="baseline" mb={2}>
+                <Typography variant="h6" sx={{ fontWeight: "bold", mr: 2 }}>
+                  Tên sân:
+                </Typography>
+                <Typography variant="h6">{bookingDetails.courtName}</Typography>
+              </Box>
+              <Box display="flex" alignItems="baseline" mb={2}>
+                <Typography variant="h6" sx={{ fontWeight: "bold", mr: 2 }}>
+                  Thời gian:
+                </Typography>
+                <Typography variant="h6">
+                  {bookingDetails.timeSlot}:00
+                </Typography>
+              </Box>
             </Box>
-          ))}
+          </Box>
         </Box>
       )}
     </Box>

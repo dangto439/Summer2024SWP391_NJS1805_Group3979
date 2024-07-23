@@ -39,7 +39,7 @@ const generateRounds = (data, timeData, scoreData, totalMatches) => {
       secondPlayerName,
     } = game;
 
-    const playingDate = timeData[index] || "Unknown";
+    const playingDate = timeData[index] || "Chưa biết";
     const setScore = scoreData[index];
 
     if (!roundData[round]) {
@@ -174,11 +174,11 @@ const GamebyCustomer = () => {
     };
 
     if (roundIndex === totalRounds - 1) {
-      return <div style={titleStyle}>Final</div>;
+      return <div style={titleStyle}>Chung Kết</div>;
     } else if (roundIndex === totalRounds - 2) {
-      return <div style={titleStyle}>Semi-final</div>;
+      return <div style={titleStyle}>Bán kết</div>;
     } else {
-      return <div style={titleStyle}>Round {roundIndex + 1}</div>;
+      return <div style={titleStyle}>Vòng {roundIndex + 1}</div>;
     }
   };
 
