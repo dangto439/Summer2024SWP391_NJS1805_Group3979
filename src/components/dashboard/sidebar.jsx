@@ -136,6 +136,7 @@ const MySidebar = () => {
         "& .ps-menuitem-root .ps-active": {
           color: "#6870fa !important",
         },
+        marginRight: "8px",
       }}
     >
       <Drawer

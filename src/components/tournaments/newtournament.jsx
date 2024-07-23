@@ -16,20 +16,28 @@ import uploadFile from "../../utils/upload.js";
 import { Upload, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function NewTournament() {
   const [clubs, setClubs] = useState([]);
   const [tournamentName, setTournamentName] = useState("");
-  const [tournamentImage, setTournamentImage] = useState(null);
   const [previewImage, setPreviewImage] = useState("");
-  const [firstPrize, setFirstPrize] = useState(0);
-  const [secondPrize, setSecondPrize] = useState(0);
-  const [quantity, setQuantity] = useState(0);
+  const [firstPrize, setFirstPrize] = useState("");
+  const [secondPrize, setSecondPrize] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [participationFee, setParticipationFee] = useState(0);
   const [hostClubId, setHostClubId] = useState("");
   const navigate = useNavigate();
+
+  const getCurrentDate = () => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  };
 
   useEffect(() => {
     const fetchClubs = async () => {
@@ -43,26 +51,29 @@ function NewTournament() {
     fetchClubs();
   }, []);
 
-  // const handleImageChange = (info) => {
-  //   if (info.file.status === "done") {
-  //     setTournamentImage(info.file.originFileObj);
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       setPreviewImage(reader.result);
-  //     };
-  //     reader.readAsDataURL(info.file.originFileObj);
-  //   }
-  // };
-
   const handleFormSubmit = async () => {
-    // if (!tournamentImage) {
-    //   alert("Please select an image.");
-    //   return;
-    // }
+    if (!tournamentName.trim()) {
+      toast.error("Tên cuộc thi không được để trống.");
+      return;
+    }
+    if (
+      parseFloat(firstPrize) < 0 ||
+      parseFloat(secondPrize) < 0 ||
+      parseFloat(participationFee) < 0
+    ) {
+      toast.error("Không thể có giá trị âm");
+      return;
+    }
 
+    if (!startTime || !endTime) {
+      toast.error("Thời gian không được để trống.");
+      return;
+    }
+    if (new Date(startTime) >= new Date(endTime)) {
+      toast.error("Ngày bắt đầu phải trước ngày kết thúc.");
+      return;
+    }
     try {
-      // const imageURL = await uploadFile(tournamentImage);
-
       const uploadPromises = fileList.map(async (file) => {
         const downloadURL = await uploadFile(file.originFileObj);
         return downloadURL;
@@ -74,8 +85,8 @@ function NewTournament() {
         urlBanner: imageURL[0],
         firstPrize: parseFloat(firstPrize),
         secondPrize: parseFloat(secondPrize),
-        startDate: startTime,
-        endDate: endTime,
+        startDate: startTime.format("YYYY-MM-DD"),
+        endDate: endTime.format("YYYY-MM-DD"),
         capacity: parseInt(quantity),
         participationPrice: parseFloat(participationFee),
         clubId: parseInt(hostClubId),
@@ -83,7 +94,7 @@ function NewTournament() {
       const response = await api.post("/contest", formData);
       navigate(`/dashboard/tournaments/detail/${response.data.contestId}`);
     } catch (error) {
-      console.error("Error saving tournament:", error);
+      toast.error(error.response.data);
     }
   };
 
@@ -96,7 +107,6 @@ function NewTournament() {
     });
 
   const [previewOpen, setPreviewOpen] = useState(false);
-  // const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -219,7 +229,6 @@ function NewTournament() {
               <TextField
                 fullWidth
                 variant="outlined"
-                type="number"
                 value={firstPrize}
                 onChange={(e) => setFirstPrize(e.target.value)}
                 sx={{
@@ -240,29 +249,8 @@ function NewTournament() {
               <TextField
                 fullWidth
                 variant="outlined"
-                type="number"
                 value={secondPrize}
                 onChange={(e) => setSecondPrize(e.target.value)}
-                sx={{
-                  backgroundColor: "white",
-                  marginBottom: 2,
-                  borderRadius: "8px",
-                  color: "black",
-                }}
-                InputProps={{ style: { color: "black" } }}
-              />
-            </Grid>
-            <Grid item xs={2}>
-              <Typography sx={{ color: "black", textAlign: "center" }}>
-                Mô tả
-              </Typography>
-            </Grid>
-            <Grid item xs={10}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                multiline
-                rows={4}
                 sx={{
                   backgroundColor: "white",
                   marginBottom: 2,
@@ -293,9 +281,7 @@ function NewTournament() {
                 variant="outlined"
                 type="number"
                 value={quantity}
-                onChange={(e) =>
-                  setQuantity(e.target.value).format("YYYY-MM-DD")
-                }
+                onChange={(e) => setQuantity(e.target.value)}
                 sx={{
                   backgroundColor: "white",
                   marginBottom: 2,
@@ -316,17 +302,17 @@ function NewTournament() {
                 variant="outlined"
                 type="date"
                 value={startTime}
-                onChange={(e) =>
-                  setStartTime(e.target.value).format("YYYY-MM-DD")
-                }
+                onChange={(e) => setStartTime(e.target.value)}
                 sx={{
                   backgroundColor: "white",
                   marginBottom: 2,
                   borderRadius: "8px",
                   color: "black",
                 }}
-                InputLabelProps={{ shrink: true }}
-                InputProps={{ style: { color: "black" } }}
+                inputProps={{
+                  min: getCurrentDate(),
+                  style: { color: "black" },
+                }}
               />
             </Grid>
             <Grid item xs={2}>
@@ -347,13 +333,15 @@ function NewTournament() {
                   borderRadius: "8px",
                   color: "black",
                 }}
-                InputLabelProps={{ shrink: true }}
-                InputProps={{ style: { color: "black" } }}
+                inputProps={{
+                  min: startTime || getCurrentDate(),
+                  style: { color: "black" },
+                }}
               />
             </Grid>
             <Grid item xs={2}>
               <Typography sx={{ color: "black", textAlign: "center" }}>
-                Phí tham gia
+                Lệ phí
               </Typography>
             </Grid>
             <Grid item xs={10}>
@@ -374,9 +362,19 @@ function NewTournament() {
             </Grid>
           </Grid>
         </CardMedia>
-        <Box display="flex" justifyContent="flex-end" mt={2} mr={2}>
-          <Button onClick={handleFormSubmit} sx={{ backgroundColor: "green" }}>
-            Lưu và Tiếp tục
+        <Box display="flex" justifyContent="flex-end" mt={2} pr={2}>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{
+              backgroundColor: "#007BFF",
+              color: "white",
+              borderRadius: "8px",
+              padding: "10px 20px",
+            }}
+            onClick={handleFormSubmit}
+          >
+            Lưu
           </Button>
         </Box>
       </Card>

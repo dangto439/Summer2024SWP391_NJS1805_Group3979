@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Box,
   Button,
@@ -18,6 +18,7 @@ import api from "../../config/axios";
 import ConfirmRegistration from "../register-contest";
 import { tokens } from "../../theme";
 import SearchIcon from "@mui/icons-material/Search";
+import { months } from "moment/moment";
 
 const ListContest = () => {
   const [contests, setContests] = useState([]);
@@ -30,6 +31,7 @@ const ListContest = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [registrationCounts, setRegistrationCounts] = useState({});
+  const [hotContests, setHotContests] = useState([]);
 
   const [sortCriteria, setSortCriteria] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
@@ -59,19 +61,6 @@ const ListContest = () => {
     fetchContests();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchRegistrationCount = async (contestId) => {
-  //     try {
-  //       const response = await api.get(`/registration-count/${contestId}`);
-  //       setRegistrationCount(response.data);
-  //       return registrationCount;
-  //     } catch (error) {
-  //       console.error("Error fetching data: ", error);
-  //     }
-  //   };
-  //   fetchRegistrationCount();
-  // }, [registrationCount]);
-
   useEffect(() => {
     const fetchRegistrationCounts = async () => {
       try {
@@ -91,6 +80,18 @@ const ListContest = () => {
     if (contests.length > 0) {
       fetchRegistrationCounts();
     }
+  }, [contests]);
+
+  useEffect(() => {
+    const fetchHotContest = async () => {
+      try {
+        const response = await api.get(`/contests/outstanding`);
+        setHotContests(response.data);
+      } catch (error) {
+        console.error("Error fetching hot contest: ", error);
+      }
+    };
+    fetchHotContest();
   }, [contests]);
 
   useEffect(() => {
@@ -153,26 +154,12 @@ const ListContest = () => {
     today,
   ]);
 
-  const hotContests = [
-    {
-      imgSrc: "https://via.placeholder.com/50",
-      alt: "Tin tức 1",
-      content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    },
-    {
-      imgSrc: "https://via.placeholder.com/50",
-      alt: "Tin tức 2",
-      content:
-        "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    },
-    {
-      imgSrc: "https://via.placeholder.com/50",
-      alt: "Tin tức 3",
-      content:
-        "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    },
-  ];
-
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    return `${month} năm ${year}`;
+  };
   const months = [
     "Tháng 1",
     "Tháng 2",
@@ -194,13 +181,6 @@ const ListContest = () => {
 
   const handleClose = () => {
     setIsModalVisible(false);
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
-    return `${month} năm ${year}`;
   };
 
   const renderContests = () => {
@@ -237,9 +217,9 @@ const ListContest = () => {
               <br />
               <strong>Ngày kết thúc:</strong> {contest.endDate}
               <br />
-              <strong>Phần thưởng nhất:</strong> {contest.firstPrize}
+              <strong>Giải nhất:</strong> {contest.firstPrize} ₫
               <br />
-              <strong>Phần thưởng nhì:</strong> {contest.secondPrize}
+              <strong>Giải nhì:</strong> {contest.secondPrize} ₫
               <br />
               <strong>Số lượng: </strong>
               {registrationCounts[contest.contestId] || 0} / {contest.capacity}
@@ -289,26 +269,36 @@ const ListContest = () => {
   };
 
   const renderHotContests = () => {
-    return hotContests.map((news, index) => (
-      <Box
-        key={index}
-        display="flex"
-        mb={2}
-        border="1px solid #ddd"
-        p={1}
-        borderRadius={1}
-      >
-        <img
-          src={news.imgSrc}
-          alt={news.alt}
-          style={{ marginRight: "10px" }}
-          height="100px"
-        />
-        <Typography variant="body1">{news.content}</Typography>
+    return hotContests.map((contest) => (
+      <Box key={contest.contestId} mb={3}>
+        <Box display="flex" alignItems="center" mt={2}>
+          <img
+            src={contest.urlBanner}
+            alt={contest.name}
+            style={{ width: "180px", height: "150px", marginRight: "30px" }}
+          />
+          <Box>
+            <Typography variant="h6" color="primary" textAlign="left">
+              <Link
+                to={`/contest/sapdienra/chitiet/${contest.contestId}`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                {contest.name}
+              </Link>
+            </Typography>
+            <Typography variant="body1" textAlign="left">
+              <strong>Giải nhất:</strong> {contest.firstPrize} ₫
+              <br />
+              <strong>Giải nhì:</strong> {contest.secondPrize} ₫
+              <br />
+              <strong>Số lượng: </strong>
+              {registrationCounts[contest.contestId] || 0} / {contest.capacity}
+            </Typography>
+          </Box>
+        </Box>
       </Box>
     ));
   };
-
   return (
     <Box>
       <Box display="flex" justifyContent="space-between" p={2}>

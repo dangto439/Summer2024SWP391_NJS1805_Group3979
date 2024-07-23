@@ -6,28 +6,20 @@ import {
   SingleLineSeed,
   Seed,
 } from "@sportsgram/brackets";
-
 import api from "../../config/axios";
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
+import { tokens } from "../../theme";
 import { useParams } from "react-router-dom";
-
-const fetchGames = async (contestId) => {
-  const response = await api.get(`/contest/games/${contestId}`);
-  return response.data;
-};
 
 const fetchPlayingTime = async (gameId) => {
   const response = await api.get(`/contest/game/${gameId}`);
-  return response.data.playingDate;
+  const timeSlot = response.data.timeSlot;
+  const playingDate = response.data.playingDate;
+  return playingDate + " " + timeSlot + ":00";
 };
 
 const fetchScores = async (gameId) => {
   const response = await api.get(`/score/${gameId}`);
-  return response.data;
-};
-
-const fetchContestDetails = async (contestId) => {
-  const response = await api.get(`/contest/${contestId}`);
   return response.data;
 };
 
@@ -43,6 +35,8 @@ const generateRounds = (data, timeData, scoreData, totalMatches) => {
       secondPlayerId,
       scoreFirstPlayer,
       scoreSecondPlayer,
+      firstPlayerName,
+      secondPlayerName,
     } = game;
 
     const playingDate = timeData[index] || "Unknown";
@@ -57,13 +51,13 @@ const generateRounds = (data, timeData, scoreData, totalMatches) => {
       teams: [
         {
           id: firstPlayerId,
-          name: `Player ${firstPlayerId}`,
+          name: firstPlayerName,
           score: scoreFirstPlayer,
           setScore: setScore?.firstPlayerSetScore || 0,
         },
         {
           id: secondPlayerId,
-          name: `Player ${secondPlayerId}`,
+          name: secondPlayerName,
           score: scoreSecondPlayer,
           setScore: setScore?.secondPlayerSetScore || 0,
         },
@@ -90,10 +84,10 @@ const generateRounds = (data, timeData, scoreData, totalMatches) => {
         roundSeeds.push({
           id: null,
           teams: [
-            { id: null, name: "Winner", score: null, setScore: null },
-            { id: null, name: "Winner", score: null, setScore: null },
+            { id: null, name: "?", score: null, setScore: null },
+            { id: null, name: "?", score: null, setScore: null },
           ],
-          playingDate: "Unknown",
+          playingDate: "Chưa biết",
         });
       }
     }
@@ -106,8 +100,40 @@ const generateRounds = (data, timeData, scoreData, totalMatches) => {
 
 const GamebyCustomer = () => {
   const [rounds, setRounds] = useState([]);
+  const [clubId, setClubId] = useState([]);
   const [totalRounds, setTotalRounds] = useState(0);
+  // const contestId = sessionStorage.getItem("contestId");
+  // sessionStorage.removeItem("contestId");
+
   const { id: contestId } = useParams();
+
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
+  useEffect(() => {
+    if (contestId != null) {
+      fetchClubId();
+      fetchGames();
+      fetchContestDetails();
+    }
+  }, []);
+
+  const fetchGames = async (contestId) => {
+    console.log(contestId);
+    const response = await api.get(`/contest/games/${contestId}`);
+    console.log(response.data);
+    return response.data;
+  };
+
+  const fetchContestDetails = async (contestId) => {
+    const response = await api.get(`/contest/${contestId}`);
+    return response.data;
+  };
+
+  const fetchClubId = async () => {
+    const response = await api.get(`/contest/${contestId}`);
+    setClubId(response.data.clubId);
+  };
 
   useEffect(() => {
     const loadData = async () => {
@@ -121,12 +147,12 @@ const GamebyCustomer = () => {
       const timePromises = games.map((game) => fetchPlayingTime(game.gameId));
       const scorePromises = games.map((game) => fetchScores(game.gameId));
 
-      const playingDates = await Promise.all(timePromises);
+      const playingTime = await Promise.all(timePromises);
       const scores = await Promise.all(scorePromises);
 
       const updatedRounds = generateRounds(
         games,
-        playingDates,
+        playingTime,
         scores,
         totalMatches
       );
@@ -148,11 +174,11 @@ const GamebyCustomer = () => {
     };
 
     if (roundIndex === totalRounds - 1) {
-      return <Box style={titleStyle}>Final</Box>;
+      return <div style={titleStyle}>Final</div>;
     } else if (roundIndex === totalRounds - 2) {
-      return <Box style={titleStyle}>Semi-final</Box>;
+      return <div style={titleStyle}>Semi-final</div>;
     } else {
-      return <Box style={titleStyle}>Round {roundIndex + 1}</Box>;
+      return <div style={titleStyle}>Round {roundIndex + 1}</div>;
     }
   };
 
@@ -166,7 +192,9 @@ const GamebyCustomer = () => {
     const Wrapper = isMiddleOfTwoSided ? SingleLineSeed : Seed;
 
     const getScoreBackgroundColor = (teamScore, opponentScore) => {
-      return teamScore > opponentScore ? "#ffeb3b" : "#ffffff";
+      return teamScore > opponentScore
+        ? colors.greenAccent[400]
+        : colors.grey[300];
     };
 
     return (
@@ -189,7 +217,7 @@ const GamebyCustomer = () => {
                 alignItems: "center",
               }}
             >
-              <SeedTeam style={{ color: "white" }}>
+              <SeedTeam style={{ color: colors.redAccent[600] }}>
                 {seed.teams[0]?.name || "NO TEAM"}
               </SeedTeam>
               <span
@@ -213,7 +241,9 @@ const GamebyCustomer = () => {
                 alignItems: "center",
               }}
             >
-              <SeedTeam>{seed.teams[1]?.name || "NO TEAM"}</SeedTeam>
+              <SeedTeam style={{ color: colors.greenAccent[500] }}>
+                {seed.teams[1]?.name || "NO TEAM"}
+              </SeedTeam>
               <span
                 style={{
                   backgroundColor: getScoreBackgroundColor(
@@ -235,14 +265,7 @@ const GamebyCustomer = () => {
   };
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      flexDirection="column"
-      // minHeight="100vh"
-      p={2}
-    >
+    <Box display="flex" justifyContent="center" alignItems="center" p={2}>
       <Box
         display="flex"
         justifyContent="center"
