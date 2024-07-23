@@ -32,6 +32,7 @@ const ListContest = () => {
   const colors = tokens(theme.palette.mode);
   const [registrationCounts, setRegistrationCounts] = useState({});
   const [hotContests, setHotContests] = useState([]);
+  const [linkInHotContest, setLinkInHotContest] = useState("");
 
   const [sortCriteria, setSortCriteria] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
@@ -182,6 +183,13 @@ const ListContest = () => {
   const handleClose = () => {
     setIsModalVisible(false);
   };
+  const handleLinkInHotContest = (count, capacity, contestId) => () => {
+    if (count === capacity) {
+      setLinkInHotContest(`/contest/dangdienra/chitiet/${contestId}`);
+    } else {
+      setLinkInHotContest(`/contest/sapdienra/chitiet/${contestId}`);
+    }
+  };
 
   const renderContests = () => {
     if (!Array.isArray(filteredContests)) {
@@ -279,12 +287,23 @@ const ListContest = () => {
           />
           <Box>
             <Typography variant="h6" color="primary" textAlign="left">
-              <Link
-                to={`/contest/sapdienra/chitiet/${contest.contestId}`}
+              {/* <Link
+                to={`/contest/dangdienra/chitiet/${contest.contestId}`}
                 style={{ textDecoration: "none", color: "inherit" }}
               >
                 {contest.name}
-              </Link>
+              </Link> */}
+              <Button
+                onClick={handleLinkInHotContest(
+                  registrationCounts[contest.contestId],
+                  contest.capacity,
+                  contest.contestId
+                )}
+                component={Link}
+                to={linkInHotContest}
+              >
+                {contest.name}
+              </Button>
             </Typography>
             <Typography variant="body1" textAlign="left">
               <strong>Giải nhất:</strong> {contest.firstPrize} ₫

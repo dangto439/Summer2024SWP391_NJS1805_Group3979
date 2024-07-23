@@ -180,6 +180,10 @@ function App() {
               element: <ContestDetail />,
             },
             {
+              path: "dangdienra/chitiet/:id",
+              element: <ContestDetail />,
+            },
+            {
               path: "sapdienra/thamgia/:id",
               element: <RegisterContest />,
             },

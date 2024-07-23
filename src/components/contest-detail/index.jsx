@@ -196,28 +196,43 @@ const ContestDetailPage = () => {
             />
 
             <Box mt={2} display="flex" justifyContent="center">
-              <Button
-                component={Link}
-                to={`/contest/sapdienra`}
-                variant="contained"
-                sx={{ marginRight: "15px", backgroundColor: "#6992CE" }}
-              >
-                Quay lại
-              </Button>
-              <Button
-                onClick={showModal}
-                component={Link}
-                variant="contained"
-                sx={{ backgroundColor: "#B84848" }}
-              >
-                Tham gia
-              </Button>
-
-              <ConfirmRegistration
-                visible={isModalVisible}
-                onClose={handleClose}
-                id={contest.contestId}
-              />
+              {location.pathname.startsWith("/contest/sapdienra") && (
+                <Box mt={2} display="flex" justifyContent="flex-start">
+                  <Button
+                    component={Link}
+                    to={`/contest/sapdienra`}
+                    variant="contained"
+                    sx={{ marginRight: "15px", backgroundColor: "#6992CE" }}
+                  >
+                    Quay lại
+                  </Button>
+                  <Button
+                    onClick={showModal}
+                    component={Link}
+                    variant="contained"
+                    sx={{ backgroundColor: "#B84848" }}
+                  >
+                    Tham gia
+                  </Button>
+                  <ConfirmRegistration
+                    visible={isModalVisible}
+                    onClose={handleClose}
+                    id={contest.contestId}
+                  />
+                </Box>
+              )}
+              {location.pathname.startsWith("/contest/dangdienra") && (
+                <Box mt={2} display="flex" justifyContent="flex-start">
+                  <Button
+                    component={Link}
+                    to={`/contest/dangdienra`}
+                    variant="contained"
+                    sx={{ marginRight: "15px", backgroundColor: "#6992CE" }}
+                  >
+                    Quay lại
+                  </Button>
+                </Box>
+              )}
             </Box>
           </Box>
         </CardContent>
