@@ -1,53 +1,92 @@
 import "./index.scss";
 
-const Policy = () => {
-  return (
-    <div className="policy-page">
-      <h1>Quy Định Hoàn Tiền</h1>
-      <section className="refund-policy">
-        <h2>Đối Với Customer</h2>
-        <p>Daily trước 1 tuần -&gt; hoàn 100%, còn lại không hoàn</p>
-        <p>Fixed, Flexible -&gt; không cho hoàn</p>
+const Policy = () => (
+  <div className="business-rules">
+    <div className="rule">
+      <h1>Quy định</h1>
+      <section className="">
+        <h2>Đăng Ký Tài Khoản </h2>
+        <p>
+          Khi đăng ký tài khoản trên website với vai trò “Chủ Câu Lạc Bộ”, tài
+          khoản cần phải được “Quản Trị Viên” phê duyệt thì mới được đăng nhập
+          vào website.
+        </p>
       </section>
-
-      <section className="privacy-policy">
-        <h2>Chính Sách Bảo Mật và Quyền Riêng Tư</h2>
-        <h3>Dữ Liệu Cá Nhân:</h3>
-        <p>Thông tin cá nhân của người dùng sẽ được bảo mật và chỉ sử dụng cho mục đích đặt sân và thanh toán.</p>
-        <p>Người dùng có quyền yêu cầu xóa thông tin cá nhân của họ khỏi hệ thống bất kỳ lúc nào.</p>
-
-        <h3>Chia Sẻ Thông Tin:</h3>
-        <p>Thông tin cá nhân sẽ không được chia sẻ với bên thứ ba nếu không có sự đồng ý của người dùng, trừ khi yêu cầu bởi pháp luật.</p>
+      <section className="wallet">
+        <h2>Ví </h2>
+        <p>
+          Số tiền nạp tối thiểu khi thực hiện chức năng Nạp Tiền & Chuyển Tiền
+          là 10.000 VND.
+        </p>
       </section>
-
-      <section className="responsibility-commitment">
-        <h2>Trách Nhiệm và Cam Kết</h2>
-        <h3>Cam Kết Của Nền Tảng:</h3>
-        <p>Cung cấp thông tin chính xác về sân, giá cả.</p>
-        <p>Hỗ trợ người dùng trong quá trình đặt sân và giải quyết mọi vấn đề phát sinh một cách nhanh chóng và công bằng.</p>
-
-        <h3>Trách Nhiệm Của Người Dùng:</h3>
-        <p>Đảm bảo thông tin cá nhân và chi tiết đặt sân chính xác.</p>
-        <p>Tuân thủ mọi quy tắc và quy định của nền tảng và sân cầu lông.</p>
+      <section className="booking">
+        <h2>Đặt Sân </h2>
+        <ul>
+          <li>
+            Khi đặt sân, nếu sau 15 phút không thanh toán thì sẽ hủy Booking.
+          </li>
+          <li>
+            Khi đặt lịch linh hoạt tại 1 câu lạc bộ, người dùng không thể tạo
+            thêm 1 lịch linh hoạt mới khi lịch linh hoạt cũ vẫn còn hiệu lực.
+          </li>
+          <li>
+            Lịch linh hoạt có hiệu lực trong 30 ngày tính từ thời gian đặt lịch.
+          </li>
+          <li>
+            Hoàn 95% đơn giá cho 1 đơn đặt lịch trước 7 ngày (chỉ áp dụng cho
+            đặt lịch ngày).
+          </li>
+          <li>Đặt lịch linh hoạt & cố định sẽ không được hoàn tiền.</li>
+          <li>Khi đặt lịch, phải thanh toán toàn bộ 100% đơn giá.</li>
+          <li>
+            Nền tảng sẽ nhận 5% đơn giá trên mỗi đơn đặt lịch và chủ câu lạc bộ
+            chỉ nhận được 95% còn lại.
+          </li>
+          <li>
+            Giá của lịch linh hoạt được tính theo công thức: Giá lịch linh hoạt
+            = (giá giờ cao điểm) * (phần trăm giảm giá cho lịch linh hoạt)
+          </li>
+          <li>
+            Lịch cố định sẽ được giảm giá theo phần trăm giảm giá cho lịch cố
+            định.
+          </li>
+        </ul>
       </section>
-
-      <section className="change-policy">
-        <h2>Thay Đổi Quy Định</h2>
-        <p>Nền tảng có quyền thay đổi các quy định và điều khoản bất kỳ lúc nào, và sẽ thông báo trước cho người dùng về những thay đổi này.</p>
+      <section className="contest">
+        <h2>Giải Đấu </h2>
+        <ul>
+          <li>
+            Khi đến ngày Giải đấu bắt đầu, nếu không đủ số người tham gia, giải
+            đấu sẽ tự động bị hủy và hoàn 100% tiền cho người tham gia từ ví của
+            chủ câu lạc bộ. Chủ câu lạc bộ sẽ phải chịu lỗ 5% lệ phí đăng ký
+            giải của mỗi người chơi.
+          </li>
+          <li>
+            Chủ sân chỉ được tạo số lượng người tham gia giải là lũy thừa của 2.
+          </li>
+          <li>
+            Chủ sân chỉ được tạo giải đấu khi số dư của ví lớn hơn hoặc bằng 5%
+            của tổng lệ phí tham gia giải đấu. Công thức tổng lệ phí tham gia
+            giải đấu: Tổng lệ phí tham gia giải đấu = (số lượng người dự kiến
+            tham gia) * (lệ phí tham gia giải đấu)
+          </li>
+        </ul>
       </section>
-
-      <section className="dispute-resolution">
-        <h2>Giải Quyết Tranh Chấp</h2>
-        <p>Mọi tranh chấp sẽ được giải quyết thông qua thương lượng trước khi tìm đến các phương án pháp lý.</p>
-      </section>
-
-      <section className="customer-support">
-        <h2>Hỗ Trợ Khách Hàng</h2>
-        <h3>Liên Hệ:</h3>
-        <p>Người dùng có thể liên hệ với bộ phận hỗ trợ khách hàng qua email để được hỗ trợ bất kỳ lúc nào.</p>
+      <section className="club">
+        <h2>Câu Lạc Bộ </h2>
+        <ul>
+          <li>Khi tạo câu lạc bộ phải có ít nhất 1 sân.</li>
+          <li>
+            Mỗi slot tương ứng 1 giờ chơi (không tạo những slot có giờ lẻ).
+          </li>
+        </ul>
       </section>
     </div>
-  );
-};
+    <img
+      src="https://i.pinimg.com/564x/67/af/67/67af678a6236d40a728b5977ed42bbf3.jpg"
+      alt=""
+    />
+  </div>
+);
 
 export default Policy;
