@@ -33,57 +33,11 @@ function ClubOwnerDasboard() {
   const [bookingDataChart, setBookingDataChart] = useState([]);
   const [priceDataChart, setPrriceDataChart] = useState([]);
 
-  const data = [
-    {
-      name: "Tháng  1",
-      pricein: 4000,
-      priceout: 2400,
-      amt: 2400,
-    },
-    {
-      name: "Tháng  2",
-      pricein: 3000,
-      priceout: 1398,
-      amt: 2210,
-    },
-    {
-      name: "Tháng  3",
-      pricein: 2000,
-      priceout: 9800,
-      amt: 2290,
-    },
-    {
-      name: "Tháng  4",
-      pricein: 2780,
-      priceout: 3908,
-      amt: 2000,
-    },
-    {
-      name: "Tháng  5",
-      pricein: 1890,
-      priceout: 4800,
-      amt: 2181,
-    },
-    {
-      name: "Tháng  6",
-      pricein: 2390,
-      priceout: 3800,
-      amt: 2500,
-    },
-    {
-      name: "Tháng  7",
-      pricein: 3490,
-      priceout: 4300,
-      amt: 2100,
-    },
-  ];
-
   const fetchData = async () => {
     try {
       const [
         totalPriceResponse,
         transactionResponse,
-        bookingResponse,
         clubsResponse,
         CoursResponse,
         bookingDataChartResponse,
@@ -92,7 +46,6 @@ function ClubOwnerDasboard() {
       ] = await Promise.all([
         api.get(`/wallet/${user.id}`),
         api.get(`get-transactions/${user.id}`),
-        api.get(`/get-all-account`), //cần chỉnh để lấy số lượng booking trên sân
         api.get(`/current-clubs`), //lấy số lượng sân hiện tại của account
         api.get(`/courts/amount`),
         api.get(`/dashboard-club-chart-account/${user.id}`),
@@ -102,15 +55,22 @@ function ClubOwnerDasboard() {
         ), //tiền ra
       ]);
 
+      const totalSumAmount = bookingDataChartResponse.data.reduce(
+        (accumulator, currentValue) => {
+          return accumulator + currentValue.sumamount;
+        },
+        0
+      );
+
       setTotalPrice(totalPriceResponse.data.balance);
       setTransaction(transactionResponse.data);
-      setBookingNumber(bookingResponse.data.length);
+      setBookingNumber(totalSumAmount);
       setClubNumber(clubsResponse.data.length);
       setCourtNumber(CoursResponse.data);
       const confirmDataBookingChart = bookingDataChartResponse.data.map(
         (item) => ({
           name: `Thang ${item.month}`,
-          soluongbooking: item.sumamount,
+          soluongdatlich: item.sumamount,
         })
       );
       setBookingDataChart(confirmDataBookingChart);
@@ -133,6 +93,13 @@ function ClubOwnerDasboard() {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
+  };
+
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(value);
   };
 
   useEffect(() => {
@@ -161,7 +128,7 @@ function ClubOwnerDasboard() {
         </div>
         <div className="card blue">
           <div className="card_inner ">
-            <h3>Số lượng booking</h3>
+            <h3>Số lượng đơn đặt sân</h3>
             <MdSupervisorAccount className="card_icon" />
           </div>
           <h1>{bookingNumber}</h1>
@@ -171,7 +138,7 @@ function ClubOwnerDasboard() {
             <h3>Tổng tiền</h3>
             <AiOutlineDollarCircle className="card_icon" />
           </div>
-          <h1>{totalPrice} VND</h1>
+          <h1>{formatCurrency(totalPrice)}</h1>
         </div>
         <div className="charts">
           <ResponsiveContainer width="100%" height={500}>
@@ -192,19 +159,17 @@ function ClubOwnerDasboard() {
               <Tooltip />
               <Legend />
               <Bar
-                dataKey="tienra"
+                dataKey="tienvao"
                 fill="#8884d8"
                 activeBar={<Rectangle fill="pink" stroke="blue" />}
               />
               <Bar
-                dataKey="tienvao"
+                dataKey="tienra"
                 fill="#82ca9d"
                 activeBar={<Rectangle fill="gold" stroke="purple" />}
               />
             </BarChart>
           </ResponsiveContainer>
-        </div>
-        <div className="charts">
           <ResponsiveContainer width="100%" height={500}>
             <BarChart
               width={500}
@@ -223,7 +188,7 @@ function ClubOwnerDasboard() {
               <Tooltip />
               <Legend />
               <Bar
-                dataKey="soluongbooking"
+                dataKey="soluongdatlich"
                 fill="#8884d8"
                 activeBar={<Rectangle fill="pink" stroke="blue" />}
               />

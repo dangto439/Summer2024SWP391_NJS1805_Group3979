@@ -44,10 +44,16 @@ const ClubAdmin = () => {
     showModal(clubData);
   };
 
+  const formatStatusClub = (value) => {
+    if (value === "INACTIVE") {
+      return "Chưa kích hoạt";
+    } else return "Đã kích hoạt";
+  };
+
   const columns = [
     {
       field: "clubName",
-      headerName: "Tên Club",
+      headerName: "Tên CLB",
       flex: 1,
       cellClassName: "name-column--cell",
       headerAlign: "left",
@@ -63,7 +69,7 @@ const ClubAdmin = () => {
     },
     {
       field: "hotline",
-      headerName: "Hotline",
+      headerName: "SĐT",
       flex: 1,
       cellClassName: "name-column--cell",
       headerAlign: "left",
@@ -82,6 +88,9 @@ const ClubAdmin = () => {
       type: "number",
       headerAlign: "left",
       align: "left",
+      renderCell: (params) => {
+        return formatStatusClub(params.value);
+      },
     },
     {
       field: "update",

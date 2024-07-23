@@ -71,7 +71,7 @@ function AdminDasboard() {
         api.get(`/get-all-account`),
         api.get(`/clubs`),
         api.get(`/get-all-court`),
-        api.get(`/dashboard-admin-area-chart/${year}`),
+        api.get(`/dashboard-club-area-chart?walletId=1&year=${year}`),
         api.get(`/dashboard-admin-area-chart/${year}/${month}`),
         api.get(`/dashboard-admin-bar-chart/${year}`),
         api.get(`/dashboard-admin-tiny-chart/${year}`),
@@ -126,6 +126,13 @@ function AdminDasboard() {
     }
   };
 
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(value);
+  };
+
   useEffect(() => {
     fetchData();
   }, [year, month]);
@@ -162,7 +169,7 @@ function AdminDasboard() {
             <h3>Tổng tiền</h3>
             <AiOutlineDollarCircle className="card_icon" />
           </div>
-          <h1>{totalPrice} VND</h1>
+          <h1>{formatCurrency(totalPrice)}</h1>
         </div>
         {/* <div>
           <DatePicker onChange={onChangeYear} picker="year" />
@@ -213,7 +220,7 @@ function AdminDasboard() {
               <Tooltip />
               <Legend />
               <Bar
-                dataKey="TongGiaBooking"
+                dataKey="Tổng tiền đã đặt sân"
                 fill="#82ca9d"
                 activeBar={<Rectangle fill="gold" stroke="purple" />}
               />
@@ -264,7 +271,7 @@ function AdminDasboard() {
               <Tooltip />
               <Legend />
               <Bar
-                dataKey="soluongaccount"
+                dataKey="Số lượng tài khoản"
                 fill="#82ca9d"
                 activeBar={<Rectangle fill="gold" stroke="purple" />}
               />

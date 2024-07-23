@@ -240,7 +240,11 @@ function Wallet() {
         },
         {
           text: "Nạp tiền",
-          value: "DEPOST",
+          value: "DEPOSIT",
+        },
+        {
+          text: "Đang xử lý",
+          value: "PENDING",
         },
       ],
       onFilter: (value, record) => record.type.includes(value),
@@ -330,19 +334,24 @@ function Wallet() {
             <div className="form-group-recharge">
               <Form.Item
                 name="amount"
-                rules={[{ required: true, message: "Vui lòng nhập số tiền!" }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập số tiền!" },
+                  {
+                    validator: (_, value) =>
+                      value >= 10000
+                        ? Promise.resolve()
+                        : Promise.reject(
+                            new Error("Số tiền phải lớn hơn 10.000đ!")
+                          ),
+                  },
+                ]}
               >
                 <InputNumber
                   style={{ width: 450 }}
-                  defaultValue={10000}
-                  min={10000}
                   max={50000000}
-                  step={1000}
-                  formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-                  }
-                  parser={(value) => value?.replace(/,/g, "")}
                   onChange={onChange}
+                  placeholder="Nhập số tiền cần nạp"
+                  size="large"
                 />
               </Form.Item>
               <Button
@@ -408,19 +417,24 @@ function Wallet() {
 
               <Form.Item
                 name="amount"
-                rules={[{ required: true, message: "Vui lòng nhập số tiền!" }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập số tiền!" },
+                  {
+                    validator: (_, value) =>
+                      value >= 10000
+                        ? Promise.resolve()
+                        : Promise.reject(
+                            new Error("Số tiền phải lớn hơn 10.000đ!")
+                          ),
+                  },
+                ]}
               >
                 <InputNumber
-                  style={{ width: 470 }}
-                  defaultValue={10000}
-                  min={10000}
+                  style={{ width: 475 }}
                   max={50000000}
-                  step={1000}
-                  formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-                  }
-                  parser={(value) => value?.replace(/,/g, "")}
+                  placeholder="Nhập số tiền cần chuyển"
                   onChange={onChange}
+                  size="large"
                 />
               </Form.Item>
               <Button

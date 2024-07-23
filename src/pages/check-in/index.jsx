@@ -14,7 +14,9 @@ import { Link as RouterLink, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../config/axios";
 
+
 const Checkin = () => {
+  const { staffId } = useParams();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [searchTerm, setSearchTerm] = useState("");

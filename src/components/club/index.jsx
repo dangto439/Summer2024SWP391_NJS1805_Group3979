@@ -66,7 +66,7 @@ const Club = () => {
   const columns = [
     {
       field: "clubName",
-      headerName: "Tên Club",
+      headerName: "Tên CLB",
       flex: 1,
       cellClassName: "name-column--cell",
       headerAlign: "left",
