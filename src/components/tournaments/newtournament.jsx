@@ -148,7 +148,7 @@ function NewTournament() {
           <Grid container spacing={2}>
             <Grid item xs={2}>
               <Typography sx={{ color: "black", textAlign: "center" }}>
-                Host
+                Câu lạc bộ
               </Typography>
             </Grid>
             <Grid item xs={10}>

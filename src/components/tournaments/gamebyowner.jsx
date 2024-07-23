@@ -226,11 +226,11 @@ const GamebyOwner = () => {
     };
 
     if (roundIndex === totalRounds - 1) {
-      return <div style={titleStyle}>Final</div>;
+      return <div style={titleStyle}>Chung Kết</div>;
     } else if (roundIndex === totalRounds - 2) {
-      return <div style={titleStyle}>Semi-final</div>;
+      return <div style={titleStyle}>Bán Kết</div>;
     } else {
-      return <div style={titleStyle}>Round {roundIndex + 1}</div>;
+      return <div style={titleStyle}>Vòng {roundIndex + 1}</div>;
     }
   };
 
