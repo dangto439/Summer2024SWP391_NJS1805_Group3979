@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import api from "../../config/axios.js";
 import uploadFile from "../../utils/upload.js";
-import { Upload, Image } from "antd";
+import { Upload, Image, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -85,12 +85,13 @@ function NewTournament() {
         urlBanner: imageURL[0],
         firstPrize: parseFloat(firstPrize),
         secondPrize: parseFloat(secondPrize),
-        startDate: startTime.format("YYYY-MM-DD"),
-        endDate: endTime.format("YYYY-MM-DD"),
+        startDate: startTime,
+        endDate: endTime,
         capacity: parseInt(quantity),
         participationPrice: parseFloat(participationFee),
         clubId: parseInt(hostClubId),
       };
+      console.log(formData);
       const response = await api.post("/contest", formData);
       navigate(`/dashboard/tournaments/detail/${response.data.contestId}`);
     } catch (error) {
@@ -302,7 +303,9 @@ function NewTournament() {
                 variant="outlined"
                 type="date"
                 value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
+                onChange={(e) =>
+                  setStartTime(e.target.value).format("YYYY-MM-DD")
+                }
                 sx={{
                   backgroundColor: "white",
                   marginBottom: 2,
@@ -326,7 +329,9 @@ function NewTournament() {
                 variant="outlined"
                 type="date"
                 value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
+                onChange={(e) =>
+                  setEndTime(e.target.value).format("YYYY-MM-DD")
+                }
                 sx={{
                   backgroundColor: "white",
                   marginBottom: 2,

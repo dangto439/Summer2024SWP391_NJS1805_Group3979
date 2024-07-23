@@ -43,7 +43,7 @@ const ScheduleContest = () => {
   useEffect(() => {
     const fetchContests = async () => {
       try {
-        const response = await api.get("/contest");
+        const response = await api.get("/contests");
         setContests(response.data);
       } catch (error) {
         console.error("Error fetching contests: ", error);

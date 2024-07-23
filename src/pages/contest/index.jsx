@@ -37,7 +37,7 @@ import "@syncfusion/ej2-react-schedule/styles/material.css";
 // Để sử dụng được sync, registerLicense là cái key mà ngta cấp
 import { registerLicense } from "@syncfusion/ej2-base";
 registerLicense(
-  "Ngo9BigBOggjHTQxAR8/V1NCaF5cXmpCeUx3QXxbf1x0ZFRHal9UTnVcUj0eQnxTdEFjX31bcXNWRWVZUUV0Wg=="
+  "Ngo9BigBOggjHTQxAR8/V1NCaF5cWWFCdkx3TXxbf1x0ZFRMYVRbR3BPIiBoS35RckVkW3xecHBSQ2hbVUJ0"
 );
 
 const Contest = () => {

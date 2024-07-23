@@ -277,7 +277,7 @@ const GamebyOwner = () => {
               }}
             >
               <SeedTeam style={{ color: colors.redAccent[100] }}>
-                {seed.teams[0]?.name || "NO TEAM"}
+                {seed.teams[0]?.name || "Chưa có nhóm"}
               </SeedTeam>
               <span
                 style={{
@@ -300,7 +300,7 @@ const GamebyOwner = () => {
                 alignItems: "center",
               }}
             >
-              <SeedTeam>{seed.teams[1]?.name || "NO TEAM"}</SeedTeam>
+              <SeedTeam>{seed.teams[1]?.name || "Chưa có nhóm"}</SeedTeam>
               <span
                 style={{
                   backgroundColor: getScoreBackgroundColor(
