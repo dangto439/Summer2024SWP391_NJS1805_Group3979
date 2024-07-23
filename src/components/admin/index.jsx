@@ -220,7 +220,7 @@ function AdminDasboard() {
               <Tooltip />
               <Legend />
               <Bar
-                dataKey="Tổng tiền đã đặt sân"
+                dataKey="TongGiaBooking"
                 fill="#82ca9d"
                 activeBar={<Rectangle fill="gold" stroke="purple" />}
               />
@@ -271,7 +271,7 @@ function AdminDasboard() {
               <Tooltip />
               <Legend />
               <Bar
-                dataKey="Số lượng tài khoản"
+                dataKey="soluongaccount"
                 fill="#82ca9d"
                 activeBar={<Rectangle fill="gold" stroke="purple" />}
               />

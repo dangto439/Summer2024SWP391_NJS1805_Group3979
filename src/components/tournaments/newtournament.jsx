@@ -91,6 +91,7 @@ function NewTournament() {
         participationPrice: parseFloat(participationFee),
         clubId: parseInt(hostClubId),
       };
+      console.log(formData);
       const response = await api.post("/contest", formData);
       navigate(`/dashboard/tournaments/detail/${response.data.contestId}`);
     } catch (error) {
