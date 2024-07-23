@@ -56,7 +56,7 @@ function Login() {
       toast.success("Đăng nhập thành công!");
 
       if (role === "CUSTOMER") navigate("/");
-      if (role === "CLUB_STAFF") navigate("/checkin");
+      if (role === "CLUB_STAFF") navigate("/");
       else if (role === "CLUB_OWNER") navigate("/dashboard");
       else if (role === "ADMIN") navigate("/admin");
     } catch (error) {

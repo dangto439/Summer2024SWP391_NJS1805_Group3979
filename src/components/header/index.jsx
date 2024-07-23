@@ -29,7 +29,13 @@ function Header({ balanceChange }) {
     navigate("/");
   };
 
+  const handleCheckIn = (value) => {
+    console.log("Navigating to check-in with value:", value);
+    navigate(`/checkin/${value}`);
+  };
+
   const onClick = ({ key }) => {
+    console.log("Dropdown menu clicked with key:", key);
     switch (key) {
       case "1":
         navigate("/profile");
@@ -71,6 +77,7 @@ function Header({ balanceChange }) {
   const [role, setRole] = useState("");
   const fetchProfileData = async () => {
     try {
+      console.log("Fetching profile data...");
       const [response, responseprice] = await Promise.all([
         api.get("/profile"),
         api.get(`/wallet/${user.id}`),
@@ -91,8 +98,12 @@ function Header({ balanceChange }) {
   };
 
   useEffect(() => {
-    fetchProfileData();
-  }, []);
+    if (user) {
+      fetchProfileData();
+    } else {
+      console.log("User not logged in, skipping fetch profile data.");
+    }
+  }, [user]);
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -100,16 +111,9 @@ function Header({ balanceChange }) {
     }
   };
 
-  // const handleSearchHeader = () => {
-  //   console.log(inputSearch);
-  //   // Thêm logic tìm kiếm ở đây, ví dụ:
-  //   // navigate(`/search?query=${inputSearch}`);
-  //   navigate("/list-club");
-  // };
-
   const handleSearchHeader = () => {
     sessionStorage.setItem("search", "true");
-    console.log(inputSearch);
+    console.log("Search input:", inputSearch);
     navigate(`/list-club?search=${inputSearch}`);
   };
 
@@ -156,7 +160,9 @@ function Header({ balanceChange }) {
 
           {role === "CLUB_STAFF" && user != null ? (
             <li className="header__link">
-              <Link to="/checkin">Kiểm Tra Code</Link>
+              <Link to="#" onClick={() => handleCheckIn(user.id)}>
+                Kiểm Tra Code
+              </Link>
             </li>
           ) : (
             ""

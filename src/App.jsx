@@ -123,6 +123,14 @@ function App() {
           element: <Policy />,
         },
         {
+          path: "/checkin/:id",
+          element: (
+            <ClubStafRoute>
+              <Checkin />
+            </ClubStafRoute>
+          ),
+        },
+        {
           path: "/contact",
           element: (
             // <PrivateRoute>
@@ -178,14 +186,6 @@ function App() {
           ],
         },
 
-        {
-          path: "/checkin",
-          element: (
-            <ClubStafRoute>
-              <Checkin />
-            </ClubStafRoute>
-          ),
-        },
         {
           path: "/booking/:clubId",
           element: (

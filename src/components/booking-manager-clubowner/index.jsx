@@ -26,20 +26,14 @@ const BookingManager = ({ clubId }) => {
       headerAlign: "center",
       align: "center",
     },
-    {
-      field: "temporaryPrice",
-      headerName: "Giá booking tạm tính",
-      flex: 1,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "discountPrice",
-      headerName: "Giá giảm",
-      flex: 1,
-      headerAlign: "center",
-      align: "center",
-    },
+    //
+    // {
+    //   field: "discountPrice",
+    //   headerName: "Giá giảm",
+    //   flex: 1,
+    //   headerAlign: "center",
+    //   align: "center"
+    // },
     {
       field: "totalPrice",
       headerName: "Giá tổng",

@@ -62,7 +62,6 @@ function ClubOwnerDasboard() {
         0
       );
 
-
       setTotalPrice(totalPriceResponse.data.balance);
       setTransaction(transactionResponse.data);
       setBookingNumber(totalSumAmount);
@@ -129,7 +128,7 @@ function ClubOwnerDasboard() {
         </div>
         <div className="card blue">
           <div className="card_inner ">
-            <h3>Số lượng đặt sân</h3>
+            <h3>Số lượng đơn đặt sân</h3>
             <MdSupervisorAccount className="card_icon" />
           </div>
           <h1>{bookingNumber}</h1>

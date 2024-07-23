@@ -10,10 +10,11 @@ import {
 } from "@mui/material";
 import { tokens } from "../../theme";
 import SearchIcon from "@mui/icons-material/Search";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useParams } from "react-router-dom";
 import { useState } from "react";
 
 const Checkin = () => {
+  const { staffId } = useParams();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [searchTerm, setSearchTerm] = useState("");
