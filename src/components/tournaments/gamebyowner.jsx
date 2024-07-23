@@ -38,6 +38,8 @@ const generateRounds = (data, timeData, scoreData, totalMatches) => {
       secondPlayerId,
       scoreFirstPlayer,
       scoreSecondPlayer,
+      firstPlayerName,
+      secondPlayerName,
     } = game;
 
     const playingDate = timeData[index] || "Unknown";
@@ -52,13 +54,13 @@ const generateRounds = (data, timeData, scoreData, totalMatches) => {
       teams: [
         {
           id: firstPlayerId,
-          name: `Player ${firstPlayerId}`,
+          name: firstPlayerName,
           score: scoreFirstPlayer,
           setScore: setScore?.firstPlayerSetScore || 0,
         },
         {
           id: secondPlayerId,
-          name: `Player ${secondPlayerId}`,
+          name: secondPlayerName,
           score: scoreSecondPlayer,
           setScore: setScore?.secondPlayerSetScore || 0,
         },

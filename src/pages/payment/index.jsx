@@ -75,6 +75,14 @@ function Payment() {
     sessionStorage.removeItem("bookingtransfer");
   };
 
+  const tranfer = async (data) => {
+    try {
+      await api.post(`/wallet/transfer-contest`, data);
+    } catch (error) {
+      throw new Error("Chuyển tiền thất bại");
+    }
+  };
+
   useEffect(() => {
     const processPayment = async () => {
       await handleGetTransaction();
@@ -89,6 +97,12 @@ function Payment() {
           await handleCreateTransactionAndWallet(bookingtransfer);
           sessionStorage.removeItem("typepayment");
           navigate("/history-booking");
+        }
+        if (typePayment === "CONTEST") {
+          const data = JSON.parse(sessionStorage.getItem("contest"));
+          tranfer(data);
+          sessionStorage.removeItem("typepayment");
+          navigate("/wallet");
         }
         const reloadpage = sessionStorage.getItem("reloadpage");
         if (reloadpage === "TRUE") {

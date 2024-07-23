@@ -27,7 +27,7 @@ const ConfirmRegistration = ({ visible, onClose, id }) => {
         receiverWalletId: walletClub?.walletId,
         amount: price,
       };
-      console.log(data);
+      // console.log(data);
       try {
         await registration();
         await tranfer(data);
